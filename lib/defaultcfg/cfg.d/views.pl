@@ -3,6 +3,7 @@
 # a valid result. 
 # Multiple fields may be specified for one view, but avoid
 # subject or allowing null in this case.
+<<<<<<< HEAD
 
 
 
@@ -18,6 +19,8 @@
 # To disable the limit set max_items to 0.
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 $c->{browse_views} = [
         {
                 id => "year",

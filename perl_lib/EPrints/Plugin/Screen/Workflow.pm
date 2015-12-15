@@ -122,6 +122,7 @@ sub can_be_viewed
 	return $self->allow( $self->{processor}->{dataset}->id."/edit" );
 }
 
+<<<<<<< HEAD
 sub allow_action
 {
 	my( $self, $action ) = @_;
@@ -129,6 +130,8 @@ sub allow_action
 	return $self->can_be_viewed();
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub dataset
 {
 	my( $self ) = @_;
@@ -279,6 +282,7 @@ sub hidden_bits
 	);
 }
 
+<<<<<<< HEAD
 sub _render_action_aux
 {
 	my( $self, $params, $asicon ) = @_;
@@ -342,6 +346,8 @@ sub _render_action_aux
 	return $form;
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 

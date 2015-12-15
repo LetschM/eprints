@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 ######################################################################
 #
@@ -9,11 +10,55 @@
 ######################################################################
 
 =pod
+=======
+=for Pod2Wiki
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 NAME
 
 B<EPrints::Plugin::InputForm::Component> - A single form component 
 
+<<<<<<< HEAD
+=======
+=head1 DESCRIPTION
+
+A component is an HTML widget for use in a L<EPrints::Workflow::Stage>. A L<EPrints::Plugin::InputForm::Component::Field> component renders the form inputs for a L<EPrints::MetaField> but component subclasses can be used to provide any required behaviour around user input. Components don't even have to be form inputs e.g. just render a fragment of XHTML.
+
+Where components are shown and configuration are controlled through the EPrints XML workflow. The workflow reads the component type, loads the referenced plugin and passes the XML node to L</parse_config>:
+
+=for verbatim_lang xml
+
+	<component type="Upload" show_help="always" />
+
+In this instance the L<EPrints::Plugin::InputForm::Component::Upload> component is being inserted into the workflow and its help is being set to always be shown.
+
+Components share many of the features seen in L<EPrints::Plugin::Screen>s. The L</update_from_form> method is called from the Screen's L</from> stage and the component L</render>s a fragment of XHTML that is inserted into the resulting page. Components have no equivalent to L<EPrints::Plugin::Screen/can_be_viewed> - it is assumed that the workflow only exposes inputs to which the user has access.
+
+A component will be created twice during a workflow response: to process the incoming data (L</update_from_form>) and to generate the new page (L</render>). Therefore you can not rely on data persisting between the update and rendering stages, unless you store the data in the L<EPrints::ScreenProcessor>.
+
+Buttons in components are classed as "internal actions". Internal actions do not normally change the response workflow but only how the component renders. This is used to provide search features, provide more button inputs etc.
+
+=head2 AJAX Support
+
+Some components support AJAX-like incremental updates. The Javascript Component class can make requests aimed at a Component by specifying the C<component=cXX> CGI parameter and it is then up to the component what it renders.
+
+The default behaviour is to render the XHTML fragment represented by the component, which is used by Javascript as an in-place replacement. Elsewhere a JSON response is used to drive client-side behaviour.
+
+Similarly to L<EPrints::Plugin::Screen>, AJAX components have a life-cycle of:
+
+=over 4
+
+=item 1. update_from_form() reads form values and sets them on the object
+
+=item 2. wishes_to_export() determines if this component is exporting
+
+=item 3. export() generates a response
+
+=back
+
+See also L<EPrints::Plugin::InputForm::Component::Documents>, which uses a JSON response to determine the documents to update.
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 METHODS
 
 =over 4
@@ -63,6 +108,7 @@ sub new
 	# don't have a config when we first load this to register it as a plugin class
 	if( defined $opts{xml_config} )
 	{
+<<<<<<< HEAD
 		$self->{session} = $opts{session};
 		$self->{collapse} = $opts{collapse};
 		$self->{no_help} = $opts{no_help};
@@ -71,6 +117,8 @@ sub new
 		$self->{prefix} = $opts{prefix};
 		$self->{dataobj} = $opts{dataobj};
 		$self->{dataset} = $opts{dataobj}->get_dataset;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$self->parse_config( $opts{xml_config} );
 	}
 
@@ -95,13 +143,47 @@ sub note
 
 =item $bool = $component->parse_config( $config_dom )
 
+<<<<<<< HEAD
 Parses the supplied DOM object and populates $component->{config}
+=======
+Parses the supplied DOM object and populates $component configuration.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 
 sub parse_config
 {
+<<<<<<< HEAD
 	my( $self, $config_dom ) = @_;
+=======
+	my( $self, $xml_config ) = @_;
+
+	foreach my $attr ($xml_config->attributes)
+	{
+		my $value = $attr->nodeValue;
+		next if !EPrints::Utils::is_set( $value );
+		my $name = $attr->nodeName;
+
+		if( $name eq "id" )
+		{
+			$self->{prefix} = $value;
+		}
+		elsif( $name eq "surround" )
+		{
+			$self->{surround} = $value;
+		}
+		elsif( $name eq "collapse" )
+		{
+			$self->{collapse} = 1 if $value eq "yes";
+		}
+		elsif( $name eq "help" )
+		{
+			$self->{no_help} = 1 if $value eq "never";
+			$self->{no_toggle} = 1 if $value eq "always";
+			# toggle
+		}
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return 1;
 }
@@ -523,7 +605,11 @@ sub get_state_fragment
 
 =for COPYRIGHT BEGIN
 
+<<<<<<< HEAD
 Copyright 2000-2011 University of Southampton.
+=======
+Copyright 2000-2013 University of Southampton.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =for COPYRIGHT END
 

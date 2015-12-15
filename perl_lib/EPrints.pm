@@ -42,6 +42,15 @@ Do not check the current user/group is the same as the user/group in SystemSetti
 
 =back
 
+<<<<<<< HEAD
+=======
+=head2 Debugging
+
+To get a full stack trace on errors and warnings use L<Carp>'s verbose mode. E.g. in F<perl_lib/EPrints/SystemSettings.pm> add:
+
+	use Carp 'verbose';
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =begin InternalDoc
 
 =head2 Debugging Slow Processes
@@ -65,11 +74,19 @@ A shell script will print the stack trace to the console.
 package EPrints;
 
 my $conf;
+<<<<<<< HEAD
 		
 use Cwd;
 
 BEGIN
 {
+=======
+
+BEGIN
+{
+	require Cwd;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	# SystemSettings can be overridden by loading it before EPrints, which is
 	# used by some unit tests
 	if( !defined($EPrints::SystemSettings::conf) )
@@ -83,7 +100,11 @@ BEGIN
 	# set default global configuration values
 	if( !defined $conf->{base_path} )
 	{
+<<<<<<< HEAD
 		my $base_path = Cwd::realpath( $INC{'EPrints.pm'} );
+=======
+		my $base_path = Cwd::realpath($INC{'EPrints.pm'});
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$base_path =~ s/.perl_lib.EPrints\.pm$//; # ignore / \
 		$conf->{base_path} = $base_path;
 	}
@@ -102,7 +123,12 @@ use Carp;
 
 use strict;
 
+<<<<<<< HEAD
 our $VERSION = v3.3.14;
+=======
+our $VERSION = v4.0.0;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 $conf->{version} = "EPrints ".EPrints->human_version;
 $conf->{versionid} = "eprints-".EPrints->human_version;
 
@@ -252,6 +278,16 @@ use EPrints::Apache::REST;
 use EPrints::Apache::RobotsTxt;
 use EPrints::Apache::SiteMap;
 use EPrints::Apache::CRUD;
+<<<<<<< HEAD
+=======
+use EPrints::Apache::MapToStorage;
+use EPrints::Apache::MapToStorage::Javascript;
+use EPrints::Apache::MapToStorage::SecureJavascript;
+use EPrints::Apache::MapToStorage::Stylesheet;
+use EPrints::Apache::MapToStorage::XHTML;
+use EPrints::Apache::MapToStorage::XPage;
+use EPrints::Apache::MapToStorage::View;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 use EPrints::BackCompatibility;
 
@@ -267,10 +303,19 @@ use EPrints::Storage;
 use EPrints::Citation;
 use EPrints::Citation::EPC;
 use EPrints::Citation::XSL;
+<<<<<<< HEAD
+=======
+use EPrints::Cookie;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::DataObj;
 use EPrints::DataObj::SubObject;
 use EPrints::DataObj::Access;
 use EPrints::DataObj::Cachemap;
+<<<<<<< HEAD
+=======
+use EPrints::DataObj::CacheDataobj;
+use EPrints::DataObj::CacheDataobjMap;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::DataObj::Document;
 use EPrints::DataObj::EPrint;
 use EPrints::DataObj::EPM;
@@ -278,6 +323,10 @@ use EPrints::DataObj::File;
 use EPrints::DataObj::History;
 use EPrints::DataObj::Import;
 use EPrints::DataObj::Import::XML;
+<<<<<<< HEAD
+=======
+use EPrints::DataObj::Issue;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::DataObj::EventQueue;
 use EPrints::DataObj::LoginTicket;
 use EPrints::DataObj::Message;
@@ -296,11 +345,18 @@ use EPrints::Index::Daemon;
 use EPrints::Language;
 use EPrints::Latex;
 use EPrints::List;
+<<<<<<< HEAD
+=======
+use EPrints::List::Cache;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::MetaField;
 use EPrints::NamedSet;
 use EPrints::OpenArchives;
 use EPrints::Page;
+<<<<<<< HEAD
 use EPrints::Page::DOM;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::Paginate;
 use EPrints::Paginate::Columns;
 use EPrints::Plugin;
@@ -317,6 +373,11 @@ use EPrints::ScreenProcessor;
 use EPrints::Script;
 use EPrints::Script::Compiler;
 use EPrints::Script::Compiled;
+<<<<<<< HEAD
+=======
+use EPrints::Template;
+use EPrints::Template::EPC;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::URL;
 use EPrints::Paracite;
 use EPrints::Update::Static;
@@ -592,6 +653,7 @@ sub import
 
 	my %opts = map { $_ => 1 } @args;
 
+<<<<<<< HEAD
 	# mod_perl will probably be running as root for the main httpd.
 	# The sub processes should run as the same user as the one specified
 	# in $EPrints::SystemSettings
@@ -602,6 +664,8 @@ sub import
 		EPrints->system->test_uid();
 	}
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$__loaded = 1;
 }
 
@@ -697,8 +761,14 @@ sub sigusr2_cluck
 	$SIG{'USR2'} = \&sigusr2_cluck;
 };
 
+<<<<<<< HEAD
 # Die with stack trace if Carp is verbose
 $SIG{__DIE__} = \&Carp::croak if $Carp::Verbose;
+=======
+# Attach die and warn to Carp if Carp is verbose
+$SIG{__DIE__} = \&Carp::croak if $Carp::Verbose;
+$SIG{__WARN__} = \&Carp::carp if $Carp::Verbose;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 umask( 0002 );
 
@@ -747,4 +817,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with EPrints.  If not, see <http://www.gnu.org/licenses/>.
 
 =for LICENSE CLOSE
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6

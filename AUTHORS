@@ -1,5 +1,6 @@
 The following people have contributed to the EPrints project.
 
+<<<<<<< HEAD
 Software Architects
  Christopher Gutteridge - http://www.ecs.soton.ac.uk/people/cjg
  Dr Tim Brody - http://www.ecs.soton.ac.uk/people/tdb2
@@ -14,29 +15,57 @@ Developers
  Dr Timothy Miles-Board
  Dr Dave Tarrant - http://www.ecs.soton.ac.uk/people/dt2
  Patrick McSweeney - http://www.ecs.soton.ac.uk/people/pm5
+=======
+Lead Developer + Software Architect
+ Dr Tim Brody - http://www.ecs.soton.ac.uk/people/tdb2
+
+Developers
+ Christopher Gutteridge - http://www.ecs.soton.ac.uk/people/cjg
+ Dr Timothy Miles-Board - http://www.ecs.soton.ac.uk/people/tmb
+ Seb Francois - http://www.ecs.soton.ac.uk/people/sf2
+ Dave Tarrant - http://www.ecs.soton.ac.uk/people/dct05r
+ Patrick McSweeney - http://www.ecs.soton.ac.uk/people/pm5
+ Adam Field - http://www.ecs.soton.ac.uk/people/af05v
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Contributors
  Alexander Bergolth - http://www.wu.ac.at/
  Dr Michael O. Jewell - http://www.ecs.soton.ac.uk/people/moj
+<<<<<<< HEAD
  Dr Jessie Hey
  Dr Harry Mason
+=======
+ Dr Jessie Hey - http://www.ecs.soton.ac.uk/people/jmnh
+ Dr Harry Mason - http://www.ecs.soton.ac.uk/people/hjm03r
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
  Al Riddoch
  Dr Gui Power
  Pauline Simpson
  Robert Tansley
  Adam White
  Wendy White
+<<<<<<< HEAD
  Dr Steve Hitchcock
+=======
+ Steve Hitchcock - http://www.ecs.soton.ac.uk/people/sh94r
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
  Denis Pitzalis
  Matthew Kerwin
  Mark Gregson
  John Salter
 
 user experience consultant
+<<<<<<< HEAD
  prof mc schraefel - http://www.ecs.soton.ac.uk/people/mc
 
 Project Management
  Professor Leslie Carr - http://www.ecs.soton.ac.uk/people/lac
+=======
+ dr mc schraefel - http://www.ecs.soton.ac.uk/people/mc
+
+Project Management
+ Dr Leslie Carr - http://www.ecs.soton.ac.uk/people/lac
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
  John Darlington - http://www.ecs.soton.ac.uk/people/jd
 
 Visionary and Software Specifications

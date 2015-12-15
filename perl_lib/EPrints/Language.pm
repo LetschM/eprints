@@ -98,11 +98,14 @@ sub new
 		$repository->get_conf( "config_path" ).
 			"/lang/".$self->{id}."/phrases" );
 
+<<<<<<< HEAD
 	$self->_read_phrases_dir(
 		$self->{data},
 		$repository->get_conf( "lib_path" ).
 			"/lang/".$self->{id}."/phrases" );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( -e $repository->config( "base_path" )."/site_lib/lang/".$self->{id}."/phrases" )
 	{
 		$self->_read_phrases_dir(
@@ -111,6 +114,14 @@ sub new
 				"/site_lib/lang/".$self->{id}."/phrases" );
 	}
 
+<<<<<<< HEAD
+=======
+	$self->_read_phrases_dir(
+		$self->{data},
+		$repository->get_conf( "lib_path" ).
+			"/lang/".$self->{id}."/phrases" );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return( $self );
 }
 
@@ -249,10 +260,17 @@ sub phrase
 	$inserts = {} if( !defined $inserts );
 	if( !defined $phrase )
 	{
+<<<<<<< HEAD
 		$session->get_repository->log( sprintf("Undefined phrase: %s (%s) at line %d in %s",
 			$phraseid,
 			$self->{id},
 			(caller(1))[2,1] ) );
+=======
+		$session->log( sprintf("Undefined phrase: %s (%s) at line %d in %s",
+			$phraseid,
+			$self->{id},
+			(caller(1))[2,1] ) ) if $session->{noise};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my $frag = $session->make_doc_fragment;
 		$frag->appendChild( $session->make_text( '["'.$phraseid.'" not defined' ) );
 		if( scalar(keys %$inserts) )

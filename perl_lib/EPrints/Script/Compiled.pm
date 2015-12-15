@@ -290,21 +290,67 @@ sub run_is_set
 	return [ EPrints::Utils::is_set( $param->[0] ), "BOOLEAN" ];
 } 
 
+<<<<<<< HEAD
 sub run_citation_link
 {
 	my( $self, $state, $object, $citationid ) = @_;
 
 	my $citation = $object->[0]->render_citation_link( $citationid->[0]  );
+=======
+=item citation_link( OBJECT, [ ,CITATION_NAME [, OPTIONS ] ] )
+
+Renders a citation for OBJECT that will be linked to the object's URL.
+
+If CITATION_NAME is not given defaults to "default".
+
+OPTIONS is a key-value list of options to pass to the citation method e.g.
+
+	citation_link($doc, "default", "eprint", $eprint);
+
+=cut
+
+sub run_citation_link
+{
+	my( $self, $state, $object, $citationid, @opts ) = @_;
+
+	$_ = $_->[0] for @opts;
+
+	my $citation = $object->[0]->render_citation_link( $citationid->[0], @opts  );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return [ $citation, "XHTML" ];
 }
 
+<<<<<<< HEAD
 sub run_citation
 {
 	my( $self, $state, $object, $citationid ) = @_;
 
 	my $citation = $object->[0]->render_citation( $citationid->[0],
 		finalize => 0
+=======
+=item citation( OBJECT, [ ,CITATION_NAME [, OPTIONS ] ] )
+
+Renders a citation for OBJECT.
+
+If CITATION_NAME is not given defaults to "default".
+
+OPTIONS is a key-value list of options to pass to the citation method e.g.
+
+	citation_link($doc, "default", "eprint", $eprint);
+
+=cut
+
+sub run_citation
+{
+	my( $self, $state, $object, $citationid, @opts ) = @_;
+
+	$_ = $_->[0] for @opts;
+
+	my $citation = $object->[0]->render_citation( $citationid->[0],
+		finalize => 0,
+		@opts,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	);
 
 	return [ $citation, "XHTML" ];
@@ -389,6 +435,22 @@ sub _array_to_list
     return @new_list;
 }
 
+<<<<<<< HEAD
+=======
+=item namedset( NAMEDSET_NAME )
+
+Returns an ARRAY of types from NAMEDSET_NAME.
+
+=cut
+
+sub run_namedset
+{
+	my( $self, $state, $namedset ) = @_;
+
+	return [ [ $state->{session}->get_types( $namedset ? $namedset->[0] : undef ) ], "ARRAY" ];
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub run_as_item 
 {
 	my( $self, $state, $itemref ) = @_;
@@ -528,6 +590,18 @@ sub run_related_objects
 	return [ scalar($object->[0]->get_related_objects( @r )), 'ARRAY' ];
 }
 
+<<<<<<< HEAD
+=======
+sub run_search_related
+{
+	my( $self, $state, $object, @required ) = @_;
+
+	my $list = $object->[0]->search_related( map { $_->[0] } @required );
+
+	return [ [ $list->slice ], 'ARRAY' ];
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub run_url
 {
 	my( $self, $state, $object ) = @_;
@@ -546,13 +620,21 @@ sub run_doc_size
 
 	if( !defined $doc->[0] || ref($doc->[0]) ne "EPrints::DataObj::Document" )
 	{
+<<<<<<< HEAD
 		$self->runtime_error( "Can only call doc_zie() on document objects not ".
+=======
+		$self->runtime_error( "Can only call doc_size() on document objects not ".
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			ref($doc->[0]) );
 	}
 
 	if( !$doc->[0]->is_set( "main" ) )
 	{
+<<<<<<< HEAD
 		return 0;
+=======
+		return [];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	my %files = $doc->[0]->files;
@@ -864,6 +946,31 @@ sub run_array_concat
 	return [ \@v, "DATA_ARRAY" ];
 }
 
+<<<<<<< HEAD
+=======
+=item grep_dataobj_list( list, fieldname, value )
+
+Greps a list of objects where fieldname equals value.
+
+=cut
+
+sub run_grep_dataobj_list
+{
+	my( $self, $state, $list, $fieldname, $value ) = @_;
+
+	$self->runtime_error( "Usage: grep_dataobj_list( list, fieldname, value )" )
+		if !defined $value || $list->[1] ne "ARRAY";
+
+	$_ = $_->[0] for $list, $fieldname, $value;
+
+	my $f = EPrints::Utils::is_set( $value ) ?
+		sub { $_->value( $fieldname ) eq $value } :
+		sub { !$_->is_set( $fieldname ) };
+
+	return [ [ grep { &$f } @$list ], "ARRAY" ];
+};
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub run_join
 {
 	my( $self, $state, $array, $join_string ) = @_;

@@ -92,6 +92,14 @@ $EPrints::XML::LIB_LEN = length("XML::DOM::");
 
 		return undef;
 	};
+<<<<<<< HEAD
+=======
+*XML::DOM::Document::toFH = sub {
+		my( $doc, $fh, $format ) = @_;
+
+		$doc->print( $fh );
+	};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 ######################################################################
 # 

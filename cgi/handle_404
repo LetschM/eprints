@@ -133,6 +133,7 @@ sub plain_404
 {
 	my( $session ) = @_;
 
+<<<<<<< HEAD
 	$session->build_page( 
 		$session->html_phrase( "cgi/handle_http_error:404_title" ),
 		$session->html_phrase( "cgi/handle_http_error:404_blurb", 
@@ -140,5 +141,11 @@ sub plain_404
 		"plain_404" );
 
         $session->send_page();
+=======
+	EPrints::ScreenProcessor->process(
+		session => $session,
+		screenid => "Error::404",
+	);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 

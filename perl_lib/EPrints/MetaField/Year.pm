@@ -11,7 +11,11 @@
 
 =head1 NAME
 
+<<<<<<< HEAD
 B<EPrints::MetaField::Year> - no description
+=======
+EPrints::MetaField::Year - no description
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 DESCRIPTION
 
@@ -23,6 +27,7 @@ not done
 
 package EPrints::MetaField::Year;
 
+<<<<<<< HEAD
 use strict;
 use warnings;
 
@@ -61,12 +66,23 @@ sub from_search_form
 			
 	return( undef,undef,undef, $session->html_phrase( "lib/searchfield:year_err" ) );
 }
+=======
+use EPrints::MetaField::Int;
+@ISA = qw( EPrints::MetaField::Int );
+
+use strict;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub get_property_defaults
 {
 	my( $self ) = @_;
 	my %defaults = $self->SUPER::get_property_defaults;
+<<<<<<< HEAD
 	$defaults{digits} = 4;
+=======
+	$defaults{maxlength} = 4; # Still running Perl in 10000?
+	$defaults{regexp} = qr/\d{4}/;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return %defaults;
 }
 
@@ -75,6 +91,11 @@ sub should_reverse_order { return 1; }
 ######################################################################
 1;
 
+<<<<<<< HEAD
+=======
+=back
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

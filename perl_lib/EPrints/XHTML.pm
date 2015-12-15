@@ -27,9 +27,20 @@ B<EPrints::XHTML> - XHTML Module
 	$xhtml_dom_node = $xhtml->text_area_field( $name, $value, rows => 4 );
 	$xhtml_dom_node = $xhtml->form( "get", $url );
 
+<<<<<<< HEAD
 	$xhtml_dom_node = $xhtml->data_element( $name, $value, indent => 4 );
 
 	$page = $xhtml->page( %opts );
+=======
+	$xhtml_dom_node = $xhtml->fragment;
+	$xhtml_dom_node = $xhtml->element('div', class => 'ep_block');
+	$xhtml_dom_node = $xhtml->text('Hello, World!');
+	$xhtml_dom_node = $xhtml->data_element(
+		'span',
+		'Hello, World!',
+		style => 'text-color: red'
+	);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head2 tree()
 
@@ -116,6 +127,111 @@ sub new($$)
 	return $self;
 }
 
+<<<<<<< HEAD
+=======
+=item $node = $xhtml->fragment()
+
+See L<EPrints::XML/create_document_fragment>.
+
+=cut
+
+sub fragment
+{ 
+	my( $self ) = @_;
+
+	return $self->{repository}->xml->create_document_fragment 
+}
+
+=item $node = $xhtml->element()
+
+See L<EPrints::XML/create_element>.
+
+=cut
+
+sub element 
+{
+	my( $self, @opts ) = @_;
+
+	return $self->{repository}->xml->create_element( @opts )
+}
+
+=item $node = $xhtml->text()
+
+See L<EPrints::XML/create_text_node>.
+
+=cut
+
+sub text 
+{
+	my( $self, @opts ) = @_;
+
+	return $self->{repository}->xml->create_text_node( @opts );
+}
+
+=item $node = $xhtml->cdata()
+
+See L<EPrints::XML/create_cdata_section>.
+
+=cut
+sub cdata
+{
+	my( $self, @opts ) = @_;
+
+	return $self->{repository}->xml->create_cdata_section( @opts );
+}
+
+=item $node = $xhtml->comment()
+
+See L<EPrints::XML/create_comment>.
+
+=cut
+
+sub comment
+{
+	my( $self, @opts ) = @_;
+
+	return $self->{repository}->xml->create_comment( @opts );
+}
+
+=item $DOM = $xhtml->javascript( $code, %attribs )
+
+Return a new DOM "script" element containing $code in javascript. %attribs will
+be added to the script element, similar to make_element().
+
+E.g.
+
+        <script type="text/javascript">
+        // <![CDATA[
+        alert("Hello, World!");
+        // ]]>
+        </script>
+
+=cut
+
+sub javascript
+{
+        my( $self, $text, %attr ) = @_;
+
+	my $script = $self->element( 'script', type => 'text/javascript', %attr );
+
+        if( defined $text )
+        {
+                chomp($text);
+                $script->appendChild( $self->text( "\n// " ) );
+                $script->appendChild( $self->cdata( "\n$text\n// " ) );
+        }
+        else
+        {
+                $script->appendChild( $self->comment( "padder" ) );
+        }
+
+        return $script;
+}
+
+sub uid { APR::UUID->new->format() }
+
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $node = $xhtml->form( $method [, $action] )
 
 Returns an XHTML form. If $action isn't defined uses the current URL.
@@ -132,7 +248,11 @@ sub form
 		$action = $self->{repository}->current_url( query => 0 );
 	}
 
+<<<<<<< HEAD
 	my $form = $self->{repository}->xml->create_element( "form",
+=======
+	my $form = $self->element( "form",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		method => $method,
 		'accept-charset' => "utf-8",
 		action => $action,
@@ -171,7 +291,11 @@ sub input_field
 		push @opts, onKeyPress => 'return EPJS_block_enter( event )';
 	}
 
+<<<<<<< HEAD
 	return $self->{repository}->xml->create_element( "input",
+=======
+	return $self->element( "input",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		name => $name,
 		id => $name,
 		value => $value,
@@ -188,7 +312,11 @@ sub hidden_field
 {
 	my( $self, $name, $value, @opts ) = @_;
 
+<<<<<<< HEAD
 	return $self->{repository}->xml->create_element( "input",
+=======
+	return $self->element( "input",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		name => $name,
 		id => $name,
 		value => $value,
@@ -210,7 +338,11 @@ sub action_button
 
 	$opts{class} = join ' ', 'ep_form_action_button', ($opts{class}||());
 
+<<<<<<< HEAD
 	return $self->{repository}->xml->create_element( "input",
+=======
+	return $self->element( "input",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		name => "_action_$name",
 		value => $value,
 		type => "submit",
@@ -230,7 +362,11 @@ sub action_icon
 {
 	my( $self, $name, $src, %opts ) = @_;
 
+<<<<<<< HEAD
 	return $self->{repository}->xml->create_element( "input",
+=======
+	return $self->element( "input",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		name => "_action_$name",
 		src => $src,
 		type => "image",
@@ -248,26 +384,39 @@ sub text_area_field
 {
 	my( $self, $name, $value, @opts ) = @_;
 
+<<<<<<< HEAD
 	my $node = $self->{repository}->xml->create_element( "textarea",
 		name => $name,
 		id => $name,
 		@opts );
 	$node->appendChild( $self->{repository}->xml->create_text_node( $value ) );
+=======
+	my $node = $self->element( "textarea",
+		name => $name,
+		id => $name,
+		@opts );
+	$node->appendChild( $self->text( $value ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $node;
 }
 
 =item $node = $xhtml->data_element( $name, $value, %opts )
 
+<<<<<<< HEAD
 Create a new element named $name containing a text node containing $value.
 
 Options:
 	indent - amount of whitespace to indent by
+=======
+See L<EPrints::XML/create_data_element>.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 
 sub data_element
 {
+<<<<<<< HEAD
 	my( $self, $name, $value, @opts ) = @_;
 
 	my $indent;
@@ -294,6 +443,11 @@ sub data_element
 	}
 
 	return $node;
+=======
+	my( $self, @opts ) = @_;
+
+	return $self->{repository}->xml->create_data_element(@opts);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 =item $utf8_string = $xhtml->to_xhtml( $node, %opts )
@@ -306,7 +460,11 @@ sub to_xhtml
 {
 	my( $self, $node, %opts ) = @_;
 
+<<<<<<< HEAD
 	&_to_xhtml( $node );
+=======
+	return scalar(&_to_xhtml( $node ));
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 my %HTML_ENTITIES = (
@@ -526,6 +684,7 @@ sub _to_text_dump
 	return;
 }
 
+<<<<<<< HEAD
 =item $page = $xhtml->page( $map, %opts )
 
 Returns an EPrints::Page object describing an XHTML page filled out with the templates provided in $map.
@@ -686,6 +845,118 @@ sub page
 	}
 
 	return EPrints::Page->new( $repo, join( "", @output ) );
+=======
+=item $node = $xhtml->box( $content, %opts )
+
+Render a collapsible box.
+
+Options:
+
+=over 4
+
+=item basename = ep_box
+
+Prefix to use for identifying page elements.
+
+=item collapsed = 1
+
+Should the box start rolled up.
+
+=item show_label
+
+Label shown when the box is hidden (in the link).
+
+=item hide_label
+
+Label shown when the box is visible (in the link).
+
+=item show_icon_url = "style/images/plus.png"
+
+The url of the icon to use instead of the [+].
+
+=item hide_icon_url = "style/images/minus.png"
+
+The url of the icon to use instead of the [-].
+
+=back
+
+=cut
+
+sub box
+{
+	my( $self, $content, %opts ) = @_;
+
+	my $repo = $self->{repository};
+	my $xml = $repo->xml;
+
+	my $frag = $self->fragment;
+
+	my $basename = exists $opts{basename} ? $opts{basename} : "ep_box";
+	my $class = exists $opts{class} ? $opts{class} : "ep_summary_box";
+
+	$frag->appendChild( my $div = $self->element( "div",
+			id=>$basename,
+			class=>$class,
+		) );
+
+	$div->appendChild( my $title_bar = $self->element( "div",
+			class => "ep_summary_box_title",
+			id => "${basename}_title_bar",
+		) );
+
+	$div->appendChild( my $container = $self->data_element( "div",
+			$content,
+			class => "ep_summary_box_body ep_no_js",
+			id => "${basename}_content",
+		) );
+
+	$title_bar->appendChild( my $show_link = $self->element( "a",
+			href => "javascript:",
+			id => "${basename}_show_link",
+			class => "ep_box_show",
+			style => "",
+		) );
+	$title_bar->appendChild( my $hide_link = $self->element( "a",
+			href => "javascript:",
+			id => "${basename}_hide_link",
+			class => "ep_box_hide",
+			style => "",
+		) );
+
+	if( $opts{show_label} )
+	{
+		$show_link->appendChild( $opts{show_label} );
+	}
+	if( $opts{show_icon_url} )
+	{
+		$show_link->setAttribute( style => "background-image: url(" . $opts{show_icon_url} . ");" );
+	}
+	if( $opts{hide_label} )
+	{
+		$hide_link->appendChild( $opts{hide_label} );
+	}
+	if( $opts{hide_icon_url} )
+	{
+		$hide_link->setAttribute( style => "background-image: url(" . $opts{hide_icon_url} . ");" );
+	}
+
+	if( !$opts{collapsed} )
+	{
+		$container->setAttribute( class => "ep_summary_box_body" );
+		$show_link->setAttribute(
+			style => join(' ', $show_link->getAttribute( "style" ), "display: none;")
+		);
+		$hide_link->setAttribute(
+			style => join(' ', $hide_link->getAttribute( "style" ), "display: block;")
+		);
+	}
+
+	$frag->appendChild( $repo->make_javascript( <<"EOJ" ) );
+new EPrints.XHTML.Box ('$basename');
+EOJ
+
+	return $frag;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 =item $node = $xhtml->tabs( $labels, $contents, %opts )
@@ -713,7 +984,11 @@ sub tabs
 	my $xml = $repo->xml;
 	my $online = $repo->get_online;
 
+<<<<<<< HEAD
 	my $frag = $xml->create_document_fragment;
+=======
+	my $frag = $self->fragment;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $base_url = exists($opts{base_url}) || !$online ? $opts{base_url} : $repo->current_url( query => 1 );
 	my $basename = exists($opts{basename}) ? $opts{basename} : "ep_tabs";
@@ -752,7 +1027,11 @@ sub tabs
 		$current = exists $raliases{$current} ? $raliases{$current} : 0;
 	}
 
+<<<<<<< HEAD
 	my $ul = $xml->create_element( "ul",
+=======
+	my $ul = $self->element( "ul",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		id=>$basename."_tabs",
 		class => "ep_tab_bar",
 	);
@@ -761,7 +1040,11 @@ sub tabs
 	my $panel;
 	if( @$contents )
 	{
+<<<<<<< HEAD
 		$panel = $xml->create_element( "div", 
+=======
+		$panel = $self->element( "div", 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				id => $basename."_panels",
 				class => "ep_tab_panel" );
 		$frag->appendChild( $panel );
@@ -774,7 +1057,11 @@ sub tabs
 		my $label = defined($aliases) ? $aliases->{$_} : $_;
 		my $width = int( 100 / @$labels );
 		$width += 100 % @$labels if $_ == 0;
+<<<<<<< HEAD
 		my $tab = $ul->appendChild( $xml->create_element( "li",
+=======
+		my $tab = $ul->appendChild( $self->element( "li",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			($current == $_ ? (class => "ep_tab_selected") : ()),
 			id => $basename."_tab_".$label,
 			style => "width: $width\%",
@@ -803,13 +1090,21 @@ sub tabs
 
 		if( defined $panel )
 		{
+<<<<<<< HEAD
 			my $inner_panel = $xml->create_element( "div", 
+=======
+			my $inner_panel = $self->element( "div", 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				id => $basename."_panel_".$label,
 			);
 			if( $_ != $current )
 			{
 				# padding for non-javascript enabled browsers
+<<<<<<< HEAD
 				$panel->appendChild( $xml->create_element( "div",
+=======
+				$panel->appendChild( $self->element( "div",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 					class=>"ep_no_js",
 					style => "height: 1em",
 				) );
@@ -846,7 +1141,11 @@ sub tree
 
 	$opts{class} = $opts{prefix} if !defined $opts{class};
 
+<<<<<<< HEAD
 	my $frag = $xml->create_document_fragment;
+=======
+	my $frag = $self->fragment;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$frag->appendChild( $xml->create_data_element( "div",
 		$self->tree2( $root, %opts ),
@@ -869,12 +1168,20 @@ sub tree2
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 
+<<<<<<< HEAD
 	my $frag = $xml->create_document_fragment;
+=======
+	my $frag = $self->fragment;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $frag if !defined $root || !scalar(@$root);
 
 	$opts{render_value} ||= sub { $xml->create_text_node( $_[0] ) };
 
+<<<<<<< HEAD
 	my $dl = $frag->appendChild( $xml->create_element( "dl" ) );
+=======
+	my $dl = $frag->appendChild( $self->element( "dl" ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	
 	foreach my $node (@$root)
 	{
@@ -896,7 +1203,11 @@ sub tree2
 			$dl->appendChild( $xml->create_data_element( "dt",
 				$opts{render_value}( $node ),
 			) );
+<<<<<<< HEAD
 			$dl->appendChild( $xml->create_element( "dd",
+=======
+			$dl->appendChild( $self->element( "dd",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				class => "ep_no_js",
 			) );
 		}
@@ -918,7 +1229,11 @@ sub action_list
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 
+<<<<<<< HEAD
 	my $ul = $xml->create_element( "ul", class => "ep_action_list" );
+=======
+	my $ul = $self->element( "ul", class => "ep_action_list" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	for(@$actions)
 	{
 		$ul->appendChild( $xml->create_data_element( "li", $_ ) );
@@ -940,7 +1255,11 @@ sub action_definition_list
 	my $repo = $self->{repository};
 	my $xml = $repo->xml;
 
+<<<<<<< HEAD
 	my $dl = $xml->create_element( "dl", class => "ep_action_list" );
+=======
+	my $dl = $self->element( "dl", class => "ep_action_list" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	for(my $i = 0; $i < @$actions; ++$i)
 	{
@@ -980,7 +1299,11 @@ END
 
 =for COPYRIGHT BEGIN
 
+<<<<<<< HEAD
 Copyright 2000-2011 University of Southampton.
+=======
+Copyright 2000-2013 University of Southampton.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =for COPYRIGHT END
 

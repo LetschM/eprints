@@ -93,11 +93,18 @@ sub handler
 
 	my $repo = $EPrints::HANDLE->current_repository();
 
+<<<<<<< HEAD
 	my $dataobj = $r->pnotes( "dataobj" );
 	my $filename = $r->pnotes( "filename" );
 
 	# Now get the file object itself
 	my $fileobj = $dataobj->get_stored_file( $filename );
+=======
+	my $fileobj = $r->pnotes( "dataobj" );
+	my $filename = $fileobj->value( "filename" );
+
+	# Now get the file object itself
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return HTTP_NOT_FOUND unless defined $fileobj;
 
 	my $url = $fileobj->get_remote_copy();
@@ -245,9 +252,16 @@ sub handler
 		}
 		print shift( @boundaries ) if $rv;
 	}
+<<<<<<< HEAD
 	elsif( $rres == HTTP_RANGE_NOT_SATISFIABLE )
 	{
 		return HTTP_RANGE_NOT_SATISFIABLE;
+=======
+	elsif( $rres != OK )
+	{
+		# HTTP_RANGE_NOT_SATISFIABLE, HTTP_BAD_REQUEST
+		return $rres;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	else # OK normal response
 	{
@@ -273,7 +287,11 @@ sub handler
 			# Shows in httpd logs as 499, even though the client
 			# received a '200 Ok' response. From nginx
 			return 499;
+<<<<<<< HEAD
 		}	
+=======
+		}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	elsif( !$rv )
 	{

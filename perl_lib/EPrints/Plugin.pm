@@ -143,14 +143,23 @@ sub global_uri
 ######################################################################
 =pod
 
+<<<<<<< HEAD
 =item $id = $plugin->get_id
+=======
+=item $id = $plugin->id
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Return the ID of this plugin.
 
 =cut
 ######################################################################
 
+<<<<<<< HEAD
 sub get_id
+=======
+sub get_id { shift->id }
+sub id
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self ) = @_;
 
@@ -160,14 +169,23 @@ sub get_id
 ######################################################################
 =pod
 
+<<<<<<< HEAD
 =item $name = $plugin->get_name
+=======
+=item $name = $plugin->name
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Return the ID of this plugin.
 
 =cut
 ######################################################################
 
+<<<<<<< HEAD
 sub get_name
+=======
+sub get_name { shift->name }
+sub name
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self ) = @_;
 
@@ -177,14 +195,23 @@ sub get_name
 ######################################################################
 =pod
 
+<<<<<<< HEAD
 =item $name = $plugin->get_type
+=======
+=item $name = $plugin->type
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Return the type of this plugin. eg. Export
 
 =cut
 ######################################################################
 
+<<<<<<< HEAD
 sub get_type
+=======
+sub get_type { shift->type }
+sub type
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self ) = @_;
 
@@ -196,7 +223,11 @@ sub get_type
 ######################################################################
 =pod
 
+<<<<<<< HEAD
 =item $name = $plugin->get_subtype
+=======
+=item $name = $plugin->subtype
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Return the sub-type of this plugin. eg. BibTex
 
@@ -205,7 +236,12 @@ This is the ID with the type stripped from the front.
 =cut
 ######################################################################
 
+<<<<<<< HEAD
 sub get_subtype
+=======
+sub get_subtype { shift->subtype }
+sub subtype
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self ) = @_;
 

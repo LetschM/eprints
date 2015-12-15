@@ -159,7 +159,10 @@ push @{$c->{fields}->{eprint}},
 {
 	name => 'date',
 	type => 'date',
+<<<<<<< HEAD
 	min_resolution => 'year',
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 },
 
 {
@@ -268,6 +271,7 @@ push @{$c->{fields}->{eprint}},
 	name => 'thesis_type',
 	type => 'set',
 	options => [qw(
+<<<<<<< HEAD
 		diploma
 		masters
 		doctoral
@@ -284,6 +288,11 @@ push @{$c->{fields}->{eprint}},
 		mphil
 		phd
 		dphil
+=======
+		masters
+		phd
+		engd
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		other
 	)],
 	input_style => 'medium',
@@ -389,6 +398,31 @@ push @{$c->{fields}->{eprint}},
 },
 
 {
+<<<<<<< HEAD
+=======
+	name => 'exhibitors',
+	type => 'compound',
+	multiple => 1,
+	fields => [
+		{
+			sub_name => 'name',
+			type => 'name',
+			hide_honourific => 1,
+			hide_lineage => 1,
+			family_first => 1,
+		},
+		{
+			sub_name => 'id',
+			type => 'text',
+			input_cols => 20,
+			allow_null => 1,
+		}
+	],
+	input_boxes => 2,
+},
+
+{
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	name => 'num_pieces',
 	type => 'int',
 },
@@ -399,6 +433,82 @@ push @{$c->{fields}->{eprint}},
 },
 
 {
+<<<<<<< HEAD
+=======
+	name => 'producers',
+	type => 'compound',
+	multiple => 1,
+	fields => [
+		{
+			sub_name => 'name',
+			type => 'name',
+			hide_honourific => 1,
+			hide_lineage => 1,
+			family_first => 1,
+		},
+		{
+			sub_name => 'id',
+			type => 'text',
+			input_cols => 20,
+			allow_null => 1,
+		}
+	],
+	input_boxes => 1,
+},
+
+{
+	name => 'conductors',
+	type => 'compound',
+	multiple => 1,
+	fields => [
+		{
+			sub_name => 'name',
+			type => 'name',
+			hide_honourific => 1,
+			hide_lineage => 1,
+			family_first => 1,
+		},
+		{
+			sub_name => 'id',
+			type => 'text',
+			input_cols => 20,
+			allow_null => 1,
+		}
+	],
+	input_boxes => 1,
+},
+
+{
+	name => 'lyricists',
+	type => 'compound',
+	multiple => 1,
+	fields => [
+		{
+			sub_name => 'name',
+			type => 'name',
+			hide_honourific => 1,
+			hide_lineage => 1,
+			family_first => 1,
+		},
+		{
+			sub_name => 'id',
+			type => 'text',
+			input_cols => 20,
+			allow_null => 1,
+		}
+	],
+	input_boxes => 1,
+},
+
+{
+	name => 'accompaniment',
+	type => 'text',
+	multiple => 1,
+	input_boxes => 1,
+},
+
+{
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	name => 'data_type',
 	type => 'text',
 },

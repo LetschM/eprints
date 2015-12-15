@@ -10,11 +10,19 @@
 
 =head1 NAME
 
+<<<<<<< HEAD
 B<EPrints::DataObj::Import> - bulk imports logging
 
 =head1 DESCRIPTION
 
 Inherits from L<EPrints::DataObj>.
+=======
+EPrints::DataObj::Import - caching import session
+
+=head1 DESCRIPTION
+
+Inherits from L<EPrints::DataObj::Cachemap>.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 INSTANCE VARIABLES
 
@@ -74,12 +82,27 @@ Time the import was last successfully completed.
 
 package EPrints::DataObj::Import;
 
+<<<<<<< HEAD
 @ISA = ( 'EPrints::DataObj' );
 
 use EPrints;
 
 use strict;
 
+=======
+use base EPrints::DataObj;
+
+use strict;
+
+=back
+
+=head2 Class Methods
+
+=over 4
+
+=cut
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $thing = EPrints::DataObj::Import->get_system_field_info
 
 Core fields contained in a Web import.
@@ -99,6 +122,7 @@ sub get_system_field_info
 
 		{ name=>"userid", type=>"itemref", required=>0, datasetid => "user" },
 
+<<<<<<< HEAD
 		{ name=>"source_repository", type=>"text", required=>0, },
 
 		{ name=>"url", type=>"longtext", required=>0, },
@@ -123,18 +147,34 @@ sub get_system_field_info
 ######################################################################
 =pod
 
+=======
+		{ name=>"pluginid", type=>"id", },
+
+		{ name=>"query", type=>"longtext", },
+
+		{ name=>"count", type=>"int", },
+
+		{ name=>"cache", type=>"subobject", datasetid=>"import_cache", dataset_fieldname=>"", dataobj_fieldname=>"importid", },
+	);
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $dataset = EPrints::DataObj::Import->get_dataset_id
 
 Returns the id of the L<EPrints::DataSet> object to which this record belongs.
 
 =cut
+<<<<<<< HEAD
 ######################################################################
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub get_dataset_id
 {
 	return "import";
 }
 
+<<<<<<< HEAD
 ######################################################################
 
 =head2 Object Methods
@@ -365,6 +405,136 @@ sub epdata_to_dataobj
 	$dataobj->commit();
 
 	return $dataobj;
+=======
+sub cleanup
+{
+	my( $class, $repo ) = @_;
+
+	my $dataset = $repo->dataset( $class->get_dataset_id );
+
+	my $cache_maxlife = $repo->config( "cache_maxlife" );
+
+	my $expired_time = EPrints::Time::iso_datetime( time() - $cache_maxlife * 3600 );
+
+	$dataset->search(filters => [
+		{ meta_fields => [qw( datestamp )], value => "..$expired_time" }
+	])->map(sub {
+		$_[2]->remove();
+	});
+}
+
+sub create_from_data
+{
+	my( $class, $session, $data, $dataset ) = @_;
+
+	# if we're online delay clean-up until Apache cleanup, which will prevent
+	# the request blocking
+	if( $session->get_online )
+	{
+		$session->get_request->pool->cleanup_register(sub {
+				__PACKAGE__->cleanup( $session )
+			}, $session );
+	}
+	else
+	{
+		$class->cleanup( $session );
+	}
+
+	return $class->SUPER::create_from_data( $session, $data, $dataset );
+}
+
+######################################################################
+
+=head2 Object Methods
+
+=cut
+
+######################################################################
+
+sub touch
+{
+	my( $self ) = @_;
+
+	$self->set_value( "datestamp", EPrints::Time::iso_datetime() );
+	$self->commit;
+}
+
+sub remove
+{
+	my( $self ) = @_;
+
+	my $repo = $self->{session};
+
+	$self->{session}->get_database->delete_from(
+			$self->{session}->dataset( "import_cache" )->get_sql_table_name,
+			["importid"],
+			[$self->id],
+		);
+
+	$self->SUPER::remove();
+}
+
+sub plugin
+{
+	my( $self, @params ) = @_;
+
+	return $self->{session}->plugin( "Import::" . $self->value( "pluginid" ), @params );
+}
+
+sub count
+{
+	my( $self ) = @_;
+
+	return $self->value( "count" );
+}
+
+sub item
+{
+	my( $self, $pos ) = @_;
+
+	my $item = $self->{session}->dataset( "import_cache" )->search(filters => [
+				{ meta_fields => ["importid"], value => $self->id, },
+				{ meta_fields => ["pos"], value => $pos, },
+			],
+		)->item( 0 );
+	return undef if !defined $item;
+
+	my $dataset = $self->{session}->dataset( $item->value( "datasetid" ) );
+	$item = $dataset->make_dataobj( $item->value( "epdata" ) );
+
+	return $item;
+}
+
+*get_records = \&slice;
+sub slice
+{
+	my( $self, $left, $count ) = @_;
+
+	my $repo = $self->{session};
+
+	$left ||= 0;
+
+	my $right;
+	if( !defined $count || $left + $count > $self->count )
+	{
+		$right = $self->count;
+	}
+	else
+	{
+		$right = $left + $count;
+	}
+	++$left;
+
+	my $dataset = $self->{session}->dataset( "import_cache" );
+	my @records = $dataset->search(filters => [
+				{ meta_fields => ["importid"], value => $self->id, },
+				{ meta_fields => ["pos"], value => "$left..$right", match => "EQ", },
+			],
+			custom_order => "pos",
+		)->slice;
+
+	return @records;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 1;

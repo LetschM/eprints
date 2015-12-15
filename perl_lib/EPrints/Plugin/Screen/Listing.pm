@@ -145,7 +145,11 @@ sub from
 		}
 	}
 
+<<<<<<< HEAD
 	# don't apply the user filters (/preferences) if they're about to be changed or reset
+=======
+	# don't apply the user filters (/preferences) if they're about to be changed or reset	
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	unless( $action eq 'set_filters' || $action eq 'reset_filters' )
 	{
 		$self->apply_user_filters();
@@ -326,7 +330,12 @@ sub apply_user_filters
 		$self->{processor}->{search}->add_field( fields => $sf->get_fields, 
 			value => $sf->get_value, 
 			match => $sf->get_match, 
+<<<<<<< HEAD
 			merge => $sf->get_merge 
+=======
+			merge => $sf->get_merge,
+			id => $sf->get_id,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		);
 	}
 }
@@ -389,8 +398,12 @@ sub render
 	my( $self ) = @_;
 
 	my $session = $self->{session};
+<<<<<<< HEAD
 	my $user = $session->current_user;
 	my $imagesurl = $session->config( "rel_path" )."/style/images";
+=======
+	my $list = $self->perform_search;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $chunk = $session->make_doc_fragment;
 
@@ -398,11 +411,32 @@ sub render
 
 	$chunk->appendChild( $self->render_filters() );
 
+<<<<<<< HEAD
+=======
+	$chunk->appendChild( $self->render_items( $list ) );
+
+	return $chunk;
+}
+
+sub render_items
+{
+	my( $self, $list ) = @_;
+
+	my $session = $self->{session};
+	my $user = $session->current_user;
+	my $imagesurl = $session->config( "rel_path" )."/style/images";
+
+	my $chunk = $session->make_doc_fragment;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	### Get the items owned by the current user
 	my $ds = $self->{processor}->{dataset};
 
 	my $search = $self->{processor}->{search};
+<<<<<<< HEAD
 	my $list = $self->perform_search;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $exp;
 	if( !$search->is_blank )
 	{
@@ -498,6 +532,7 @@ sub render
 		columns => [(map{ $_->name } @{$columns}), undef ],
 		above_results => $session->make_doc_fragment,
 		render_result => sub {
+<<<<<<< HEAD
 			my( undef, $dataobj ) = @_;
 
 			local $self->{processor}->{dataobj} = $dataobj;
@@ -521,6 +556,9 @@ sub render
 			++$row;
 
 			return $tr;
+=======
+			$self->render_result_row( $_[1] );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		},
 		rows_after => $final_row,
 	);
@@ -583,12 +621,49 @@ sub hidden_bits
 	);
 }
 
+<<<<<<< HEAD
+=======
+sub render_result_row
+{
+	my( $self, $dataobj ) = @_;
+
+	my $session = $self->{session};
+	my $columns = $self->{processor}->{columns};
+
+	local $self->{processor}->{dataobj} = $dataobj;
+	my $class = "";
+# "row_".($row % 2 ? "b" : "a");
+
+	my $tr = $session->make_element( "tr", class=>$class );
+
+	my $first = 1;
+	for( map { $_->name } @$columns )
+	{
+		my $td = $session->make_element( "td", class=>"ep_columns_cell".($first?" ep_columns_cell_first":"")." ep_columns_cell_$_"  );
+		$first = 0;
+		$tr->appendChild( $td );
+		$td->appendChild( $dataobj->render_value( $_ ) );
+	}
+
+	my $td = $session->make_element( "td", class=>"ep_columns_cell ep_columns_cell_last", align=>"left" );
+	$tr->appendChild( $td );
+	$td->appendChild( $self->render_dataobj_actions( $dataobj ) );
+
+	return $tr;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub render_top_bar
 {
 	my( $self ) = @_;
 
 	my $session = $self->{session};
 	my $chunk = $session->make_doc_fragment;
+<<<<<<< HEAD
+=======
+	my $imagesurl = $session->current_url( path => "static", "style/images" );
+	my $list = $self->perform_search;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	if( $session->get_lang->has_phrase( $self->html_phrase_id( "intro" ), $session ) )
 	{
@@ -599,6 +674,25 @@ sub render_top_bar
 		$chunk->appendChild( $intro_div_outer );
 	}
 
+<<<<<<< HEAD
+=======
+	my $phraseid = $self->html_phrase_id( $list->count ? "help" : "help_no_items" );
+	if( $session->get_lang->has_phrase( $phraseid, $session ) )
+	{
+		my %options = (
+			session => $session,
+			id => "ep_review_instructions",
+			title => $self->html_phrase( "help_title" ),
+			content => $session->html_phrase( $phraseid ),
+			collapsed => 1,
+			show_icon_url => "$imagesurl/help.gif",
+		);
+		my $box = $session->make_element( "div", style=>"text-align: left" );
+		$box->appendChild( EPrints::Box::render( %options ) );
+		$chunk->appendChild( $box );
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	# we've munged the argument list below
 	$chunk->appendChild( $self->render_action_list_bar( "dataobj_tools", {
 		dataset => $self->{processor}->{dataset}->id,

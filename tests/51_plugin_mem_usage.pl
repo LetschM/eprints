@@ -44,7 +44,11 @@ ok(defined $repository, "test repository creation");
 
 my %usage = %PLUGIN_MEM_USAGE;
 
+<<<<<<< HEAD
 my $show = $ENV{PLUGIN_MEM_USAGE} || 5;
+=======
+my $show = $ENV{SHOW} || $ENV{PLUGIN_MEM_USAGE} || 5;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 diag( "\nPlugin Memory Usage" );
 foreach my $class (sort { $usage{$b} <=> $usage{$a} } keys %usage)

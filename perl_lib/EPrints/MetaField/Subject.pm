@@ -89,22 +89,35 @@ sub get_top_subject
 	my $topid = $self->get_property( "top" );
 	if( !defined $topid )
 	{
+<<<<<<< HEAD
 		$session->render_error( $session->make_text( 
 			'Subject field name "'.$self->get_name().'" has '.
 			'no "top" property.' ) );
 		exit;
+=======
+		EPrints->abort( 'Subject field name "'.$self->get_name().'" has no "top" property.' );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 		
 	my $topsubject = EPrints::DataObj::Subject->new( $session, $topid );
 
 	if( !defined $topsubject )
 	{
+<<<<<<< HEAD
 		$session->render_error( $session->make_text( 
 			'The top level subject (id='.$topid.') for field '.
 			'"'.$self->get_name().'" does not exist. The '.
 			'site admin probably has not run import_subjects. '.
 			'See the documentation for more information.' ) );
 		exit;
+=======
+		EPrints->abort(
+			'The top level subject (id='.$topid.') for field '.
+			'"'.$self->get_name().'" does not exist. The '.
+			'site admin probably has not run import_subjects. '.
+			'See the documentation for more information.'
+		);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	
 	return $topsubject;

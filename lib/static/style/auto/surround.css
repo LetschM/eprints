@@ -6,6 +6,11 @@
 .ep_sr_component {
 	padding: 0px;
 	margin-top: 10px;
+<<<<<<< HEAD
+=======
+	border-width: 1px;
+	border-style: solid;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 .ep_sr_component .ep_sr_title_bar {
 	padding: 2px 6px 2px 6px; 
@@ -21,8 +26,11 @@
 .ep_sr_component .ep_sr_content {
 	clear: both;
 	padding: 6px;
+<<<<<<< HEAD
 	border-style: none solid solid solid;
 	border-width: 1px;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 /* collapse bar */
@@ -31,9 +39,12 @@
 	padding: 2px 6px 2px 6px; 
 	font-weight: bold;
 	font-size: 115%;
+<<<<<<< HEAD
 	margin-top: 10px;
 	border-style: solid;
 	border-width: 1px;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 .ep_sr_collapse_bar a {
 	text-decoration: none;
@@ -64,8 +75,13 @@
 	text-decoration: none;
 }	
 .ep_sr_component .ep_sr_title_bar {
+<<<<<<< HEAD
 	border-style: solid;
 	border-width: 1px;
+=======
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 .ep_sr_show_help img {
 	vertical-align: -2px;

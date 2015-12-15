@@ -78,16 +78,30 @@ EOH
 
 	if( defined $doc )
 	{
+<<<<<<< HEAD
 		$data{docid} = $doc->id;
 	}
 	if( defined $file )
 	{
 		$data{fileid} = $file->id;
+=======
+		$doc->set_value('files', $doc->value('files'));
+		$data{document} = $doc;
+	}
+	if( defined $file )
+	{
+		$data{file} = $file;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	$data{phrases}{abort} = $repo->phrase( "lib/submissionform:action_cancel" );
 
 	my $plugin = $self->{session}->plugin( "Export::JSON" );
+<<<<<<< HEAD
 	print $plugin->output_dataobj( \%data );
+=======
+	$plugin->initialise_fh(\*STDOUT);
+	print $plugin->output_dataobj(\%data, fh => \*STDOUT);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub action_add_format
@@ -137,6 +151,7 @@ sub action_create_file
 	my $processor = $self->{processor};
 	my $eprint = $processor->{eprint};
 
+<<<<<<< HEAD
 	my $filename = $session->param( "filename" );
 	$filename = "main.bin" if !EPrints::Utils::is_set( $filename );
 
@@ -154,6 +169,47 @@ sub action_create_file
 			filesize => 0,
 			mime_type => $mime_type,
 		});
+=======
+	my $doc;
+	my $file;
+
+	my $filename = $session->param( "filename" );
+	$filename = "main.bin" if !EPrints::Utils::is_set( $filename );
+
+	# search for an existing file
+#	if (EPrints::Utils::is_set($filename))
+#	{
+#		my @docids = map { $_->id } $eprint->get_all_documents;
+#		$file = $session->dataset("file")->search(filters => [
+#			{ meta_fields => [qw( filename )], value => $filename, },
+#			{ meta_fields => [qw( datasetid )], value => "document", },
+#			{ meta_fields => [qw( objectid )], value => "@docids", match => "EQ", merge => "ANY", },
+#		])->item(0);
+#		$doc = $file->parent if defined $file;
+#	}
+#	else
+#	{
+#		$filename = "main.bin";
+#	}
+
+#	if (!defined $file)
+#	{
+		my $mime_type = $session->param( "mime_type" );
+		$mime_type = "application/octet-stream" if !EPrints::Utils::is_set( $mime_type );
+
+		$doc = $eprint->create_subdataobj( "documents", {
+				main => $filename,
+				mime_type => $mime_type,
+				format => "other",
+			});
+
+		$file = $doc->create_subdataobj( "files", {
+				filename => $filename,
+				filesize => 0,
+				mime_type => $mime_type,
+			});
+#	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$processor->{notes}->{upload_plugin}->{document} = $doc;
 	$processor->{notes}->{upload_plugin}->{file} = $file;
@@ -221,8 +277,12 @@ sub render
 
 	$container->appendChild( $xml->create_data_element( "div",
 			$session->html_phrase( "Plugin/InputForm/Component/Upload:drag_and_drop" ),
+<<<<<<< HEAD
 			style => "display: none;",
 			id => join('_', $self->{prefix}, "dropbox_help"),
+=======
+			class => "ep_dropbox_help",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		) );
 
 	# file selection button
@@ -249,6 +309,7 @@ sub render
 		) );
 
 	$container->appendChild( $session->make_javascript( <<EOJ ) );
+<<<<<<< HEAD
 var div = \$('$self->{prefix}_dropbox');
 var body = document.getElementsByTagName ('body').item (0);
 var controller = new Screen_EPrint_UploadMethod_File ('$self->{prefix}', '$component');
@@ -262,6 +323,9 @@ Event.observe (body, 'ep:dragcommence', function(evt) {
 Event.observe (body, 'ep:dragfinish', function(evt) {
 		controller.dragFinish (evt);
 	});
+=======
+new Screen_EPrint_UploadMethod_File ('$self->{prefix}', '$component');
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 EOJ
 
 	return $f;

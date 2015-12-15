@@ -48,7 +48,11 @@ $c->{indexing}->{freetext_always_words} = {
 
 
 
+<<<<<<< HEAD
 # Chars which seperate words. Pretty much anything except
+=======
+# Chars which separate words. Pretty much anything except
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # A-Z a-z 0-9 and single quote '
 
 # If you want to add other seperator characters then they
@@ -107,7 +111,11 @@ $c->{extract_words} = sub
 
 	# Iterate over every word (bits divided by seperator chars)
 	# We use hashes rather than arrays at this point to make
+<<<<<<< HEAD
 	# sure we only get each word once, not once for each occurance.
+=======
+	# sure we only get each word once, not once for each occurrence.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my %good = ();
 	my %bad = ();
 	my $word;
@@ -156,6 +164,14 @@ $c->{extract_words} = sub
 		# Only "bad" words are used in display to the
 		# user. Good words can be normalised even further.
 
+<<<<<<< HEAD
+=======
+		# If any of the characters are lowercase then lower
+		# case the entire word so "Mesh" becomes "mesh" but
+		# "HTTP" remains "HTTP".
+		$word = lc $word;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		# non-acronyms (ie not all UPPERCASE words) have
 		# a trailing 's' removed. Thus in searches the
 		# word "chair" will match "chairs" and vice-versa.
@@ -164,6 +180,7 @@ $c->{extract_words} = sub
 		# reasonable attempt.
 		$word =~ s/s$//;
 
+<<<<<<< HEAD
 		# If any of the characters are lowercase then lower
 		# case the entire word so "Mesh" becomes "mesh" but
 		# "HTTP" remains "HTTP".
@@ -172,6 +189,8 @@ $c->{extract_words} = sub
 			$word = lc $word;
 		}
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$good{$word}++;
 	}
 	# convert hash keys to arrays and return references

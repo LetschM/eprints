@@ -123,7 +123,11 @@ sub new
 {
 	my( $class, %self ) = @_;
 
+<<<<<<< HEAD
 	$self{session} = $self{repository} if !defined $self{session};
+=======
+	$self{session} ||= $self{repository} ||= $self{session};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $self = \%self;
 #	$self->{session} = $opts{session} || $opts{repository};
@@ -652,11 +656,17 @@ sub map
 {
 	my( $self, $function, $info ) = @_;	
 
+<<<<<<< HEAD
 	my $count = $self->count();
 
 	my $CHUNKSIZE = 100;
 
 	for( my $offset = 0; $offset < $count; $offset+=$CHUNKSIZE )
+=======
+	my $CHUNKSIZE = 100;
+
+	for( my $offset = 0; 1; $offset+=$CHUNKSIZE )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my @records = $self->slice( $offset, $CHUNKSIZE );
 		foreach my $item ( @records )
@@ -667,6 +677,10 @@ sub map
 				$item, 
 				$info );
 		}
+<<<<<<< HEAD
+=======
+		last if @records < $CHUNKSIZE;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 }
 

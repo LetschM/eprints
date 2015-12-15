@@ -6,9 +6,15 @@ EPrints::Plugin::Issues::SimilarTitles
 
 package EPrints::Plugin::Issues::SimilarTitles;
 
+<<<<<<< HEAD
 use EPrints::Plugin::Export;
 
 @ISA = ( "EPrints::Plugin::Issues" );
+=======
+use EPrints::Plugin::Issues::ExactTitleDups;
+
+@ISA = ( "EPrints::Plugin::Issues::ExactTitleDups" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 use strict;
 
@@ -19,10 +25,15 @@ sub new
 	my $self = $class->SUPER::new( %params );
 
 	$self->{name} = "Similar titles";
+<<<<<<< HEAD
+=======
+	$self->{accept} = [qw( list/eprint )];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }
 
+<<<<<<< HEAD
 sub process_at_end
 {
 	my( $plugin, $info ) = @_;
@@ -67,12 +78,23 @@ sub process_item_in_list
 
 	$info->{id_to_title}->{$item->get_id} = $title;
 	push @{$info->{codemap}->{make_code( $title )}}, $item->get_id;
+=======
+sub process_dataobj
+{
+	my( $self, $eprint, %opts ) = @_;
+
+	my $title = $eprint->value( "title" );
+	return if !EPrints::Utils::is_set( $title );
+
+	push @{$self->{titles}->{make_code( $title )}}, $eprint->id;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub make_code
 {
 	my( $string ) = @_;
 
+<<<<<<< HEAD
 	# Lowercase string
 	$string = "\L$string";
 
@@ -91,6 +113,31 @@ sub make_code
 
 	# remove vowels 
 	$string =~ s/[aeiou]//g;
+=======
+	local $_;
+	for($string) {
+
+	# Lowercase string
+	$_ = lc;
+
+	# remove one and two character words
+	s/\b\p{Alnum}{1,2}\b//g; 
+
+	# turn one-or more non-alphanumerics into a single space.
+	s/\P{Alnum}+/ /g;
+
+	# remove leading and ending spaces
+	s/^ //;
+	s/ $//;
+
+	# remove double characters
+	s/([^ ])\1/$1/g;
+
+	# remove English vowels 
+	s/[aeiou]//g;
+
+	} # end of $_-alias
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $string;
 }

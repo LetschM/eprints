@@ -68,6 +68,7 @@ sub query
 
 	my $url = URI->new( $base_url );
 	$url->path( $url->path . "cgi/search" );
+<<<<<<< HEAD
 	$url->query_form( q => $q, output => "EPMI2" );
 	my $tmpfile = File::Temp->new;
 
@@ -115,6 +116,9 @@ sub query2
 	{
 		$url->query_form( q => $q, v => $v, "q_merge" => "ALL", output => "EPMI2" );
 	}
+=======
+	$url->query_form( q => $q, output => "EPMI" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $tmpfile = File::Temp->new;
 
@@ -140,6 +144,7 @@ sub query2
 	return \@epms;
 }
 
+<<<<<<< HEAD
 sub accolades
 {
 	my( $_ua, $_base_url ) = @_;
@@ -167,6 +172,8 @@ sub accolades
 	return %kv;
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $epm = $source->epm_by_eprintid( $eprintid )
 
 Retrieves an installable EPM from the source with $eprintid.

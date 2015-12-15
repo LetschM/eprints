@@ -52,6 +52,20 @@ foreach my $datasetid ($repo->get_dataset_ids)
 	}
 }
 
+<<<<<<< HEAD
+=======
+{
+	my $simpleType = $xml->create_element( "xs:simpleType", name => "uuid.attribute" );
+	my $restriction = $xml->create_element( "xs:restriction", base => "xs:string" );
+	$simpleType->appendChild( $restriction );
+	my $pattern = $xml->create_element( "xs:pattern", value => "urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" );
+	$restriction->appendChild( $pattern );
+
+	$types{'uuid.attribute'} = $simpleType;
+}
+
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 foreach my $datasetid (sort keys %elements)
 {
 	# root element for this dataset
@@ -79,6 +93,13 @@ foreach my $datasetid (sort keys %elements)
 	my $id = $xml->create_element( "xs:attribute", name => "id", type => "xs:anyURI" );
 	$complexType->appendChild( $id );
 
+<<<<<<< HEAD
+=======
+	# uuid="..."
+	my $uuid = $xml->create_element( "xs:attribute", name => "uuid", type => "uuid.attribute" );
+	$complexType->appendChild( $uuid );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	print $repo->xml->to_string( $root, indent => 1 ) . "\n";
 	print $repo->xml->to_string( $complexType, indent => 1 ) . "\n";
 }

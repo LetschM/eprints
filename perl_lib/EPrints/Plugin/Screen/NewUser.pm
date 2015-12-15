@@ -124,9 +124,13 @@ sub render
 		_order => [ "create", "cancel" ]
 	);
 
+<<<<<<< HEAD
 	my $form = $session->render_form( "GET" );
 	$form->appendChild( 
 		$session->render_hidden_field ( "screen", "NewUser" ) );		
+=======
+	my $form = $self->render_form;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $ds = $session->dataset( "user" );
 	my $username_field = $ds->get_field( "username" );
 	my $usertype_field = $ds->get_field( "usertype" );

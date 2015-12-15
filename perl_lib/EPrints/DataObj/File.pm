@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::DataObj::File
@@ -9,11 +10,17 @@
 
 =pod
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =for Pod2Wiki
 
 =head1 NAME
 
+<<<<<<< HEAD
 B<EPrints::DataObj::File> - a stored file
+=======
+EPrints::DataObj::File - a stored file
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 DESCRIPTION
 
@@ -310,8 +317,11 @@ sub get_dataset_id
 
 =head2 Object Methods
 
+<<<<<<< HEAD
 =over 4
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 ######################################################################
@@ -588,7 +598,11 @@ sub to_sax
 		Attributes => \%Attributes,
 	});
 
+<<<<<<< HEAD
 	if( $self->value( "datasetid" ) eq "document" )
+=======
+	if( $self->is_set( "datasetid" ) && $self->value( "datasetid" ) eq "document" )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my $doc = $self->parent();
 		my $url = $doc->get_url( $self->value( "filename" ) );
@@ -705,12 +719,27 @@ $n is the number of bytes to read, defaults to C<filesize>.
 
 CALLBACK is:
 
+<<<<<<< HEAD
 	sub {
 		my( $buffer ) = @_;
 		...
 		return 1;
 	}
 
+=======
+=for verbatim_lang perl
+
+	sub {
+		my( $buffer ) = @_;
+
+		print $buffer;
+
+		return 1;
+	}
+
+Returning 0 from the callback will cause the read to abort.
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 sub get_file
@@ -729,7 +758,13 @@ Write $content_length bytes from CONTENT to the file object. Updates C<filesize>
 
 Returns $content_length or undef on failure.
 
+<<<<<<< HEAD
 CONTENT may be one of:
+=======
+If CONTENT has fewer bytes than $content_length the result is undetermined and a warning will be printed.
+
+CONTENT may be any one of:
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =over 4
 
@@ -737,13 +772,27 @@ CONTENT may be one of:
 
 Will be called until it returns empty string ("").
 
+<<<<<<< HEAD
+=======
+=for verbatim_lang perl
+
+	sub {
+		sysread($fh, my $buffer, 1024);
+		return $buffer;
+	};
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item SCALARREF
 
 A scalar reference to a string of octets that will be written as-is.
 
 =item GLOB
 
+<<<<<<< HEAD
 Will be treated as a file handle and read with sysread().
+=======
+Will be treated as a file handle and read with sysread() until the eof.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =back
 
@@ -925,7 +974,10 @@ sub end_element
 		seek($tmpfile,0,0);
 		delete $state->{encoding};
 		delete $state->{buffer};
+<<<<<<< HEAD
                 $epdata->{filesize} = -s $epdata->{_content} if ( !exists $epdata->{filesize} );
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	$self->SUPER::end_element( $data, $epdata, $state );
@@ -943,9 +995,16 @@ sub characters
 		for($state->{buffer})
 		{
 			use bytes;
+<<<<<<< HEAD
 			$_ .= $data->{Data};
 			print $tmpfile MIME::Base64::decode_base64( substr($_,0,length($_) - length($_)%77) );
 			$_ = substr($_,length($_) - length($_)%77);
+=======
+			$data->{Data} =~ s/\s+//g;
+			$_ .= $data->{Data};
+			print $tmpfile MIME::Base64::decode_base64( substr($_,0,length($_) - length($_)%4) );
+			$_ = substr($_,length($_) - length($_)%4);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 	}
 }
@@ -984,6 +1043,11 @@ __END__
 
 =head1 SEE ALSO
 
+<<<<<<< HEAD
+=======
+L<EPrints::Storage>
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 L<EPrints::DataObj> and L<EPrints::DataSet>.
 
 =cut
@@ -993,7 +1057,11 @@ L<EPrints::DataObj> and L<EPrints::DataSet>.
 
 =for COPYRIGHT BEGIN
 
+<<<<<<< HEAD
 Copyright 2000-2011 University of Southampton.
+=======
+Copyright 2000-2013 University of Southampton.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =for COPYRIGHT END
 

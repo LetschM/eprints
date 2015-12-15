@@ -26,12 +26,16 @@ case "$1" in
 	# Why disable the site in configure?!
 	#rm -f /etc/apache2/sites-available/@PACKAGE@
 	#rm -f /etc/apache2/sites-enabled/@PACKAGE@
+<<<<<<< HEAD
 	if [ ! -e /etc/apache2/sites-available/@PACKAGE@ ]; then 
 		echo "Include @PREFIX@/cfg/apache.conf" > /etc/apache2/sites-available/@PACKAGE@
 	elif [ "`cat /etc/apache2/sites-available/@PACKAGE@`" != "Include @PREFIX@/cfg/apache.conf" ]; then
 		echo "WARNING: /etc/apache2/sites-available/@PACKAGE@ differs from maintainer's version.  Apache may have problems loading this configuration."
 	fi
 	ln -fs /etc/apache2/sites-available/@PACKAGE@ /etc/apache2/sites-available/@PACKAGE@.conf
+=======
+	echo "Include @PREFIX@/cfg/apache.conf" > /etc/apache2/sites-available/@PACKAGE@.conf
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	ln -fs @PREFIX@/bin/epindexer /etc/init.d/epindexer
 	update-rc.d epindexer defaults 99 99 > /dev/null
 	chown @INSTALL_USER@:www-data @PREFIX@ -R > /dev/null
@@ -61,7 +65,11 @@ case "$1" in
 	echo "##                                                               ##";
 	echo "##  # exit                                                       ##";
 	echo "##                                                               ##";
+<<<<<<< HEAD
 	echo "##  # a2ensite eprints                                           ##";
+=======
+	echo "##  # a2ensite eprints3                                          ##";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	echo "##                                                               ##";
 	echo "##  # apache2ctl restart                                         ##";
 	echo "##                                                               ##";

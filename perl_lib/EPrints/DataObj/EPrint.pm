@@ -132,7 +132,12 @@ sub get_system_field_info
 		multiple=>1 },
 
 	{ name=>"eprint_status", type=>"set", required=>1,
+<<<<<<< HEAD
 		options=>[qw/ inbox buffer archive deletion /] },
+=======
+		options=>[qw/ inbox buffer archive deletion /],
+		default_value=>"inbox", },
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	# UserID is not required, as some bulk importers
 	# may not provide this info. maybe bulk importers should
@@ -173,7 +178,11 @@ sub get_system_field_info
 
 	{ name=>"contact_email", type=>"email", required=>0, can_clone=>0 },
 
+<<<<<<< HEAD
 	{ name=>"fileinfo", type=>"longtext", 
+=======
+	{ name=>"fileinfo", type=>"longtext", import=>0,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		text_index=>0,
 		export_as_xml=>0,
 		render_value=>"EPrints::DataObj::EPrint::render_fileinfo" },
@@ -195,6 +204,7 @@ sub get_system_field_info
 		],
 	},
 
+<<<<<<< HEAD
 	{ name=>"item_issues", type=>"compound", multiple=>1,
 		fields => [
 			{
@@ -247,12 +257,20 @@ sub get_system_field_info
 	},
 
 	{ name=>"item_issues_count", type=>"int",  volatile=>1 },
+=======
+	{ name=>"item_issues", type=>"subobject", datasetid=>'issue',
+		multiple=>1, text_index=>1 },
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	{ 'name' => 'sword_depositor', 'type' => 'itemref', datasetid=>"user" },
 
 	{ 'name' => 'sword_slug', 'type' => 'text' },
 
+<<<<<<< HEAD
 	{ 'name' => 'edit_lock', 'type' => 'compound', volatile => 1, export_as_xml=>0,
+=======
+	{ 'name' => 'edit_lock', 'type' => 'compound', volatile => 1, export_as_xml=>0, import=>0,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		'fields' => [
 			{ 'sub_name' => 'user',  'type' => 'itemref', 'datasetid' => 'user', sql_index=>0 },
 			{ 'sub_name' => 'since', 'type' => 'int', sql_index=>0 },
@@ -264,6 +282,7 @@ sub get_system_field_info
 	)
 }
 
+<<<<<<< HEAD
 =item $eprint->set_item_issues( $new_issues )
 
 This method updates the issues attached to this eprint based on the new issues
@@ -380,6 +399,8 @@ sub order_issues_newest_open_timestamp
 	return $v;	
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $eprint->fileinfo()
 
 The special B<fileinfo> field contains the icon URL and main-file URL for each non-volatile document in the eprint. This is a performance tweak to avoid having to retrieve documents when rendering eprint citations.
@@ -905,6 +926,14 @@ sub remove
 		$file->remove;
 	}
 
+<<<<<<< HEAD
+=======
+	foreach my $issue (@{$self->value( "item_issues" )})
+	{
+		$issue->remove;
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $success = $self->SUPER::remove();
 
 	# remove the webpages associated with this record.
@@ -960,6 +989,7 @@ sub commit
 {
 	my( $self, $force ) = @_;
 
+<<<<<<< HEAD
 	# recalculate issues number
 	if( exists $self->{changed}->{item_issues_status} )
 	{
@@ -973,6 +1003,8 @@ sub commit
 		$self->set_value( "item_issues_count", $c );
 	}
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( !$self->is_set( "datestamp" ) && $self->value( "eprint_status" ) eq "archive" )
 	{
 		$self->set_value( "datestamp", EPrints::Time::get_iso_timestamp() );
@@ -1065,7 +1097,11 @@ sub save_revision
 	$event->set_dataobj_xml( $self );
 
 	# make sure the revision number is correct in the database
+<<<<<<< HEAD
 	$repo->database->update(
+=======
+	$repo->database->update_data(
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$self->{dataset},
 		$self->{data},
 		{ rev_number => delete $self->{changed}->{rev_number} }
@@ -1403,25 +1439,48 @@ sub generate_static
 		# only deleted and live records have a web page.
 		next if( $status ne "archive" && $status ne "deletion" );
 
+<<<<<<< HEAD
 		my( $page, $title, $links, $template ) = $self->render;
 		my @plugins = $self->{session}->plugin_list( 
+=======
+		my %pins;
+
+		@pins{qw( page title links template )} = $self->render;
+		if( $pins{template} )
+		{
+			$pins{template} = $self->{session}->make_text( $pins{template} );
+		}
+		else
+		{
+			delete $pins{template};
+		}
+
+		my @plugins = $self->{session}->get_plugins( 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 					type=>"Export",
 					can_accept=>"dataobj/".$self->{dataset}->confid, 
 					is_advertised => 1,
 					is_visible=>"all" );
 		if( scalar @plugins > 0 ) {
+<<<<<<< HEAD
 			$links = $self->{session}->make_doc_fragment() if( !defined $links );
 			foreach my $plugin_id ( @plugins ) 
 			{
 				$plugin_id =~ m/^[^:]+::(.*)$/;
 				my $id = $1;
 				my $plugin = $self->{session}->plugin( $plugin_id );
+=======
+			$pins{links} = $self->{session}->make_doc_fragment() if( !defined $pins{links} );
+			foreach my $plugin ( @plugins ) 
+			{
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				my $link = $self->{session}->make_element( 
 					"link", 
 					rel=>"alternate",
 					href=>$plugin->dataobj_export_url( $self ),
 					type=>$plugin->param("mimetype"),
 					title=>EPrints::XML::to_string( $plugin->render_name ), );
+<<<<<<< HEAD
 				$links->appendChild( $link );
 				$links->appendChild( $self->{session}->make_text( "\n" ) );
 			}
@@ -1430,6 +1489,16 @@ sub generate_static
 			$full_path . "/index",
 			{title=>$title, page=>$page, head=>$links, template=>$self->{session}->make_text($template) },
 			 );
+=======
+				$pins{links}->appendChild( $link );
+				$pins{links}->appendChild( $self->{session}->make_text( "\n" ) );
+			}
+		}
+		EPrints::Page->new(
+				repository => $self->{session},
+				pins => \%pins,
+			)->write_to_path( "$full_path/index" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	$self->{session}->change_lang( $real_langid );
 	delete $self->{session}->{preparing_static_page};
@@ -1524,15 +1593,22 @@ sub render
 		{
 			$replacement = $self->{session}->eprint( $self->value( "succeeds" ) );
 		}
+<<<<<<< HEAD
 		elsif( $self->{dataset}->has_field( "replacedby" ) && $self->is_set( "replacedby" ) ) ##backward compatibility for repository upgraded from older version, which had replacedby. 
 		{
 			$replacement = $self->{session}->eprint( $self->value( "replacedby" ) );
 		}
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if( defined $replacement && $replacement->value( "eprint_status" ) eq "archive" )
 		{
 			$dom->appendChild( 
 				$self->{session}->html_phrase( 
+<<<<<<< HEAD
 					"lib/eprint:replaced_version", 
+=======
+					"lib/eprint:later_version", 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 					citation => $replacement->render_citation_link ) );
 		}
 	}
@@ -2229,8 +2305,11 @@ sub render_edit_lock
 };
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 

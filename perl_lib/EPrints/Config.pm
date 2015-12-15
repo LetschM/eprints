@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::Config
@@ -9,6 +10,9 @@
 
 
 =pod
+=======
+=for Pod2Wiki
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 NAME
 
@@ -20,7 +24,11 @@ This module handles loading the main configuration for an instance
 of the eprints software - such as the list of language id's and 
 the top level configurations for repositories - the XML files in /archives/
 
+<<<<<<< HEAD
 =head1 METHODS
+=======
+You should need to use this module, instead load repositories using L<EPrints>.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head2 Deprecated Methods
 
@@ -28,17 +36,30 @@ the top level configurations for repositories - the XML files in /archives/
 
 =item EPrints::Config::abort
 
+<<<<<<< HEAD
 Deprecated, use L<EPrints>::abort.
 
 =item EPrints::Config::get_archive_config
 =item EPrints::Config::get_archive_ids
+=======
+Deprecated, use L<EPrints/abort>.
+
+=item EPrints::Config::get_archive_config
+
+=item EPrints::Config::get_archive_ids
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item EPrints::Config::load_archive_config_module
 
 Deprecated, use *_repository_*.
 
 =back
 
+<<<<<<< HEAD
 =head2 Normal Methods
+=======
+=head1 METHODS
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =over 4
 
@@ -51,6 +72,11 @@ Deprecated, use *_repository_*.
 
 package EPrints::Config;
 
+<<<<<<< HEAD
+=======
+use Data::Dumper;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use warnings;
 use strict;
 
@@ -76,6 +102,18 @@ Load the EPrints configuration.
 Do not use this method directly, it will be automatically called
 when using EPrints.
 
+<<<<<<< HEAD
+=======
+Defines the following configuration properties:
+
+	cgi_path /cgi
+	cfg_path /cfg
+	lib_path /lib
+	arc_path /archives
+	bin_path /bin
+	var_path /var
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 ######################################################################
 
@@ -113,6 +151,14 @@ sub init
 
 Load the system configuration files.
 
+<<<<<<< HEAD
+=======
+Configuration files are loaded in order from (later files with the same name will be ignored):
+
+	/cfg/cfg.d
+	/lib/syscfg.d
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 sub load_system_config
@@ -140,7 +186,11 @@ sub load_system_config
 		${"EPrints::SystemSettings::config"} = $SYSTEMCONF;
 	}
 
+<<<<<<< HEAD
 	eval &_bootstrap( "EPrints::SystemSettings" ) or die $@;
+=======
+	eval &_bootstrap( "EPrints::SystemSettings" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	# we want to sort by filename because we interleave files from default and
 	# custom locations
@@ -210,10 +260,30 @@ sub get_repository_ids
 
 =item $arc_conf = EPrints::Config::load_repository_config_module( $id )
 
+<<<<<<< HEAD
 Load the full configuration for the specified repository unless the 
 it has already been loaded.
 
 Return a reference to a hash containing the full repository configuration. 
+=======
+Load the full configuration for the specified repository.
+
+Returns a reference to a hash containing the full repository configuration. 
+
+Configuration files are loaded in order from (later files with the same name will be ignored):
+
+	archives/[archiveid]/cfg/cfg.d
+	site_lib/cfg.d
+	lib/cfg.d
+
+Defines the following configuration properties:
+
+	archiveroot    archives/[archiveid]
+	documents_path archives/[archiveid]/documents
+	config_path    archives/[archiveid]/cfg
+	htdocs_path    archives/[archiveid]/html
+	cgi_path       archives/[archiveid]/cgi
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 ######################################################################
@@ -269,7 +339,11 @@ sub load_repository_config_module
 		${"EPrints::Config::${id}::config"} = $info;
 	}
 
+<<<<<<< HEAD
 	eval &_bootstrap( "EPrints::Config::".$id ) or die $@;
+=======
+	eval &_bootstrap( "EPrints::Config::".$id );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	# we want to sort by filename because we interleave files from default and
 	# custom locations
@@ -317,7 +391,10 @@ sub load_config_file
 }
 }
 
+<<<<<<< HEAD
 1;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 EOP
 }
 
@@ -341,6 +418,30 @@ sub get
 	return $SYSTEMCONF->{$confitem};
 }
 
+<<<<<<< HEAD
+=======
+=item $ok = EPrints::Config::write_config( $dest, $names, $values )
+
+Write name-value pairs to a configuration file $dest (overwriting any existing data). This uses L<EPrints::Dumper> to serialise the passed Perl structures.
+
+=cut
+
+sub write_config
+{
+	my( $filename, $names, $values ) = @_;
+
+	my $sys = EPrints::System->new;
+
+	open(my $fh, ">", $filename) or die "Error writing to $filename: $!";
+	print $fh Data::Dumper->Dump( $values, $names );
+	close($fh);
+
+	$sys->chmod( $sys->file_perms, $filename );
+
+	$sys->chown_for_eprints( $filename );
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 ######################################################################

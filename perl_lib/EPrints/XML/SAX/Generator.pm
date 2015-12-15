@@ -37,6 +37,20 @@ sub generate {
 	return $r;
 }
 
+<<<<<<< HEAD
+=======
+sub generate_fragment {
+    my $self = shift;
+    my ($node) = @_;
+    
+	$NS{$self->{Handler}} = XML::NamespaceSupport->new;
+
+    process_node($self->{Handler}, $node);
+
+	delete $NS{$self->{Handler}};
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub process_node {
     my ($handler, $node) = @_;
     
@@ -58,6 +72,14 @@ sub process_node {
     elsif ($node_type == XML_DOCUMENT_NODE) {
 		process_element($handler,$node->documentElement);
     }
+<<<<<<< HEAD
+=======
+	elsif ($node_type == XML_DOCUMENT_FRAGMENT_NODE) {
+        foreach my $kid ($node->childNodes) {
+            process_node($handler, $kid);
+        }
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     else {
         warn("unknown node type: $node_type");
     }
@@ -74,10 +96,17 @@ sub process_element {
 
 	if( $element->can( "namespaceURI" ) && !defined($ns->get_uri( $element->prefix || '' )) )
 	{
+<<<<<<< HEAD
 		$ns->declare_prefix( $element->prefix || '', $element->namespaceURI );
 		$handler->start_prefix_mapping({
 			Prefix => $element->prefix || '',
 			NamespaceURI => $element->namespaceURI,
+=======
+		$ns->declare_prefix( $element->prefix || '', $element->namespaceURI || '');
+		$handler->start_prefix_mapping({
+			Prefix => $element->prefix || '',
+			NamespaceURI => $element->namespaceURI || '',
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		});
 	}
 

@@ -78,6 +78,7 @@ sub output_list
 {
 	my( $plugin, %opts ) = @_;
 
+<<<<<<< HEAD
 	my $r = [];
 	if( defined $opts{fh} )
 	{
@@ -129,6 +130,53 @@ sub output_list
 	}
 
 	return join( '', @{$r} );
+=======
+	my @r;
+
+	my $f = defined $opts{fh} ?
+		sub { print {$opts{fh}} $_[0] } :
+		sub { push @r, $_[0] };
+
+	&$f( $plugin->rdf_header() );
+
+	{
+		my $graph = EPrints::RDFGraph->new( repository=>$plugin->{session} );
+		$graph->add_boilerplate_triples();
+		&$f( $plugin->serialise_graph( $graph, %opts ) ); # returns "" if it printed already
+	}
+
+	if( $opts{list}->get_dataset->id eq "triple" )
+	{
+		my $graph = EPrints::RDFGraph->new( repository=>$plugin->{session} );
+		my $n = 0;
+		$opts{list}->map( sub {
+			(undef, undef, my $dataobj) = @_;
+
+			$graph->add_dataobj_triples( $dataobj );
+
+			if( ++$n % 1000 == 0 )
+			{
+				&$f( $plugin->serialise_graph( $graph, %opts ) );
+				$graph = EPrints::RDFGraph->new( repository=>$plugin->{session} );
+			}
+		});
+		&$f( $plugin->serialise_graph( $graph, %opts ) );
+	}
+	else
+	{
+		$opts{list}->map( sub {
+			(undef, undef, my $dataobj) = @_;
+
+			my $graph = EPrints::RDFGraph->new( repository=>$plugin->{session} );
+			$graph->add_dataobj_triples( $dataobj );
+			&$f( $plugin->serialise_graph( $graph, %opts ) );
+		});
+	}
+
+	&$f( $plugin->rdf_footer() );
+
+	return join '', @r;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub output_graph

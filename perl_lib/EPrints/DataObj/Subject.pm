@@ -64,6 +64,7 @@ sub get_system_field_info
 				{
             				'sub_name' => 'name',
             				'type' => 'text',
+<<<<<<< HEAD
 					'input_cols' => 30,
 				},
 				# EPrints Services/tmb 2010-07-30 optional user-supplied sort value
@@ -71,6 +72,8 @@ sub get_system_field_info
             				'sub_name' => 'sortvalue',
             				'type' => 'text',
 					'input_cols' => 30,
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				},
 			]
 		},
@@ -84,6 +87,7 @@ sub get_system_field_info
 
 		{ name=>"depositable", type=>"boolean", required=>1,
 			input_style=>"radio" },
+<<<<<<< HEAD
 
 		# EPrints Services/tmb 2010-07-30 derived sort value - not to be confused with name_sortvalue!
 		{ name=>"sortvalue", type=>"multilang", required=>1, multiple=>1, volatile => 1, export_as_xml => 0,
@@ -94,6 +98,8 @@ sub get_system_field_info
 				},
 			]
 		},
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	);
 }
 
@@ -204,6 +210,7 @@ sub commit
 	my @ancestors = $self->_get_ancestors( {} );
 	$self->set_value( "ancestors", \@ancestors );
 
+<<<<<<< HEAD
 	# EPrints Services/tmb 2010-07-30 derive sort values
 	my @svals;
 	for( @{ $self->get_value( "name" ) } )
@@ -218,6 +225,8 @@ sub commit
 	}
 	$self->set_value( "sortvalue", \@svals );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( !defined $self->{changed} || scalar( keys %{$self->{changed}} ) == 0 )
 	{
 		# don't do anything if there isn't anything to do
@@ -489,7 +498,12 @@ sub get_children
 				value => $subjectid
 			}
 		],
+<<<<<<< HEAD
 		custom_order=>"sortvalue_sortvalue/name_name" );
+=======
+		custom_order=>"name_name" );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $results->slice;
 }
 
@@ -811,7 +825,11 @@ sub get_all
 	my $ds = $session->dataset( "subject" );
 
 	# Retrieve all of the subjects
+<<<<<<< HEAD
 	my $results = $ds->search( custom_order => "sortvalue_sortvalue/name_name" ); # EPrints Services/tmb 2010-07-30 order by derived sort value
+=======
+	my $results = $ds->search( custom_order => "name_name" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	
 	$results->map($f);
 

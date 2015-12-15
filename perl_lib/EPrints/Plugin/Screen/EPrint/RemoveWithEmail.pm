@@ -77,14 +77,18 @@ sub action_cancel
 	$self->{processor}->{screenid} = "EPrint::View";
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub render
 {
 	my( $self ) = @_;
 
 	my $eprint = $self->{processor}->{eprint};
 	my $user = $eprint->get_user();
+<<<<<<< HEAD
 	# We can't bounce it if there's no user associated 
 
 	if( !defined $user )
@@ -95,6 +99,8 @@ sub render
 			"error" );
 		return;
 	}
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $page = $self->{session}->make_doc_fragment();
 	

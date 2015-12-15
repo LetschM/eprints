@@ -103,3 +103,29 @@ th.ep_title_row {
 {
 	padding: 2px;
 }
+<<<<<<< HEAD
+=======
+
+/* shows a padlock overlayed on top of the document's icon */
+.ep_doc_icon_restricted {
+    /* fix the width of the span to the size of the background image */
+    display: inline-block;
+    background: no-repeat url('images/restricted_document.png');
+    width: 28px;
+    height: 28px;
+    /* relative positioning, allows us to shift the image back */
+    position: relative;
+    /* shift the image and its margins */
+    left: -25px;
+    top: 5px;
+    margin-right: -25px;
+    /* make sure we display in front */
+    z-index: 10;
+}
+
+.ep_loading {
+	background: no-repeat url('images/loading.gif');
+	min-height: 60px;
+	min-width: 60px;
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6

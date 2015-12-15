@@ -40,10 +40,20 @@ sub output_dataobj
 
 	return "" if !$repo->get_online;
 
+<<<<<<< HEAD
 	my $title = $dataobj->render_citation( "summary_title" );
 	my $page = $dataobj->render_citation( "summary_page" );
 	$repo->build_page( $title, $page, "export" );
 	$repo->send_page;
+=======
+	$repo->template->send_page( EPrints::Page->new(
+			repository => $repo,
+			pins => {
+				title => $dataobj->render_citation( "summary_title" ),
+				page => $dataobj->render_citation( "summary_page" ),
+			}
+		) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return "";
 }
@@ -64,8 +74,17 @@ sub output_list
 		$para->appendChild( $dataobj->render_citation_link );
 	});
 
+<<<<<<< HEAD
 	$repo->build_page( undef, $page, "export" );
 	$repo->send_page;
+=======
+	$repo->template->send_page( EPrints::Page->new(
+			repository => $repo,
+			pins => {
+				page => $page,
+			}
+		) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return "";
 }

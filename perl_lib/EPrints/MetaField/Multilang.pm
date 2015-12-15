@@ -9,10 +9,29 @@
 
 =pod
 
+<<<<<<< HEAD
+=======
+=for Pod2Wiki
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 NAME
 
 B<EPrints::MetaField::Multilang> - Subclass of compound for multilingual data.
 
+<<<<<<< HEAD
+=======
+=head1 SYNOPSIS
+
+	{
+		name => "title",
+		type => "multilang",
+		multiple => 1,
+		fields => [
+			{ sub_name => "title", type => "text", },
+		],
+	},
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 DESCRIPTION
 
 not done
@@ -74,7 +93,11 @@ sub lang_value
 	});
 }
 
+<<<<<<< HEAD
 sub render_value
+=======
+sub render_value_actual
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
 
@@ -89,9 +112,31 @@ sub render_value
 	$value = $self->lang_value( undef, $value )
 		if $self->property( "multiple" );
 
+<<<<<<< HEAD
     	# always render the 1st sub_field's sub_name. Override this render_value if you need something different to be rendered. 
 	$value = $value->{$f->[0]->property( "sub_name" )};
 	return $f->[0]->render_single_value( $session, $value );
+=======
+	if( @$f > 2 ) # value + lang
+	{
+		return $self->render_value_no_multiple(
+			$session,
+			$value,
+			$nolink,
+			$object,
+		);
+	}
+	else
+	{
+		$value = $value->{$f->[0]->property( "sub_name" )};
+		return $f->[0]->render_value_no_multiple(
+			$session,
+			$value,
+			$nolink,
+			$object,
+		);
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub value_to_langhash

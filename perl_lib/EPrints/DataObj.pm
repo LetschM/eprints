@@ -649,7 +649,11 @@ sub commit
 	);
 
 	# Write the data to the database
+<<<<<<< HEAD
 	my $success = $self->{session}->get_database->update(
+=======
+	my $success = $self->{session}->get_database->update_data(
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$self->{dataset},
 		$self->{data},
 		$force ? $self->{data} : $self->{changed} );
@@ -847,7 +851,11 @@ sub _equal
 
 Returns a list of all the values in this record of all the fields specified
 by $fieldnames. $fieldnames should be in the format used by browse views - slash
+<<<<<<< HEAD
 seperated fieldnames with an optional .id suffix to indicate the id part rather
+=======
+separated fieldnames with an optional .id suffix to indicate the id part rather
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 than the main part. 
 
 For example "author.id/editor.id" would return a list of all author and editor
@@ -1044,6 +1052,61 @@ sub get_id
 	return $self->{data}->{$keyfield->get_name()};
 }
 
+<<<<<<< HEAD
+=======
+=item $uuid = $dataobj->uuid( [ $fragment ] )
+
+Generates a version 5 UUID for this object e.g.
+
+	f70ef731-be66-50f4-8e72-8b8de36778b5
+
+The UUID is generated from the SHA1 hash of the concantenation of C<uuid_namespace>, the L<object's uri|/internal_uri> and, if defined, B<$fragment>.
+
+C<uuid_namespace> is a configuration variable. If C<uuid_namespace> is undefined uses C<base_url>:
+
+	# Note: deliberate typo to prevent copy-and-paste
+	$c->{uuid_namespace} = "http://your-repository's url"";
+
+Returns the formatted UUID.
+
+=cut
+
+sub EPrints::DataObj::uuid
+{
+	my( $self, $fragment ) = @_;
+
+	use bytes;
+
+	my $internal_uri = $self->internal_uri;
+	return if !defined $internal_uri;
+
+	my $repo = $self->{session};
+
+	# SHA1
+	my $sha = Digest::SHA->new( 1 );
+
+	# globally unique object id
+	$sha->add( $repo->config( "uuid_namespace" ) || $repo->config( "base_url" ) );
+	$sha->add( $internal_uri );
+	$sha->add( "#".URI::Escape::uri_escape_utf8( $fragment ) ) if defined $fragment;
+
+	my $uuid = substr( $sha->digest, 0, 16 );
+
+	# set version to 5
+	substr( $uuid, 6, 1 ) = chr( ord( substr( $uuid, 6, 1 ) ) & 0x0f | 0x50 );
+
+	# set variant to 2
+	substr( $uuid, 8, 1 ) = chr( ord( substr( $uuid, 8, 1 ) ) & 0x3f | 0x80 );
+
+	# format
+	$uuid = join '-',
+			map { unpack 'H*', $_ }
+			map { substr $uuid, 0, $_, '' }
+			( 4, 2, 2, 2, 6 );
+
+	return $uuid;
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 
@@ -1627,6 +1690,20 @@ sub to_sax
 				Value => $uri,
 			};
 	}
+<<<<<<< HEAD
+=======
+	my $uuid = $self->uuid;
+	if( defined $uuid )
+	{
+		$Attributes{'{}uuid'} = {
+				Prefix => '',
+				LocalName => 'uuid',
+				Name => 'uuid',
+				NamespaceURI => '',
+				Value => 'urn:uuid:' . $uuid,
+			};
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$handler->start_element({
 		Prefix => '',
@@ -2439,6 +2516,31 @@ sub remove_dataobj_relations
 	}
 }
 
+<<<<<<< HEAD
+=======
+=item $list = $dataobj->duplicates()
+
+Return a conservative list of other objects that look like this one.
+
+=cut
+
+sub duplicates
+{
+	my( $self ) = @_;
+
+	my $dataset = $self->{dataset};
+
+	my @ids;
+
+	$dataset->run_trigger( EPrints::Const::EP_TRIGGER_DUPLICATE_SEARCH(),
+			dataobj => $self,
+			ids => \@ids,
+		);
+
+	return $dataset->list( \@ids );
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 

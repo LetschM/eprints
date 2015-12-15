@@ -9,8 +9,11 @@
 
 =pod
 
+<<<<<<< HEAD
 =for Pod2Wiki
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 NAME
 
 B<EPrints::Box> - Class to render cute little collapsable/expandable Web 2.0ish boxes.
@@ -46,6 +49,7 @@ use strict;
 
 =item $box_xhtmldom = EPrints::Box::render( %options )
 
+<<<<<<< HEAD
 Render a collapsable/expandable box to which content can be added. The box is in keeping with the eprints style
 
 Required Options:
@@ -73,6 +77,9 @@ Optional Options:
 %options{show_icon_url} - the url of the icon to use instead of the [+]
 
 %options{hide_icon_url} - the url of the icon to use instead of the [-]
+=======
+Deprecated, use L<EPrints::XHTML/box>.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =back
 
@@ -83,6 +90,7 @@ sub EPrints::Box::render
 {
 	my( %options ) = @_;
 
+<<<<<<< HEAD
 	if( !defined $options{id} ) { EPrints::abort( "EPrints::Box::render called without a id. Bad bad bad." ); }
 	if( !defined $options{title} ) { EPrints::abort( "EPrints::Box::render called without a title. Bad bad bad." ); }
 	if( !defined $options{content} ) { EPrints::abort( "EPrints::Box::render called without a content. Bad bad bad." ); }
@@ -151,6 +159,16 @@ sub EPrints::Box::render
 	}
 		
 	return $div;
+=======
+	$options{show_label} = $options{title};
+	$options{hide_label} = $options{session}->xml->clone( delete $options{title} ),
+	$options{basename} = delete $options{id};
+
+	return $options{session}->xhtml->box( delete($options{content}), %options );
+
+	# note: "content_style" is unsupported, which is a style to apply to a div
+	# container around the contents.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 1;

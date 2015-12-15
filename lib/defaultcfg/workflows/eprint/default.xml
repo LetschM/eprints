@@ -31,7 +31,11 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
       <field ref="license" />
       <field ref="date_embargo" />
 <!--  <field ref="relation" /> -->
+<<<<<<< HEAD
       <field ref="language" />
+=======
+<!--  <field ref="language" /> --> 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     </component>
   </stage>
 
@@ -46,7 +50,10 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
     </epc:if>
     <epc:if test="type = 'thesis'">
       <component><field ref="thesis_type" required="yes" /></component>
+<<<<<<< HEAD
       <component><field ref="thesis_name" required="yes" /></component>
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     </epc:if>
     <epc:if test="type = 'conference_item'">
       <component><field ref="pres_type" required="yes" /></component>
@@ -70,12 +77,38 @@ Action buttons (Previous/Save/Next) can be shown "top", "bottom" or "both":
       </epc:otherwise>
     </epc:choose>
 
+<<<<<<< HEAD
     <component><field ref="contributors" /></component>
 
     <epc:if test="type = 'exhibition'">
       <component><field ref="num_pieces"/></component>
     </epc:if>
 
+=======
+<!-- This field is much more complicated than creators, but here if you need it. 
+    <component><field ref="contributors" /></component>
+-->
+
+
+    <epc:if test="type = 'exhibition'">
+      <component collapse="yes"><field ref="exhibitors"/></component>
+      <component><field ref="num_pieces"/></component>
+    </epc:if>
+
+    <epc:if test="type = 'composition'">
+      <component collapse="yes"><field ref="producers"/></component>
+      <component collapse="yes"><field ref="conductors"/></component>
+      <component collapse="yes"><field ref="accompaniment"/></component>
+      <component collapse="yes"><field ref="lyricists"/></component>
+    </epc:if>
+
+    <epc:if test="type = 'performance'">
+      <component collapse="yes"><field ref="producers"/></component>
+      <component collapse="yes"><field ref="conductors"/></component>
+      <component collapse="yes"><field ref="accompaniment"/></component>
+    </epc:if>
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <component><field ref="divisions" /></component>
 
     <component type="Field::Multi">

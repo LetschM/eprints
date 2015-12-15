@@ -268,7 +268,11 @@ sub handler
 	}
 
 	# sitemap.xml (nb. only works if site is in root / of domain.)
+<<<<<<< HEAD
 	if( $uri =~ m! ^$urlpath/sitemap(?:-sc)\.xml$ !x )
+=======
+	if( $uri =~ m! ^$urlpath/sitemap\.xml$ !x )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		$r->handler( 'perl-script' );
 
@@ -422,7 +426,11 @@ sub handler
 
 			$r->pnotes( eprint => $eprint );
 			$r->pnotes( document => $doc );
+<<<<<<< HEAD
 			$r->pnotes( dataobj => $doc );
+=======
+			$r->pnotes( dataobj => $doc->stored_file( $filename ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			$r->pnotes( filename => $filename );
 
 			$r->handler('perl-script');
@@ -492,16 +500,34 @@ sub handler
 		return OK;
 	}
 
+<<<<<<< HEAD
 	# apache 2 does not automatically look for index.html so we have to do it ourselves
 	my $localpath = $uri;
 	$localpath =~ s! ^$urlpath !!x;
+=======
+	local $repository->{preparing_static_page} = 1; 
+
+	my $localpath = $uri;
+	$localpath =~ s! ^$urlpath !!x;
+
+	# apache 2 does not automatically look for index.html so we have to do it ourselves
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( $uri =~ m! /$ !x )
 	{
 		$localpath.="index.html";
 	}
+<<<<<<< HEAD
 	$r->filename( $repository->get_conf( "htdocs_path" )."/".$lang.$localpath );
 
 	if( $uri =~ m! ^$urlpath/view(/|\$.*) !x )
+=======
+
+	$r->pnotes( langid => $lang );
+	$r->pnotes( localpath => $localpath );
+
+	# /view/year/2012
+	if( $localpath =~ m! ^/view(/|\$.*) !x )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		$uri =~ s! ^$urlpath !!x;
 		# redirect /foo to /foo/ 
@@ -510,6 +536,7 @@ sub handler
 			return redir( $r, "$urlpath$uri/" );
 		}
 
+<<<<<<< HEAD
 		local $repository->{preparing_static_page} = 1; 
 		my $filename = EPrints::Update::Views::update_view_file( $repository, $lang, $localpath, $uri );
 		return NOT_FOUND if( !defined $filename );
@@ -579,6 +606,44 @@ sub handler
 		}
 		$r->handler('perl-script');
 		$r->set_handlers(PerlResponseHandler => [ 'EPrints::Apache::Template' ] );
+=======
+		$r->pnotes( localuri => $uri );
+
+		$r->set_handlers( PerlMapToStorageHandler => ['EPrints::Apache::MapToStorage::View'] );
+	}
+	# DEPRECATED /javascript/secure_auto.js
+	elsif( $localpath =~ m! ^/javascript/secure_auto(?:-\d+\.\d+\.\d+)?\.js$ !x )
+	{
+		$r->set_handlers( PerlMapToStorageHandler => ['EPrints::Apache::MapToStorage::SecureJavascript'] );
+	}
+	# /javascript/auto.js
+	elsif( $localpath =~ m! ^/javascript/auto(?:-\d+\.\d+\.\d+)?\.js$ !x )
+	{
+		$r->set_handlers( PerlMapToStorageHandler => ['EPrints::Apache::MapToStorage::Javascript'] );
+	}
+	# /style/auto.css
+	elsif( $localpath =~ m! ^/style/auto(?:-\d+\.\d+\.\d+)?\.css$ !x )
+	{
+		$r->set_handlers( PerlMapToStorageHandler => ['EPrints::Apache::MapToStorage::Stylesheet'] );
+	}
+	# /path/to/any.html
+	elsif( $localpath =~ m! \.html$ !x )
+	{
+		$r->set_handlers( PerlMapToStorageHandler => [
+				'EPrints::Apache::MapToStorage::XPage',
+				'EPrints::Apache::MapToStorage',
+			] );
+	}
+	# /path/to/any.xhtml
+	elsif( $localpath =~ m! \.xhtml$ !x )
+	{
+		$r->set_handlers( PerlMapToStorageHandler => ['EPrints::Apache::MapToStorage::XHTML'] );
+	}
+	# /path/to/*
+	else
+	{
+		$r->set_handlers( PerlMapToStorageHandler => ['EPrints::Apache::MapToStorage'] );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	return OK;

@@ -52,13 +52,21 @@ Returns the first repository object.
 
 sub repository
 {
+<<<<<<< HEAD
+=======
+	my $class = shift;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	&get_test_repository;
 }
 sub get_test_repository
 {
 	my $repoid = get_test_id();
 
+<<<<<<< HEAD
 	my $repository = EPrints::Repository->new( $repoid );
+=======
+	my $repository = EPrints::Repository->new( $repoid, @_ );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $repository;
 }
@@ -82,6 +90,13 @@ sub get_test_session
 	return $session;
 }
 
+<<<<<<< HEAD
+=======
+=item $size = EPrints::Test::mem_size()
+
+Returns the current resident memory size.
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $size = EPrints::Test::mem_increase( [ $previous ] )
 
 Returns the change in memory size in bytes since it was $previous bytes. If $previous isn't given uses the memory size the last time mem_increase was called.
@@ -92,10 +107,18 @@ eval "use GTop";
 my $MEM_PREVIOUS = 0;
 if( $@ )
 {
+<<<<<<< HEAD
+=======
+	*mem_size = sub { -1 };
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	*mem_increase = sub { -1 };
 }
 else
 {
+<<<<<<< HEAD
+=======
+	*mem_size = sub { return GTop->new->proc_mem( $$ )->resident };
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	*mem_increase = sub {
 		$MEM_PREVIOUS = $_[0] if scalar(@_);
 

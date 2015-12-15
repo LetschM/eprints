@@ -37,9 +37,16 @@ sub new
 	$self->{name} = "Microsoft .docx";
 	$self->{produce} = [qw( dataobj/eprint )];
 	$self->{accept} = [qw( application/vnd.openxmlformats-officedocument.wordprocessingml.document application/vnd.openxmlformats application/msword )];
+<<<<<<< HEAD
 	$self->{advertise} = 1;
 	$self->{actions} = [qw( metadata media bibliography )];
 	$self->{screen} = "Import::Upload";
+=======
+	$self->{advertise} = 0;
+	$self->{actions} = [qw( metadata media bibliography )];
+	$self->{screen} = "Import::Upload";
+	$self->{input_textarea} = 0;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }

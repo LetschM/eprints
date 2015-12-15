@@ -34,6 +34,7 @@ use EPrints::Plugin::Export;
 
 use strict;
 
+<<<<<<< HEAD
 my %DEFAULT;
 
 # map default thesis_type values to appropriate
@@ -59,6 +60,8 @@ $DEFAULT{thesis_type_to_quallevel} = {
 # $c->{plugins}->{"Export::OAI_UKETD_DC"}->{params}->{contributor_type_thesis_advisor} = "advisor";
 $DEFAULT{contributor_type_thesis_advisor} = "http://www.loc.gov/loc.terms/relators/THS";
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub new
 {
 	my( $class, %opts ) = @_;
@@ -75,6 +78,7 @@ sub new
 	$self->{xmlns} = "http://naca.central.cranfield.ac.uk/ethos-oai/2.0/";
 	$self->{schemaLocation} = "http://naca.central.cranfield.ac.uk/ethos-oai/2.0/uketd_dc.xsd";
 
+<<<<<<< HEAD
 	for(qw( thesis_type_to_qualname 
 		thesis_type_to_quallevel 
 		contributor_type_thesis_advisor ))
@@ -86,6 +90,8 @@ sub new
 		$self->{$_} = $DEFAULT{$_} if !defined $self->{$_};
 	}
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $self;
 }
 
@@ -252,6 +258,7 @@ sub eprint_to_uketd_dc
 			push @etddata, [ "format", $format, "dc" ];
 			# information about extent and checksums could be added here, if they are available
 			# the default eprint doesn't have a place for this but both could be generated dynamically
+<<<<<<< HEAD
 
 			# output a language, embargodate and rights element for each document where possible
 			# this may be in addition to fields defined at the eprint level (see below)
@@ -267,6 +274,8 @@ sub eprint_to_uketd_dc
 			{
 				push @etddata, ["accessRights", $_->get_value("security"), "dcterms"];
 			}
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 	
 		# Steve Carr : we're using isreferencedby for the official url splash page
@@ -278,6 +287,7 @@ sub eprint_to_uketd_dc
 		if( $eprint->exists_and_set( "thesis_name" )){
 			push @etddata, [ "qualificationname", $eprint->get_value( "thesis_name" ), "uketdterms"];
 		}
+<<<<<<< HEAD
 		# attempt to derive a qualificationname from thesis_type
 		elsif( $eprint->exists_and_set( "thesis_type" ) )
 		{
@@ -296,6 +306,10 @@ sub eprint_to_uketd_dc
 				$type = $plugin->{thesis_type_to_quallevel}{ $type };
 			}
 			push @etddata, [ "qualificationlevel", $type, "uketdterms"];
+=======
+		if( $eprint->exists_and_set( "thesis_type")){
+			push @etddata, [ "qualificationlevel", $eprint->get_value( "thesis_type" ), "uketdterms"];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 		if( $eprint->exists_and_set( "institution" )){
 			push @etddata, [ "institution", $eprint->get_value( "institution" ), "uketdterms"];
@@ -306,6 +320,7 @@ sub eprint_to_uketd_dc
 		if( $eprint->exists_and_set( "advisor" )){
 			push @etddata, [ "advisor", $eprint->get_value( "advisor" ), "uketdterms"];
 		}
+<<<<<<< HEAD
 		# also look in contributors
 		elsif( $eprint->exists_and_set( "contributors" ) )
 		{
@@ -316,12 +331,15 @@ sub eprint_to_uketd_dc
 				push @etddata, [ "advisor", EPrints::Utils::make_name_string( $contrib->{name} ), "uketdterms" ];
 			}
 		}
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if( $eprint->exists_and_set( "language" )){
 			push @etddata, [ "language", $eprint->get_value( "language" ), "dc"];
 		}
 		if( $eprint->exists_and_set( "sponsors" )){
 			push @etddata, [ "sponsor", $eprint->get_value( "sponsors" ), "uketdterms"];
 		}
+<<<<<<< HEAD
 		# also look in funders
 		elsif( $eprint->exists_and_set( "funders" ) )
 		{
@@ -330,6 +348,8 @@ sub eprint_to_uketd_dc
 				push @etddata, [ "sponsor", $funder, "uketdterms"];
 			}
 		}
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if( $eprint->exists_and_set( "alt_title" )){
 			push @etddata, [ "alternative", $eprint->get_value("alt_title" ), "dcterms"];
 		}
@@ -337,7 +357,11 @@ sub eprint_to_uketd_dc
 			push @etddata, [ "checksum", $eprint->get_value("checksum"), "uketdterms" ];
 		}
 		if( $eprint->exists_and_set( "date_embargo" )){
+<<<<<<< HEAD
 			push @etddata, ["embargodate", $eprint->get_value("date_embargo"), "uketdterms"];
+=======
+			push @etddata, ["date_embargo", $eprint->get_value("date_embargo"), "uketdterms"];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 		if( $eprint->exists_and_set( "embargo_reason" )){
 			push @etddata, ["embargo_reason", $eprint->get_value("embargo_reason"), "uketdterms"];

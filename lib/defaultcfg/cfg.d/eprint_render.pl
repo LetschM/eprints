@@ -18,15 +18,19 @@ $c->{summary_page_metadata} = [qw/
 
 
 ######################################################################
+<<<<<<< HEAD
 =pod
 
 =over
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =item $xhtmlfragment = eprint_render( $eprint, $repository, $preview )
 
 This subroutine takes an eprint object and renders the XHTML view
 of this eprint for public viewing.
 
+<<<<<<< HEAD
 Takes two arguments: the L<$eprint|EPrints::DataObj::EPrint> to render
 and the current L<$repository|EPrints::Session>.
 
@@ -41,6 +45,16 @@ no sense.)
 
 =back
 
+=======
+Takes two arguments: the L<$eprint|EPrints::DataObj::EPrint> to render and the current L<$repository|EPrints::Session>.
+
+Returns three XHTML DOM fragments (see L<EPrints::XML>): C<$page>, C<$title>, (and optionally) C<$links>.
+
+If $preview is true then this is only being shown as a preview.
+(This is used to stop the "edit eprint" link appearing when it makes
+no sense.)
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 ######################################################################
@@ -137,12 +151,15 @@ if(0){
 		$links->appendChild( $repository->plugin( "Export::DC" )->dataobj_to_html_header( $eprint ) );
 	}
 
+<<<<<<< HEAD
 	#to define a specific template to render the abstract with, you can do something like:
 	# my $template;
 	# if( $eprint->value( "type" ) eq "article" ){
 	# 	$template = "article_template";
 	# }
 	# return ( $page, $title, $links, $template );
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return( $page, $title, $links );
 };
 

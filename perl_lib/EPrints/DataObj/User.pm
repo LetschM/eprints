@@ -207,6 +207,19 @@ sub get_system_field_info
 			text_index => 0,
 			volatile => 1,
 		},
+<<<<<<< HEAD
+=======
+
+		{
+			name=>"messages",
+			type=>"subobject",
+			multiple=>1,
+			text_index=>0,
+			datasetid=>"message", 
+			dataset_fieldname=>"",
+			dataobj_fieldname=>"userid",
+		},
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	)
 };
 
@@ -307,7 +320,11 @@ sub create_from_data
 		$new_user->tidy;
 
 		# Write the data to the database
+<<<<<<< HEAD
 		$session->get_database->update(
+=======
+		$session->get_database->update_data(
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			$new_user->{dataset},
 			$new_user->{data},
 			$new_user->{changed} );
@@ -1512,8 +1529,11 @@ sub has_role
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 ######################################################################

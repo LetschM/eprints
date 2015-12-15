@@ -63,6 +63,7 @@ sub _scan_static_dirs
 	}, $dir);
 }
 
+<<<<<<< HEAD
 sub update_static_file
 {
 	my( $session, $langid, $localpath ) = @_;
@@ -144,6 +145,8 @@ sub update_static_file
 	}
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item update_auto_css( $target_dir, $dirs )
 
 =cut
@@ -316,6 +319,11 @@ sub copy_plain
 	}
 
 	$wrote_files->{$to} = 1;
+<<<<<<< HEAD
+=======
+
+	return $to;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 
@@ -323,14 +331,23 @@ sub copy_xpage
 {
 	my( $session, $from, $to, $wrote_files ) = @_;
 
+<<<<<<< HEAD
 	my $doc = $session->get_repository->parse_xml( $from );
 
 	if( !defined $doc )
+=======
+	my $page = EPrints::Page->new_from_file( $from,
+			repository => $session,
+		);
+
+	if( !defined $page )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		$session->get_repository->log( "Could not load file: $from" );
 		return;
 	}
 
+<<<<<<< HEAD
 	my $html = $doc->documentElement;
 	my $parts = {};
 	foreach my $node ( $html->getChildNodes )
@@ -356,15 +373,33 @@ sub copy_xpage
 		{
 			$session->get_repository->log( "Error: no $part element in ".$from );
 			EPrints::XML::dispose( $doc );
+=======
+	foreach my $part ( qw/ title page / )
+	{
+		if( !$page->pins->{$part} )
+		{
+			$page = "body" if $part eq "page";
+			$session->get_repository->log( "Error: no $part element in ".$from );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			return;
 		}
 	}
 
+<<<<<<< HEAD
 	$parts->{page} = delete $parts->{body};
 	$to =~ s/.html$//;
 	$session->write_static_page( $to, $parts, "static", $wrote_files );
 
 	EPrints::XML::dispose( $doc );
+=======
+	$to =~ s/.html$//;
+
+	my @written = $page->write_to_path( $to );
+
+	$wrote_files->{$_} = 1 for @written;
+
+	return "$to.page";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub copy_xhtml
@@ -379,6 +414,7 @@ sub copy_xhtml
 		return;
 	}
 
+<<<<<<< HEAD
 	my $html = $doc->documentElement;
 	if( !defined $html )
 	{
@@ -395,6 +431,20 @@ sub copy_xhtml
 			session => $session ) ); 
 
 	$session->page_to_file( $to, $wrote_files );
+=======
+	my $html = EPrints::XML::EPC::process( 
+			$doc->documentElement, 
+			in => $from,
+			session => $session );
+
+	open(my $fh, ">:utf8", $to) or die "Error writing to $to: $!";
+	print $fh $session->xhtml->to_xhtml( $html );
+	close($fh);
+
+	$wrote_files->{$to} = 1;
+
+	return $to;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 

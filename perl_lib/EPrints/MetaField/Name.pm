@@ -229,6 +229,12 @@ sub get_search_conditions
 		$indexmode = "index_start";
 	}
 
+<<<<<<< HEAD
+=======
+	# split up initials
+	$v2 = normalise_initials($v2);
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	# name searches are case sensitive
 	$v2 = "\L$v2";
 
@@ -242,11 +248,16 @@ sub get_search_conditions
 	}
 
 
+<<<<<<< HEAD
 	# split up initials
 	$v2 =~ s/([A-Z])/ $1/g;
 
 	# remove not a-z characters (except , and ')
 	$v2 =~ s/[^a-z,']/ /ig;
+=======
+	# remove not a-z characters (except , and ')
+	$v2 =~ s/[^\p{Lowercase},']/ /ig;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my( $family, $given ) = split /\s*,\s*/, $v2;
 	my @freetexts = ();
@@ -440,6 +451,20 @@ Q
 
 END
 
+<<<<<<< HEAD
+=======
+sub normalise_initials
+{
+	my ($str) = @_;
+
+	# Separate upto 3 capitalised initials
+	# JR Tolkein => J R Tolkein
+	# WORDSWORTH => WORDSWORTH
+	$str =~ s/\b(\p{Uppercase}{2,3})\b/join ' ', split '', $1/eg;
+
+	return $str;
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub get_index_codes_basic
 {
@@ -450,11 +475,15 @@ sub get_index_codes_basic
 	my $f = &EPrints::Index::apply_mapping( $session, $value->{family} );
 	my $g = &EPrints::Index::apply_mapping( $session, $value->{given} );
 
+<<<<<<< HEAD
 	# Add a space before all capitals to break
 	# up initials. Will screw up names with capital
 	# letters in the middle of words. But that's
 	# pretty rare.
 	$g =~ s/([[:upper:]])/ $1/g;
+=======
+	$g = normalise_initials($g);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $code = '';
 	my @r = ();

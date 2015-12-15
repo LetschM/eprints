@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::Search
@@ -20,11 +21,25 @@ search.
 
 It used to also store the results of the search, but now it returns
 an L<EPrints::List> object. 
+=======
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Search - retrieve objects based on search criteria
+
+=head1 DESCRIPTION
+
+The Search object represents the conditions of a single search.
+
+Executing a search returns an L<EPrints::List> object.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 A search expression can also render itself as a web-form, populate
 itself with values from that web-form and render the results as a
 web page.
 
+<<<<<<< HEAD
 =head1 EXAMPLES
 
 =head2 Searching for Eprints
@@ -48,6 +63,48 @@ web page.
 	$results = $searchexp->perform_search;
 
 	my $count = $results->count;
+=======
+L<EPrints::Plugin::Search> provides a pluggable architecture for searching EPrints.
+
+=head1 SYNOPSIS
+
+=head2 Searching for Eprints
+
+	$ds = $repo->dataset( "archive" );
+	
+	# NB 'archive' is an implicit filter on eprint.status
+	$list = $ds->search(filters => [{
+		meta_fields => [qw( eprintid )], value => 23,
+	}]);
+	
+	$list = $ds->search(search_fields => [{
+		meta_fields => [qw( creators_name )], value => "John Smith",
+	}]);
+
+	$searchexp = $ds->prepare_search();
+	$searchexp->add_field(
+		fields => [
+			$ds->field('creators_name')
+		],
+		value => "John Smith",
+		match => "EQ", # EQuals
+	);
+	$searchexp->add_field(
+		fields => [
+			$ds->field('title')
+		],
+		value => "eagle buzzard",
+		match => "IN", # INdex
+	);
+
+See L<EPrints::DataSet> for more API methods for constructing search objects.
+
+=head2 Getting Results
+
+	$list = $searchexp->perform_search;
+
+	my $count = $list->count;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $ids = $results->ids( 0, 10 );
 	my $ids = $results->ids; # Get all matching ids
@@ -57,9 +114,13 @@ web page.
 		my( $session, $dataset, $eprint, $info ) = @_;
 		$info->{matches}++;
 	};
+<<<<<<< HEAD
 	$results->map( \&fn, $info );
 
 	$results->dispose;
+=======
+	$list->map( \&fn, $info );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 See L<EPrints::List> for more.
 
@@ -362,6 +423,10 @@ Adds a new search in $fields which is either a single L<EPrints::MetaField>
 or a list of fields in an array ref with default $value. If a search field
 already exists, the value of that field is replaced with $value.
 
+<<<<<<< HEAD
+=======
+See L<EPrints::Search::Field> for details on match/merge etc.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 ######################################################################

@@ -7,7 +7,10 @@ EPrints::Plugin::Export::Atom
 package EPrints::Plugin::Export::Atom;
 
 use EPrints::Plugin::Export::Feed;
+<<<<<<< HEAD
 use EPrints::Const qw( :namespace );
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 @ISA = ( "EPrints::Plugin::Export::Feed" );
 
@@ -203,6 +206,13 @@ sub output_eprint
 		$entry = $xml->create_element( "entry" );
 	}
 
+<<<<<<< HEAD
+=======
+	# Need secure URL for editing
+	my $edit_uri = $repo->current_url( scheme => "https", host => 1, path => "static" );
+	$edit_uri->path( $edit_uri->path . $dataobj->internal_uri );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$entry->appendChild( $xml->create_data_element(
 			"link",
 			undef,
@@ -212,17 +222,29 @@ sub output_eprint
 			"link",
 			undef,
 			rel => "edit",
+<<<<<<< HEAD
 			href => $dataobj->uri ) );
+=======
+			href => $edit_uri ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$entry->appendChild( $xml->create_data_element( 
 			"link",
 			undef,
 			rel => "edit-media",
+<<<<<<< HEAD
 			href => $dataobj->uri . "/contents" ) );
+=======
+			href => $edit_uri . "/contents" ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$entry->appendChild( $xml->create_data_element( 
 			"link",
 			undef,
 			rel => "contents",
+<<<<<<< HEAD
 			href => $dataobj->uri . "/contents" ) );
+=======
+			href => $edit_uri . "/contents" ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$entry->appendChild( $xml->create_data_element(
 			"link",
 			undef,
@@ -292,7 +314,11 @@ sub output_eprint
 	my $original_deposit = $xml->create_data_element(
 		"sword:originalDeposit",
 		undef,
+<<<<<<< HEAD
 		href => $dataobj->uri
+=======
+		href => $edit_uri
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	);
 	$entry->appendChild($original_deposit);
 	
@@ -378,6 +404,13 @@ sub output_document
 
 	my $entry = $xml->create_element( "entry" );
 	
+<<<<<<< HEAD
+=======
+	# Need secure URL for editing
+	my $edit_uri = $repo->current_url( scheme => "https", host => 1, path => "static" );
+	$edit_uri->path( $edit_uri->path . $dataobj->internal_uri );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$entry->appendChild( $xml->create_data_element(
 			"id",
 			$dataobj->uri ) );
@@ -389,12 +422,20 @@ sub output_document
 		"link",
 		undef,
 		rel => "contents",
+<<<<<<< HEAD
 		href => $dataobj->uri . "/contents" ) );	
+=======
+		href => $edit_uri . "/contents" ) );	
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$entry->appendChild( $xml->create_data_element( 
 		"link",
 		undef,
 		rel => "edit-media",
+<<<<<<< HEAD
 		href => $dataobj->uri . "/contents" ) );	
+=======
+		href => $edit_uri . "/contents" ) );	
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$entry->appendChild( $xml->create_data_element(
 			"summary",
@@ -404,7 +445,11 @@ sub output_document
 		"content",
 		undef,
 		type => ($main ? $main->value( "mime_type" ) : undef),
+<<<<<<< HEAD
 		src => $dataobj->uri . "/contents" ) );
+=======
+		src => $edit_uri . "/contents" ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $r = $xml->to_string( $entry, indent => 1 );
 	$xml->dispose( $entry );

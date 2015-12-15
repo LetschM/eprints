@@ -1,9 +1,17 @@
 #!/usr/bin/perl
 
+<<<<<<< HEAD
 use Test::More tests => 21;
 
 use strict;
 use warnings;
+=======
+use Test::More tests => 25;
+
+use strict;
+use warnings;
+use utf8;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 BEGIN { use_ok( "EPrints" ); }
 BEGIN { use_ok( "EPrints::Test" ); }
@@ -130,4 +138,20 @@ foreach my $i (grep { $_ % 2 == 0 } 0..$#field_tests)
 	, "add_dataset_field ".($i/2 + 1)." $rc\n$output" );
 }
 
+<<<<<<< HEAD
+=======
+{
+	use EPrints::Test::RequestRec;
+	local $repo->{request} = EPrints::Test::RequestRec->new(
+			args => "?x=%C3%A9&x=y&z=one+two+three"
+		);
+
+	is(scalar($repo->url_param("z")), "one two three", "url_param one+two+three");
+	is(scalar($repo->url_param("x")), "é", "url_param %C3%A9");
+	my @v = $repo->url_param("x");
+	is(scalar(@v), 2, "url_param x == 2");
+	ok(utf8::is_utf8(scalar($repo->url_param("x"))), "url_param is_utf8");
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ok( $repo->can( "remote_ip" ), "Client-IP wrapper in place" );

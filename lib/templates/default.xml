@@ -59,6 +59,7 @@
           </ul>
         </li>
       </ul>
+<<<<<<< HEAD
       <table class="ep_tm_searchbar">
         <tr>
           <td align="left">
@@ -77,6 +78,24 @@
           </td>
         </tr>
       </table>
+=======
+      <div class="ep_tm_searchbar">
+		<epc:pin ref="login_status"/>
+		<div class="ep_tm_searchform">
+          <form method="get" accept-charset="utf-8" action="{$config{http_cgiurl}}/search">
+            <input type="text" name="q" placeholder="{phrase('lib/searchexpression:action_search')}"/>
+            <button value="{phrase('lib/searchexpression:action_search')}" title="{phrase('lib/searchexpression:action_search')}">
+              <img src="{$config{rel_path}}/style/images/action_search.png" />
+            </button>
+            <input type="hidden" name="_action_search" value="Search"/>
+            <input type="hidden" name="_order" value="bytitle"/>
+            <input type="hidden" name="basic_srchtype" value="ALL"/>
+            <input type="hidden" name="_satisfyall" value="ALL"/>
+          </form>
+        </div>
+		<div style="clear: both"></div>
+      </div>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     </div>
     <div>
       <div class="ep_tm_page_content">
@@ -92,6 +111,10 @@
           <img alt="EPrints Logo" src="{$config{rel_path}}/images/eprintslogo.gif"/>
         </a>
       </div>
+<<<<<<< HEAD
+=======
+	  <div class="ep_block"><epc:pin ref="languages"/></div>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
       <epc:phrase ref="template:about_eprints"/>
     </div>
   </body>

@@ -239,6 +239,12 @@ sub connect
 		# always try to reconnect
 		$self->{dbh}->{mysql_auto_reconnect} = 1;
 
+<<<<<<< HEAD
+=======
+		# utf8 decode text fields
+		$self->{dbh}->{mysql_enable_utf8} = 1;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$self->do("SET NAMES 'utf8'");
 	}
 	elsif( $DBI::err == 1040 )
@@ -249,6 +255,22 @@ sub connect
 	return $rc;
 }
 
+<<<<<<< HEAD
+=======
+sub disconnect
+{
+	my ($self) = @_;
+
+	if (defined $self->{dbh})
+	{
+		# make sure no MySQL table LOCKs are left on a cached connection
+		$self->unlock_table;
+	}
+
+	return $self->SUPER::disconnect;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 
@@ -560,6 +582,17 @@ sub type_info
 			COLUMN_SIZE => 2 ** 31,
 		};
 	}
+<<<<<<< HEAD
+=======
+	elsif( $data_type eq SQL_LONGVARBINARY )
+	{
+		return {
+			TYPE_NAME => "mediumblob",
+			CREATE_PARAMS => "",
+			COLUMN_SIZE => 2 ** 31,
+		};
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	else
 	{
 		return $self->SUPER::type_info( $data_type );
@@ -622,6 +655,40 @@ sub _create_table
 	return $self->do($sql);
 }
 
+<<<<<<< HEAD
+=======
+sub lock_table
+{
+	my ($self, @tables) = @_;
+
+	my $sql = "LOCK TABLES ".join(',', map { $self->quote_identifier($_) . " WRITE" } @tables);
+
+	return $self->do($sql);
+}
+
+sub unlock_table
+{
+	my ($self, @tables) = @_;
+
+	return $self->do("UNLOCK TABLES");
+}
+
+sub quick_count_table
+{
+	my ($self, $tablename) = @_;
+
+	my $c = $self->{dbh}->selectrow_hashref(
+			"EXPLAIN SELECT COUNT(*) FROM ".$self->quote_identifier($tablename)
+		)->{rows};
+	
+	if ($c < 1_000_000) {
+		return $self->SUPER::quick_count_table($tablename);
+	}
+
+	return $c;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1; # For use/require success
 
 ######################################################################

@@ -503,6 +503,7 @@ sub convert_input
 		}
 	}
 
+<<<<<<< HEAD
 
 	for ( $input_data->author )
         {
@@ -549,6 +550,26 @@ sub convert_input
 
 
 
+=======
+	# A Editor (Edited Book), Author (Other Types)
+	for ( $input_data->author )
+	{
+		# Author's names should be in Lastname, Firstname format
+		if( /^(.*?),(.*?)(,(.*?))?$/ )
+		{
+			if( $input_data_type eq "Edited Book" )
+			{
+				push @{$epdata->{editors_name}}, { family => $1, given => $2, lineage => $4 };
+			}
+			else
+			{
+				push @{$epdata->{creators_name}}, { family => $1, given => $2, lineage => $4 };
+			}
+		} else {
+			$plugin->warning( $plugin->phrase( "bad_author", author => $_ ) );
+		}
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	# B Conference Name, Department (Thesis), Newspaper, Magazine, Series (Book, Edited Book, Report), Book Title (Book Section)
 	if( defined $input_data->book )
@@ -609,6 +630,7 @@ sub convert_input
 			{
 				push @{$epdata->{editors_name}}, { family => $1, given => $2, lineage => $4 };
 			}
+<<<<<<< HEAD
 		} 
 		##catch: A. Lavin  ---   Lastname is the second part 
  		elsif(/^(.*?) (\w{2,})$/)
@@ -625,6 +647,9 @@ sub convert_input
 
 
 		else {
+=======
+		} else {
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			$plugin->warning( $plugin->phrase( "bad_editor", editor => $_ ) );
 		}
 	}

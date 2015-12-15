@@ -19,10 +19,15 @@ sub new
 	my $self = $class->SUPER::new( %params );
 
 	$self->{name} = "Exact title duplicates";
+<<<<<<< HEAD
+=======
+	$self->{accept} = [qw( list/eprint )];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }
 
+<<<<<<< HEAD
 sub process_at_end
 {
 	my( $plugin, $info ) = @_;
@@ -65,6 +70,51 @@ sub process_item_in_list
 
 
 
+=======
+sub process_dataobj
+{
+	my( $self, $eprint, %opts ) = @_;
+
+	my $title = $eprint->value( "title" );
+	return if !defined $title;
+
+	push @{$self->{titles}->{$title}}, $eprint->id;
+}
+
+sub finish
+{
+	my( $self, %opts ) = @_;
+
+	my $repo = $self->{session};
+
+	foreach my $set (values %{$self->{titles}})
+	{
+		next if @$set == 1;
+		foreach my $item (@$set)
+		{
+			$item = $repo->eprint( $item );
+		}
+		foreach my $item (@$set)
+		{
+			foreach my $dupe (@$set)
+			{
+				next if $item->id eq $dupe->id;
+				my $desc = $self->html_phrase( "duplicate",
+						duplicate => $dupe->render_citation_link_staff( 'brief' ),
+					);
+				$self->create_issue( $item, {
+					type => $self->get_subtype,
+					description => $repo->xhtml->to_xhtml( $desc ),
+				});
+			}
+		}
+		@$set = (); # free objects
+	}
+
+	delete $self->{titles};
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 

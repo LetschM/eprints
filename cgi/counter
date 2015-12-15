@@ -16,6 +16,10 @@
 ######################################################################
 
 use EPrints;
+<<<<<<< HEAD
+=======
+use JSON;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 
 use strict;
@@ -24,14 +28,24 @@ my $eprints = EPrints->new;
 my $repo = $eprints->current_repository;
 exit( 0 ) unless( defined $repo );
 
+<<<<<<< HEAD
 $repo->send_http_header( content_type=>"text/plain; charset=UTF-8" );
+=======
+my $use_json = $repo->get_request->path_info =~ /\.json$/;
+
+my %data;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 my %counts;
 foreach my $ds_id ($repo->get_sql_dataset_ids)
 {
 	my $ds = $repo->dataset( $ds_id );
 	my $table = $ds->get_sql_table_name;
+<<<<<<< HEAD
 	$counts{$ds_id} = $repo->get_database->count_table( $table );
+=======
+	$counts{$ds_id} = $repo->get_database->quick_count_table( $table );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 {
 	my $ds = $repo->dataset( "eprint" );
@@ -39,6 +53,10 @@ foreach my $ds_id ($repo->get_sql_dataset_ids)
 	my @counts = $search->perform_groupby( $ds->field( "eprint_status" ) );
 	foreach my $i (0..$#{$counts[0]})
 	{
+<<<<<<< HEAD
+=======
+		next if exists $counts{$counts[0]->[$i]};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$counts{$counts[0]->[$i]} = $counts[1]->[$i];
 	}
 	for(qw( inbox buffer archive deletion ))
@@ -46,6 +64,7 @@ foreach my $ds_id ($repo->get_sql_dataset_ids)
 		$counts{$_} ||= 0;
 	}
 }
+<<<<<<< HEAD
 foreach my $ds_id ( sort keys %counts )
 {
 	print sprintf("%s: %i\n",
@@ -55,6 +74,12 @@ foreach my $ds_id ( sort keys %counts )
 }
 # version
 print sprintf("version: %s\n", EPrints->human_version);
+=======
+$data{counts} = \%counts;
+
+# version
+$data{version} = EPrints->human_version;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 # Indexer Status
 my $daemon = EPrints::Index::Daemon->new(
@@ -66,6 +91,7 @@ my $daemon = EPrints::Index::Daemon->new(
 my $status = "not-running";
 $status = "running" if $daemon->is_running();
 $status = "stalled" if $daemon->has_stalled();
+<<<<<<< HEAD
 print "indexer: $status\n";
 
 print "epm: ";
@@ -82,3 +108,79 @@ $repo->dataset( 'epm' )->dataobj_class->map($repo, sub {
 print "\n";
 
 exit;
+=======
+$data{indexer} = $status;
+
+my %epm;
+$repo->dataset( 'epm' )->dataobj_class->map($repo, sub {
+	my( undef, undef, $epm ) = @_;
+
+	$epm{$epm->value("epmid")} = $epm->value("version");
+});
+$data{epm} = \%epm;
+
+if ($use_json) {
+	$repo->send_http_header( content_type=>"application/json; charset=UTF-8" );
+	&application_json(%data);
+}
+else {
+	$repo->send_http_header( content_type=>"text/plain; charset=UTF-8" );
+	&plain_text(%data);
+}
+
+exit;
+
+sub plain_text
+{
+	my %data = @_;
+
+	foreach my $ds_id ( sort keys %{$data{counts}} )
+	{
+		print sprintf("%s: %i\n",
+			$ds_id,
+			$data{counts}{$ds_id}
+		);
+	}
+
+	print sprintf("version: %s\n", $data{version});
+	print sprintf("indexer: %s\n", $data{indexer});
+
+	print "epm: ";
+	my $first = 1;
+	foreach my $epm_id ( sort keys %{$data{epm}} )
+	{
+		print "; " if !$first;
+		$first = 0;
+
+		print sprintf("%s=%s", $epm_id, $data{epm}{$epm_id});
+	}
+	print "\n";
+}
+
+sub application_json
+{
+	my %data = @_;
+
+	my $jsonp;
+	for($repo->param)
+	{
+		if (/^json|jsonp|callback$/) {
+			$jsonp = $repo->param($_);
+			$jsonp =~ s/[^=A-Za-z0-9_]//g;
+			last;
+		}
+	}
+
+	if( $jsonp )
+	{
+		print "$jsonp(";
+	}
+
+	print JSON->new->pretty->canonical->encode( \%data );
+
+	if( $jsonp )
+	{
+		print ");";
+	}
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6

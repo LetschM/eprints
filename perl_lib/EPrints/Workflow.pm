@@ -385,15 +385,23 @@ sub update_from_form
 	# gone wrong.
 	if( !defined $self->{item} )
 	{
+<<<<<<< HEAD
 		$self->_corrupt_err;
 		return( 0 );
+=======
+		EPrints->abort( "Workflow missing item object" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	if( !defined $self->{stages}->{$self->get_stage_id} )
 	{
+<<<<<<< HEAD
 		# Not a valid stage
 		$self->_corrupt_err;
 		return( 0 );
+=======
+		EPrints->abort( $self->get_stage_id . " is not a valid stage" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	
 	my $stage_obj = $self->get_stage( $self->get_stage_id );
@@ -450,6 +458,7 @@ sub render
 	return $fragment;
 }
 
+<<<<<<< HEAD
 
 ######################################################################
 # 
@@ -488,6 +497,8 @@ sub _database_err
 		$self->{session}->get_repository->get_conf( "userhome" ) );
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # return "&foo=bar"  style paramlist to add to url to maintain state
 
 sub get_state_params
@@ -516,7 +527,11 @@ sub link_problem_xhtml
 			my $url = URI->new( $self->{session}->current_url );
 			$url->query_form(
 				screen => $screenid,
+<<<<<<< HEAD
 				dataset => $self->{dataset}->id,
+=======
+				dataset => $self->{dataset}->base_id,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				dataobj => $self->{item}->id,
 				$kf_sql => $self->{item}->id,
 				stage => $stage

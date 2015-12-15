@@ -19,19 +19,30 @@ sub new
 	my $self = $class->SUPER::new( %params );
 
 	$self->{name} = "Issues XML Config File";
+<<<<<<< HEAD
+=======
+	$self->{accept} = [qw( dataobj/eprint )];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }
 
 sub config_file
 {
+<<<<<<< HEAD
 	my( $plugin ) = @_;
 
 	return $plugin->{session}->get_repository->get_conf( "config_path" )."/issues.xml";
+=======
+	my( $self ) = @_;
+
+	return $self->{session}->config( "config_path" )."/issues.xml";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub get_config
 {
+<<<<<<< HEAD
 	my( $plugin ) = @_;
 
 	if( !defined $plugin->{issuesconfig} )
@@ -48,11 +59,30 @@ sub get_config
 		if( !defined $plugin->{issuesconfig} )
 		{
 			$plugin->{session}->get_repository->log(  "Missing <issues> tag in $file\n" );
+=======
+	my( $self ) = @_;
+
+	if( !defined $self->{issuesconfig} )
+	{
+		my $file = $self->config_file;
+		my $doc = $self->{session}->parse_xml( $file , 1 );
+		if( !defined $doc )
+		{
+			$self->{session}->log( "Error parsing $file\n" );
+			return;
+		}
+	
+		$self->{issuesconfig} = ($doc->getElementsByTagName( "issues" ))[0];
+		if( !defined $self->{issuesconfig} )
+		{
+			$self->{session}->log(  "Missing <issues> tag in $file\n" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			EPrints::XML::dispose( $doc );
 			return;
 		}
 	}
 	
+<<<<<<< HEAD
 	return $plugin->{issuesconfig};
 }
 
@@ -89,6 +119,31 @@ sub item_issues
 	}
 
 	return @issues_list;
+=======
+	return $self->{issuesconfig};
+}
+
+sub process_dataobj
+{
+	my( $self, $dataobj, %opts ) = @_;
+	
+	my $issues = EPrints::XML::EPC::process( $self->get_config,
+			item => $dataobj,
+			current_user => $self->{session}->current_user,
+			session => $self->{session},
+		);
+
+	foreach my $child ( $issues->childNodes )
+	{
+		next unless( $child->nodeName eq "issue" );
+		my $desc = EPrints::XML::contents_of( $child );
+		$desc = $self->{session}->xhtml->to_xhtml( $desc );
+		$self->create_issue( $dataobj, {
+				type => $self->get_subtype . ":" . $child->getAttribute( "type" ),
+				description => $desc,
+			}, %opts);
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 1;

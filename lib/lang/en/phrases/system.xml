@@ -504,7 +504,11 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldname_editors_id">Email</epp:phrase>
 
     <epp:phrase id="eprint_fieldname_date">Date</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="eprint_fieldhelp_date">The date this EPrint was completed, submitted to a publisher, published or submitted for a Ph.D.</epp:phrase>
+=======
+    <epp:phrase id="eprint_fieldhelp_date">The date this eprint was completed, submitted to a publisher, published or submitted for a Ph.D.</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     
 	<epp:phrase id="eprint_fieldname_date_type">Date Type</epp:phrase>
 	<epp:phrase id="eprint_fieldhelp_date_type">The event to which the date applies.</epp:phrase>
@@ -570,6 +574,7 @@ This field is required if no creators are listed.
 
     <epp:phrase id="eprint_fieldname_thesis_type">Thesis Type</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_thesis_type">Please select the thesis type.</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="eprint_fieldopt_thesis_type_diploma">Diploma</epp:phrase>
     <epp:phrase id="eprint_fieldopt_thesis_type_masters">Masters</epp:phrase>
     <epp:phrase id="eprint_fieldopt_thesis_type_doctoral">Doctoral</epp:phrase>
@@ -583,6 +588,13 @@ This field is required if no creators are listed.
     <epp:phrase id="eprint_fieldopt_thesis_name_dphil">DPhil</epp:phrase>
     <epp:phrase id="eprint_fieldopt_thesis_name_other">Other</epp:phrase>
 
+=======
+    <epp:phrase id="eprint_fieldopt_thesis_type_masters">Masters</epp:phrase>
+    <epp:phrase id="eprint_fieldopt_thesis_type_phd">PhD</epp:phrase>
+    <epp:phrase id="eprint_fieldopt_thesis_type_engd">EngD</epp:phrase>
+    <epp:phrase id="eprint_fieldopt_thesis_type_other">Other</epp:phrase>
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
     <epp:phrase id="eprint_fieldname_patent_applicant">Patent Applicant</epp:phrase>
     <epp:phrase id="eprint_fieldhelp_patent_applicant">The name of the applicant to whom the patent was granted. May be a person or an organisation.
@@ -772,6 +784,63 @@ This field is required if no creators are listed.
 	<epp:phrase id="Plugin/Screen/Admin/Config/Edit/Config:inline_edit_title">Edit config file</epp:phrase>
 
 
+<<<<<<< HEAD
+=======
+
+<!-- this is used for the minimal users who have their username locked to their
+     email address -->
+
+    <epp:phrase id="cgi/register:intro_minimal">
+<p>As a registered user you will be able to set up
+saved searches, which are sent when new items 
+are placed in the repository.</p>
+
+<p>Please complete the details on this page to register with <epc:phrase ref="archive_name" />.</p>
+
+<p>The registration process uses email to send you details of how to activate
+your account. You must then check your email and activate your password. Once
+activated you can start to use the registered features of the repository.</p>
+
+<p>If you have already registered but have forgotten your username or password,
+<a href="reset_password">click here</a> to set a new password.</p>
+    </epp:phrase>
+
+
+
+
+
+
+
+    <!-- registration introduction. -->
+    <epp:phrase id="cgi/register:intro">
+<p>You need to register in order to be able to deposit items in the 
+repository. </p>
+
+<p>As a registered user you will be able to manage your items, up to the point
+of submitting them for Editorial Review. If the review is successful your 
+item will be deposited in the repository, if it is unsuccessful it will be 
+returned to you with editorial comments.</p>
+
+<p>In addition to managing your items a registered user can set up
+alert options, so that email notifications are sent when new items 
+are placed in the repository.</p>
+
+<p>Please complete the details on this page to register with <epc:phrase ref="archive_name" />.</p>
+
+<p>The registration process uses email to send you details of how to activate
+your account. You must then check your email and activate your password. Once
+activated you can start to use the registered features of the repository.</p>
+
+<p>If you have already registered but have forgotten your username or password,
+<a href="reset_password">click here</a> to set a new password.</p>
+    </epp:phrase>
+
+
+
+
+
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 <epp:phrase id="mail_bounce_reason">No reason was given.</epp:phrase>
 
 
@@ -1025,7 +1094,11 @@ Phrases related to the Manage Metadata Fields tool.
 <epp:phrase id="metafield_optdetails_type_subobject">A sub-object container (eprints contain documents).</epp:phrase>
 <epp:phrase id="metafield_fieldopt_type_text">text</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_text">text</epp:phrase>
+<<<<<<< HEAD
 <epp:phrase id="metafield_optdetails_type_text">A free-text field (upto 255 characters).</epp:phrase>
+=======
+<epp:phrase id="metafield_optdetails_type_text">A free-text field (up to 255 characters).</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 <epp:phrase id="metafield_fieldopt_type_time">time</epp:phrase>
 <epp:phrase id="metafield_fieldopt_fields_type_time">time</epp:phrase>
 <epp:phrase id="metafield_optdetails_type_time">A year-month-day hour-minute-second field (YYYY-MM-DD:hh:mm:ss).</epp:phrase>
@@ -1099,7 +1172,11 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 <epp:phrase id="metafield_fieldname_top">Top Subject Entry</epp:phrase>
 <epp:phrase id="metafield_fieldname_fields_top">Top Subject</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_top">Top element of the subject hierarchy to show.</epp:phrase>
+<<<<<<< HEAD
 <epp:phrase id="metafield_fieldname_datasetid">Dataset Name</epp:phrase>
+=======
+<epp:phrase id="metafield_fieldname_datasetid">Dataset ID</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 <epp:phrase id="metafield_fieldname_fields_datasetid">Dataset</epp:phrase>
 <epp:phrase id="metafield_fieldhelp_datasetid">The repository dataset to link the object identifier to (e.g. "eprint").</epp:phrase>
 <epp:phrase id="metafield_fieldname_set_name">Named Set Filename</epp:phrase>
@@ -1253,7 +1330,11 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="page:alert">Alert</epp:phrase>
     <epp:phrase id="page:edit_link">Repository Staff Only: <epc:pin name="link">item control page</epc:pin></epp:phrase>
  
+<<<<<<< HEAD
     <!-- Publisher- or funder-imposed embargos --> 
+=======
+    <!-- Publisher- or funder-imposed embargoes -->
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="page:embargo_status"><p>These documents will be made publicly accessible from <epc:pin name="date"/>.</p></epp:phrase>
 
     <epp:phrase id="page:item_not_available"> Item not available from this repository.</epp:phrase>
@@ -1334,7 +1415,10 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/eprint:eprint_gone_title">Item Removed</epp:phrase>
     <epp:phrase id="lib/eprint:eprint_gone"><p>You seem to be attempting to access an item that has been removed from the repository.</p></epp:phrase>
     <epp:phrase id="lib/eprint:later_version"><p>There is a later version of the item you are trying to access:<br/><epc:pin name="citation"/></p></epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="lib/eprint:replaced_version"><p>There is an alternative version of the item you are trying to access:<br/><epc:pin name="citation"/></p></epp:phrase>
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="lib/eprint:curr_disp"><strong>[Currently Displayed]</strong></epp:phrase>
     <epp:phrase id="lib/eprint:not_locked">Not currently locked.</epp:phrase>
     <epp:phrase id="lib/eprint:locked">Locked by <epc:pin name='locked_by' /> until <epc:pin name='locked_until' /></epp:phrase>
@@ -1424,7 +1508,11 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/metafield:date_res_month"></epp:phrase>
     <epp:phrase id="lib/metafield:date_res_year"></epp:phrase>
 
+<<<<<<< HEAD
     <!-- phrases used to seperate multiple values in a field -->
+=======
+    <!-- phrases used to separate multiple values in a field -->
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <!-- you can use .first and .last to make the first or 
          last joins in a list different. eg. set
 		join_name to ',' 
@@ -1457,9 +1545,15 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
 
 <!-- File -->
 	<epp:phrase id="file_fieldname_fileid">Unique file id</epp:phrase>
+<<<<<<< HEAD
 	<epp:phrase id="file_fieldname_datasetid">Object dataset id</epp:phrase>
 	<epp:phrase id="file_fieldname_mime_type">Mime-Type</epp:phrase>
 	<epp:phrase id="file_fieldname_objectid">Object id</epp:phrase>
+=======
+	<epp:phrase id="file_fieldname_datasetid">Dataset ID</epp:phrase>
+	<epp:phrase id="file_fieldname_mime_type">Mime-Type</epp:phrase>
+	<epp:phrase id="file_fieldname_objectid">Object ID</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	<epp:phrase id="file_fieldname_bucket">File bucket</epp:phrase>
 	<epp:phrase id="file_fieldname_filename">File name</epp:phrase>
 	<epp:phrase id="file_fieldname_filesize">File size</epp:phrase>
@@ -1541,13 +1635,21 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:help_time">Enter a date or date range. 
 <br/>Examples:  "<span class="ep_form_example">1985-</span>", 
 "<span class="ep_form_example">2001-05-17-2002-05-16</span>",
+<<<<<<< HEAD
 "<span class="ep_form_example">-1980-11</span>"
+=======
+"<span class="ep_form_example">-11-1980</span>"
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 </epp:phrase>
 	<epp:phrase id="lib/searchfield:help_timestamp" ref="lib/searchfield:help_time" />
     <epp:phrase id="lib/searchfield:help_date">Enter a date or date range. 
 <br/>Examples:  "<span class="ep_form_example">1985-</span>", 
 "<span class="ep_form_example">2001-05-17-2002-05-16</span>",
+<<<<<<< HEAD
 "<span class="ep_form_example">-1980-11</span>"
+=======
+"<span class="ep_form_example">-11-1980</span>"
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 </epp:phrase>
     <epp:phrase id="lib/searchfield:help_boolean">Select a value.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_email">Enter some text to search for.</epp:phrase>
@@ -1565,6 +1667,10 @@ For more information see <a href="http://eprints.org/d/?keyword=MetaFields">Meta
     <epp:phrase id="lib/searchfield:help_url">Enter some text to search for.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_year">Enter a single year (e.g. 1999), or a range of years, e.g. `1990-2000', `1990-' or -2000'.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_int">Enter a single number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
+<<<<<<< HEAD
+=======
+	<epp:phrase id="lib/searchfield:help_counter" ref="lib/searchfield:help_int"></epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="lib/searchfield:help_float">Enter a single number (e.g. 3.14159), or a range of numbers, e.g. `4.8-15', `16-' or -23.42'.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_itemref">Select a single record ID number (e.g. 93), or a range of numbers, e.g. `17-23', `17-' or -23'.</epp:phrase>
     <epp:phrase id="lib/searchfield:help_storable" />
@@ -1819,6 +1925,10 @@ Enter a URL to capture a file from: <epc:pin name="url"/><br/>
     <epp:phrase id="lib/utils:month_10">October</epp:phrase>
     <epp:phrase id="lib/utils:month_11">November</epp:phrase>
     <epp:phrase id="lib/utils:month_12">December</epp:phrase>
+<<<<<<< HEAD
+=======
+	<epp:phrase id="lib/utils:day_00">?</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
     <epp:phrase id="lib/utils:dow_1">Monday</epp:phrase>
     <epp:phrase id="lib/utils:dow_2">Tuesday</epp:phrase>
@@ -1889,6 +1999,10 @@ User Area CGI Scripts
     <epp:phrase id="Plugin/Screen/Admin:admin_actions">Misc. Tools</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Phrases:title">Phrase Editor</epp:phrase>
     <epp:phrase id="Plugin/Screen/Admin/Phrases:description">Modify phrases used in the system.</epp:phrase>
+<<<<<<< HEAD
+=======
+    <epp:phrase id="Plugin/Screen/QA:title">QA</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="Plugin/Screen/FirstTool:title">No Tools Available</epp:phrase>
     <epp:phrase id="Plugin/Screen/Status:description">Status information for this server.</epp:phrase>
     <epp:phrase id="Plugin/Screen/DatabaseSchema:description">Show the database schema.</epp:phrase>
@@ -2044,6 +2158,11 @@ User Area CGI Scripts
     <epp:phrase id="cgi/login:message">Login successful.</epp:phrase>
     <epp:phrase id="cgi/login:link_text"><p>You may now view <epc:pin name="link">your requested document</epc:pin>.</p></epp:phrase>
     <epp:phrase id="cgi/login:no_cookies">Could not log in. Your password was correct, but you have cookies turned off. You must turn cookies on to login.</epp:phrase>
+<<<<<<< HEAD
+=======
+    <epp:phrase id="cgi/login:restricted_document">The document you are trying to download is restricted. If you have a suitable account please log in below to continue.</epp:phrase>
+    <epp:phrase id="cgi/login:restricted_document:security">You are trying to access a document which is restricted to <epc:pin name="security"/>. If you have a suitable account please log in below to continue.</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 <!--********************************************************************** 
 Staff CGI Scripts
@@ -2208,6 +2327,7 @@ Public CGI Scripts
     <epp:phrase id="cgi/register:intro">
 <p>In order to access some areas of the repository, you'll need a <em>user registration</em>. No charge is made for registering with us or using any of our services.</p>
 <p>This page lets you register with <epc:phrase ref="archive_name" />. This will allow you to save searches, receive alerts and deposit items.</p>
+<<<<<<< HEAD
 <p>A confirmation email will be sent to you. You need to activate your account using the link in the email.</p>
 <p>If you have already registered but have forgotten your username or password, <a href="reset_password">click here</a> to set a new password.</p>
 </epp:phrase>
@@ -2222,6 +2342,12 @@ Public CGI Scripts
     </epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Register:title">Create Account</epp:phrase>
+=======
+<p>Your new password  will need to confirm your email address by using a code which will be mailed to you.</p>
+<p>If you have already registered but have forgotten your username or password, <a href="reset_password">click here</a> to set a new password.</p>
+</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Register:title">Create Account</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="cgi/register:action_submit">Register</epp:phrase>
     <epp:phrase id="cgi/register:title">Register</epp:phrase>
     <epp:phrase id="cgi/register:missing_field"><p>You have not filled in the &quot;<epc:pin name="fieldname"/>&quot; field.</p></epp:phrase>
@@ -2329,7 +2455,11 @@ Views
     <epp:phrase id="bin/generate_views:browsetitle">Browse Items</epp:phrase>
     <epp:phrase id="bin/generate_views:browseintro"><div class="ep_view_browse_intro">Items may be browsed by the following:</div></epp:phrase>
     <epp:phrase id="bin/generate_views:timestamp"><div class="ep_view_timestamp">This list was generated on <strong><epc:pin name="time"/></strong>.</div></epp:phrase>
+<<<<<<< HEAD
 	<epp:phrase id="bin/generate_views:max_items">The number of items (<epc:pin name="n" />) for this view has exceeded system limits (<epc:pin name="max" />). The system administrator either needs to increase "max_items" or apply additional filters to this view.</epp:phrase>
+=======
+	<epp:phrase id="bin/generate_views:max_items">The number of items for this view has exceeded system limits (<epc:pin name="max" />). The system administrator either needs to increase "max_items" or apply additional filters to this view.</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="Update/Views:group_by"><div class="ep_view_group_by">Group by: <epc:pin name="groups" /></div></epp:phrase>
     <epp:phrase id="Update/Views:current_group"><span class="ep_view_group_by_current"><epc:pin name="group" /></span></epp:phrase>
     <epp:phrase id="Update/Views:group_seperator"> | </epp:phrase>
@@ -2406,6 +2536,7 @@ Titles and Help for the System Fields
     <epp:phrase id="eprint_fieldhelp_relation">This field describes relationships this item has to other entities. Ideally, use URIs for the target identifier.</epp:phrase>
     <epp:phrase id="eprint_fieldname_relation_uri">Target identifier</epp:phrase>
     <epp:phrase id="eprint_fieldname_relation_type">Relation type</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="eprint_fieldname_item_issues">Issues</epp:phrase>
     <epp:phrase id="eprint_fieldname_item_issues_id">Issue ID</epp:phrase>
     <epp:phrase id="eprint_fieldname_item_issues_type">Issue type</epp:phrase>
@@ -2420,6 +2551,8 @@ Titles and Help for the System Fields
     <epp:phrase id="eprint_fieldopt_item_issues_status_autoresolved">Auto Resolved</epp:phrase>
     <epp:phrase id="eprint_fieldopt_item_issues_status_reported">Reported</epp:phrase>
     <epp:phrase id="eprint_fieldopt_item_issues_status_resolved">Resolved</epp:phrase>
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
     <epp:phrase id="eprint_fieldname_edit_lock">Lock</epp:phrase>
     <epp:phrase id="eprint_fieldname_edit_lock_user">Locked by</epp:phrase>
@@ -2470,7 +2603,11 @@ Titles and Help for the System Fields
     <epp:phrase id="user_fieldname_lang">Preferred Language</epp:phrase>
     <epp:phrase id="user_fieldhelp_lang">Your preferred language. Where possible information will be mailed in this language.</epp:phrase>
     <epp:phrase id="user_fieldname_roles">Roles</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="user_fieldhelp_roles">This field allows an administrator to assign roles to a user. It may also be used to assign (and remove) individual privileges by prefixing the priv string with plus (+) or minus (-).</epp:phrase>
+=======
+    <epp:phrase id="user_fieldhelp_roles">This field allows an administrator to assign roles to a user. It may also be used to assign (and remove) individual privileges by prefixing the priv string with plus (+) or minus (-). <a href="http://wiki.eprints.org/w/User_roles.pl">More info.</a></epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	<epp:phrase id="user_fieldname_openid_identifier">OpenID</epp:phrase>
 	<epp:phrase id="user_fieldhelp_openid_identifier">This must be a valid OpenID endpoint e.g. https://www.google.com/accounts/o8/id</epp:phrase>
@@ -2533,12 +2670,20 @@ Titles and Help for the System Fields
     <epp:phrase id="subject_fieldname_parents">Subject Parents Subject(s)</epp:phrase>
     <epp:phrase id="subject_fieldname_depositable">Depositable</epp:phrase>
     <epp:phrase id="subject_fieldhelp_depositable">Can users add items to this subject?</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="subject_radio_depositable"><label><epc:pin name="true"/>Yes, users can add items to this subject.</label><br/><label><epc:pin name="false"/>No. (In which case it should probably have some children.</label></epp:phrase>
+=======
+    <epp:phrase id="subject_radio_depositable"><label><epc:pin name="true"/>Yes, users can add items to this subject.</label><br/><label><epc:pin name="false"/>No. (In which case it should probably have some children.)</label></epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="subject_fieldname_subjectid">Subject ID String</epp:phrase>
     <epp:phrase id="subject_fieldhelp_subjectid">This is the internal key for this subject. It is used in the database and to generate the "views" filenames. It should contain only a-z, 0-9 and dash "/"and underscore "_".</epp:phrase>
 
     <epp:phrase id="history_fieldname_objectid">Object ID</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="history_fieldname_datasetid">Object Type</epp:phrase>
+=======
+    <epp:phrase id="history_fieldname_datasetid">Dataset ID</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
     <epp:phrase id="datasetname_archive">Repository</epp:phrase>
     <epp:phrase id="datasetname_deletion">Retired</epp:phrase>
@@ -2695,10 +2840,15 @@ Titles and Help for the System Fields
 	<epp:phrase id="Plugin/Screen/Items:list_desc">Your Deposits</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Import:title">Import Items from <epc:pin name="input"/></epp:phrase>
+<<<<<<< HEAD
+=======
+    <epp:phrase id="Plugin/Screen/Import:action:view:title">View</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	<epp:phrase id="Plugin/Screen/Import:exception">Unhandled exception in <epc:pin name="plugin" />: <epc:pin name="error" /></epp:phrase>
 	<epp:phrase id="Plugin/Screen/Import:warning">Unhandled warning in <epc:pin name="plugin" />: <epc:pin name="warning" /></epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:intro">To import items from an external source enter the required data below. To test whether the data to import is correctly formatted click <em><epc:phrase ref="Plugin/Screen/Import:action:test:title"/></em>, otherwise click <em><epc:phrase ref="Plugin/Screen/Import:action:import:title"/></em> to import.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:import_section">
+<<<<<<< HEAD
 <table width="100%"><tr>
   <td align="center">Import from <epc:pin name="menu"/><epc:pin name="button"/></td>
 </tr>
@@ -2769,22 +2919,48 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Import:action:import_from:title">Import</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:action_test_data">Test without Importing</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:action_test_upload" ref="Plugin/Screen/Import:action_test_data"></epp:phrase>
+=======
+<div>Import from <epc:pin name="menu"/><epc:pin name="button"/></div>
+<div><epc:pin name="tools"/></div>
+</epp:phrase>
+
+	<epp:phrase id="Plugin/Screen/Import:add">Added new record to <epc:pin name="dataset" />: <epc:pin name="dataobj" /></epp:phrase>
+	<epp:phrase id="Plugin/Screen/Import:all">Added <epc:pin name="n" /> new records.</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Import:results">Results</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Import:data">Paste data</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Import:upload">Upload from file</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Import:form">Search or query</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:input:title">Import a single item</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:bulk_input:title">Import more than one item</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action:add:title">Import</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action:all:title">Add all new items</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action:paste:title">Paste</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action:upload:title">Upload</epp:phrase>
+    <epp:phrase id="Plugin/Screen/Import:action:import_from:title">Import</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="Plugin/Screen/Import:action_import_data">Import Items</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:action_import_upload" ref="Plugin/Screen/Import:action_import_data"></epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:nothing_to_import">You must specify something to import!</epp:phrase>
 
+<<<<<<< HEAD
 	<epp:phrase id="Plugin/Screen/Import:multiple_inputs">Encountered more than one set of input - make sure you haven't filled in more than one field.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:test_completed">Test run completed: <epc:pin name="count"/> item(s) found.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:test_failed">Test run failed: <epc:pin name="count"/> item(s) found before an error caused the test run to abort. Carefully check any warning messages before proceeding.</epp:phrase>
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="Plugin/Screen/Import:import_completed">Import completed: <epc:pin name="count"/> item(s) imported.</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:import_failed">Import failed: <epc:pin name="count"/> item(s) imported before an error caused the import to abort.</epp:phrase>
 
     <epp:phrase id="Plugin/Screen/Import:import_errors">The following warnings were produced:<br/><epc:pin name="errors"/></epp:phrase>
+<<<<<<< HEAD
 
     <epp:phrase id="Plugin/Screen/Import:step1">Cut and paste import records<br/><i>or</i><br />Upload import file</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:step2">Select import format</epp:phrase>
     <epp:phrase id="Plugin/Screen/Import:import_documents">Import full texts in addition to metadata if full text is available</epp:phrase>
+=======
+    <epp:phrase id="Plugin/Screen/Import:confirm_all">Are you sure you want to import all items (only first <epc:pin name="limit" /> will be imported)? This may take a very long time. <epc:pin name="form"/></epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
     <!-- eprint action screens -->
 
@@ -2829,7 +3005,11 @@ PY = 2006 and OG = (Cambridge)<br />
 	<epp:phrase id="Plugin/Screen/EPrint/Staff/ChangeOwner:invaliduser">The username given was not a valid user account</epp:phrase>
 	<epp:phrase id="Plugin/Screen/EPrint/Staff/ChangeOwner:changedowner">Transferred ownership of this eprint to "<epc:pin name="user"/>".</epp:phrase>
 
+<<<<<<< HEAD
     <epp:phrase id="Plugin/Screen/EPrint/Move:status_changed">Status of item changed to "<epc:pin name="status"/>".</epp:phrase>
+=======
+    <epp:phrase id="Plugin/Screen/EPrint/Move:status_changed">Status of <epc:pin name="item" /> changed to "<epc:pin name="status"/>".</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="Plugin/Screen/EPrint/Move:cant_move">Problem changing status of item with the ID "<epc:pin name="id"/>".</epp:phrase>
 	<epp:phrase id="Plugin/Screen/EPrint/Move:action:move_archive:title">Move to Repository</epp:phrase>
 	<epp:phrase id="Plugin/Screen/EPrint/Move:action:move_archive:description">Move item to repository.</epp:phrase>
@@ -2964,7 +3144,10 @@ PY = 2006 and OG = (Cambridge)<br />
     <epp:phrase id="Plugin/Screen/Subject/Edit:existing">Link Existing Subject</epp:phrase>
 	<epp:phrase id="Plugin/Screen/Subject/Edit:exists">A subject with that id already exists.</epp:phrase>
     <epp:phrase id="subject_fieldname_name_name">Name</epp:phrase>
+<<<<<<< HEAD
     <epp:phrase id="subject_fieldname_name_sortvalue">Sort name</epp:phrase>
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="subject_fieldname_name_lang">Language</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:action_save">Save changes</epp:phrase>
     <epp:phrase id="Plugin/Screen/Subject/Edit:saved">Saved changes</epp:phrase>
@@ -3030,12 +3213,15 @@ PY = 2006 and OG = (Cambridge)<br />
 	<epp:phrase id="Plugin/InputForm/Component/Upload:bad_doc_button">Unknown internal document button: <epc:pin name="button"/></epp:phrase>
 	<epp:phrase id="Plugin/Screen/EPrint/Document/Convert:conversion_failed">Document conversion failed.</epp:phrase>
 	
+<<<<<<< HEAD
 	<!-- tabs -->
 	<epp:phrase id="Plugin/InputForm/Component/Documents:Metadata">Metadata</epp:phrase>
 	<epp:phrase id="Plugin/InputForm/Component/Documents:Files">Files</epp:phrase>
 	<epp:phrase id="Plugin/InputForm/Component/Documents:related_files">Related Files</epp:phrase>
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	<!-- options -->
 	<epp:phrase id="Plugin/InputForm/Component/Documents:move_up">Move Up</epp:phrase>
 	<epp:phrase id="Plugin/Screen/EPrint/Document/MoveUp:title" ref="Plugin/InputForm/Component/Documents:move_up" />
@@ -3107,7 +3293,10 @@ PY = 2006 and OG = (Cambridge)<br />
 	<epp:phrase id="Plugin/Import/DefaultXML:file_imports_disabled">Attempt to import eprint with document data expressed as a local filename. This is a security hole in normal use, and is disabled. It *is* useful when bulk importing and may be enabled by setting enable_file_imports.</epp:phrase>
 	<epp:phrase id="Plugin/Import/DefaultXML:file_not_exists">Could not locate file for import: <epc:pin name="href" />.</epp:phrase>
 	<epp:phrase id="Plugin/Import/DOI:invalid_doi">Unrecognised or invalid doi: <epc:pin name="doi" />.<br />Remote service said: <tt><epc:pin name="msg"/></tt></epp:phrase>
+<<<<<<< HEAD
 	<epp:phrase id="Plugin/Import/DOI:duplicate_doi"><strong>Duplicate DOI: <epc:pin name="doi" /></strong>.<br />This DOI already exists in the repository: <br /><epc:pin name="msg"/></epp:phrase>
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	<!-- Convert plugins -->
 
@@ -3161,7 +3350,11 @@ PY = 2006 and OG = (Cambridge)<br />
   <epp:phrase id="languages_typename_el">Greek</epp:phrase>  
   <epp:phrase id="languages_typename_en">English</epp:phrase>  
   <epp:phrase id="languages_typename_eo">Esperanto</epp:phrase>  
+<<<<<<< HEAD
   <epp:phrase id="languages_typename_es">Español</epp:phrase> 
+=======
+  <epp:phrase id="languages_typename_es">Spanish</epp:phrase> 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
   <epp:phrase id="languages_typename_et">Estonian</epp:phrase>  
   <epp:phrase id="languages_typename_eu">Basque</epp:phrase>  
 
@@ -3298,6 +3491,7 @@ PY = 2006 and OG = (Cambridge)<br />
 
 
   <epp:phrase id="licenses_typename_cc_by_nd">Creative Commons: Attribution-No Derivative Works 3.0</epp:phrase>
+<<<<<<< HEAD
   <epp:phrase id="licenses_typename_cc_by_nd_4">Creative Commons: Attribution-No Derivative Works 4.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_by">Creative Commons: Attribution 3.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_by_4">Creative Commons: Attribution 4.0</epp:phrase>
@@ -3309,6 +3503,13 @@ PY = 2006 and OG = (Cambridge)<br />
   <epp:phrase id="licenses_typename_cc_by_nc_sa_4">Creative Commons: Attribution-Noncommercial-Share Alike 4.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_by_sa">Creative Commons: Attribution-Share Alike 3.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_by_sa_4">Creative Commons: Attribution-Share Alike 4.0</epp:phrase>
+=======
+  <epp:phrase id="licenses_typename_cc_by">Creative Commons: Attribution 3.0</epp:phrase>
+  <epp:phrase id="licenses_typename_cc_by_nc">Creative Commons: Attribution-Noncommercial 3.0</epp:phrase>
+  <epp:phrase id="licenses_typename_cc_by_nc_nd">Creative Commons: Attribution-Noncommercial-No Derivative Works 3.0</epp:phrase>
+  <epp:phrase id="licenses_typename_cc_by_nc_sa">Creative Commons: Attribution-Noncommercial-Share Alike 3.0</epp:phrase>
+  <epp:phrase id="licenses_typename_cc_by_sa">Creative Commons: Attribution-Share Alike 3.0</epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
   <epp:phrase id="licenses_typename_cc_public_domain">Creative Commons: Public Domain Dedication</epp:phrase>
   <epp:phrase id="licenses_typename_cc_gnu_gpl">Software: Creative Commons: GNU GPL 2.0</epp:phrase>
   <epp:phrase id="licenses_typename_cc_gnu_lgpl">Software: Creative Commons: GNU LGPL 2.1</epp:phrase>
@@ -3316,6 +3517,7 @@ PY = 2006 and OG = (Cambridge)<br />
   <epp:phrase id="licenses_typename_odc_odbl">Data: Open Database License (ODbL) (Attribution-Share Alike)</epp:phrase>
   <epp:phrase id="licenses_typename_odc_by">Data: Open Data Commons Attribution License (Attribution)</epp:phrase>
 
+<<<<<<< HEAD
   <epp:phrase id="licenses_description_cc_by_nd"><a href="http://creativecommons.org/licenses/by-nd/3.0/">Creative Commons Attribution No Derivatives</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_by_nd_4"><a href="http://creativecommons.org/licenses/by-nd/4.0/">Creative Commons Attribution No Derivatives</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_by"><a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution</a></epp:phrase>
@@ -3328,6 +3530,14 @@ PY = 2006 and OG = (Cambridge)<br />
   <epp:phrase id="licenses_description_cc_by_nc_sa_4"><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution Non-commercial Share Alike</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_by_sa"><a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution Share Alike</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_by_sa_4"><a href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution Share Alike</a></epp:phrase>
+=======
+  <epp:phrase id="licenses_description_cc_by_nd"><a href="http://creativecommons.org/licenses/by-nd/2.5/">Creative Commons Attribution No Derivatives</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_by"><a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_by_nc"><a href="http://creativecommons.org/licenses/by-nc/2.5/">Creative Commons Attribution Non-commercial</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_by_nc_nd"><a href="http://creativecommons.org/licenses/by-nc-nd/2.5/">Creative Commons Attribution Non-commercial No Derivatives</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_by_nc_sa"><a href="http://creativecommons.org/licenses/by-nc-sa/2.5/">Creative Commons Attribution Non-commercial Share Alike</a></epp:phrase>
+  <epp:phrase id="licenses_description_cc_by_sa"><a href="http://creativecommons.org/licenses/by-sa/2.5/">Creative Commons Attribution Share Alike</a></epp:phrase>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
   <epp:phrase id="licenses_description_cc_public_domain"><a href="http://creativecommons.org/licenses/publicdomain/">Creative Commons Public Domain Dedication</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_gnu_gpl"><a href="http://creativecommons.org/licenses/GPL/2.0/">Creative Commons GNU GPL (Software)</a></epp:phrase>
   <epp:phrase id="licenses_description_cc_gnu_lgpl"><a href="http://creativecommons.org/licenses/LGPL/2.1/">Creative Commons GNU LGPL (Software)</a></epp:phrase>
@@ -3937,7 +4147,10 @@ To create a blank EPM entire a new id in the input and click <epc:phrase ref="Pl
 	<epp:phrase id="document_typename_indexcodes">Indexer Terms</epp:phrase>
 	<epp:phrase id="document_typename_text/html">HTML</epp:phrase>
 	<epp:phrase id="document_typename_application/pdf">PDF</epp:phrase>
+<<<<<<< HEAD
         <epp:phrase id="document_typename_application/adobe">PDF</epp:phrase>
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	<epp:phrase id="document_typename_application/postscript">Postscript</epp:phrase>
 	<epp:phrase id="document_typename_text/plain">Plain Text</epp:phrase>
 	<epp:phrase id="document_typename_application/vnd.ms-powerpoint">Microsoft PowerPoint</epp:phrase>
@@ -3976,6 +4189,32 @@ To create a blank EPM entire a new id in the input and click <epc:phrase ref="Pl
 	<epp:phrase id="document_typename_thumbnail_medium">Thumbnail (Medium)</epp:phrase>
 	<epp:phrase id="document_typename_thumbnail_preview">Thumbnail (Preview)</epp:phrase>
 
+<<<<<<< HEAD
+=======
+	<epp:phrase id="Plugin/Issues/ExactTitleDups:duplicate">Is a duplicate of <epc:pin name="duplicate"/></epp:phrase>
+	<epp:phrase id="Plugin/Issues/SimilarTitles:duplicate">Is similar to <epc:pin name="duplicate"/></epp:phrase>
+
+    <epp:phrase id="eprint_fieldname_item_issues">Issues</epp:phrase>
+	<epp:phrase id="datasetname_issue">Issues</epp:phrase>
+	<epp:phrase id="issue_fieldname_issueid">Id</epp:phrase>
+	<epp:phrase id="issue_fieldname_datasetid">Dataset ID</epp:phrase>
+	<epp:phrase id="issue_fieldname_objectid">Object ID</epp:phrase>
+	<epp:phrase id="issue_fieldname_type">Issue Type</epp:phrase>
+	<epp:phrase id="issue_fieldname_parent">Item</epp:phrase>
+	<epp:phrase id="issue_fieldname_description">Description</epp:phrase>
+	<epp:phrase id="issue_fieldname_status">Status</epp:phrase>
+	<epp:phrase id="issue_fieldname_timestamp">Timestamp</epp:phrase>
+	<epp:phrase id="issue_fieldname_reported_by">Reported By</epp:phrase>
+	<epp:phrase id="issue_fieldname_resolved_by">Resolved By</epp:phrase>
+	<epp:phrase id="issue_fieldname_comment">Comments</epp:phrase>
+
+    <epp:phrase id="issue_fieldopt_status_discovered">Auto Discovered</epp:phrase>
+    <epp:phrase id="issue_fieldopt_status_ignored">Ignored</epp:phrase>
+    <epp:phrase id="issue_fieldopt_status_autoresolved">Auto Resolved</epp:phrase>
+    <epp:phrase id="issue_fieldopt_status_reported">Reported</epp:phrase>
+    <epp:phrase id="issue_fieldopt_status_resolved">Resolved</epp:phrase>
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	<epp:phrase id="Plugin/InputForm/Component/Upload:error:fields">
 	<p>You must update your workflow file located in archives/[archiveid]/cfg/workflows/eprint/default.xml by replacing:</p>
 	<p><pre>&lt;component type="Upload"&gt;</pre></p>
@@ -3992,6 +4231,67 @@ To create a blank EPM entire a new id in the input and click <epc:phrase ref="Pl
 
     <epp:phrase id="lib/metafield:join_image"><br /></epp:phrase>
 
+<<<<<<< HEAD
+=======
+    <epp:phrase id="epm_fieldname_tags">Tags</epp:phrase>
+    <epp:phrase id="epm_fieldhelp_tags">Categorise your package. For example, "theme, language pack, import plugin".</epp:phrase>
+
+	<epp:phrase id="Plugin/Screen/EPrint/Duplicates:title">Duplicates</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:title">Compare and Merge</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:no_dupes">No duplicate items were found.</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:action:compare:title" ref="Plugin/Screen/Merge:title"></epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:action:merge:title">←</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:action:add_all:title">Add Missing Only</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:action:merge_all:title">Replace All</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:action:swap:title">Swap</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:action:succeed:title">Make <epc:pin name="dataobj" /> a later version of <epc:pin name="right" /></epp:phrase>
+	<epp:phrase id="Plugin/Screen/Merge:select_right_form">
+<h2><epc:phrase ref="Plugin/Screen/Merge:title" /> with any record</h2>
+<table>
+<tr>
+<th class="ep_row"><epc:pin name="name"/></th><td class="ep_row"><epc:pin name="input"/></td>
+</tr>
+</table>
+<epc:pin name="buttons" />
+</epp:phrase>
+
+	<epp:phrase id="Plugin/Screen/Import/Search:action:new_search:title">Import from <epc:pin name="format" /></epp:phrase>
+
+	<epp:phrase id="Plugin/Search/ISIWoK:help">Enter an ISI query string:<br />
+AU = (Carr) and TI = (open access)<br />
+PY = 2006 and OG = (Cambridge)<br />
+</epp:phrase>
+
+	<epp:phrase id="Plugin/Search/ISIWoK:title">ISI Web of Knowledge</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:AD">Address</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:AU">Author</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:CA">Cited Author</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:CI">City</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:CT">Conference</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:CU">Country</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:CW">Cited Work</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:CY">Cited Year</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:DT">Document Type</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:GP">Group Author</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:LA">Language</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:OG">Organisation</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:PS">Province/State</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:PY">Publication Year</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:SA">Street Address</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:SG">Sub-organisation</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:SO">Source</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:TI">Title</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:TS">Topic</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:UT">ISI UT Identifier</epp:phrase>
+	<epp:phrase id="Plugin/Search/ISIWoK:field:ZP">Zip/Postal Code</epp:phrase>
+
+	<epp:phrase id="Plugin/Screen/Import:on_behalf_of">Importing records on behalf of user <em><epc:pin name="user" /></em>.</epp:phrase>
+	<epp:phrase id="Plugin/Screen/Import:action:change_user:title">Change User</epp:phrase>
+	<epp:phrase id="Plugin/Import/Cerif_1_4:title">CERIF 1.4 XML</epp:phrase>
+
+	<epp:phrase id="Plugin/Screen:csrf_failure">Cross-Site Request Forgery (CSRF) check failed. Ensure you have cookies enabled and allowed for this site.</epp:phrase>
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
     <epp:phrase id="summary_page:actions"><h3>Actions (login required)</h3></epp:phrase>
     <epp:phrase id="summary_page:download">Download</epp:phrase>
 

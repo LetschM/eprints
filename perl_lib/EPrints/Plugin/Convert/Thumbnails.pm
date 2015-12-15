@@ -34,7 +34,29 @@ EPrints::Plugin::Convert::Thumbnails - thumbnail-sized versions of audio/video/i
 
 Conversion of images, videos and audio into preview/thumbnail versions.
 
+<<<<<<< HEAD
 This plugin wraps the ImageMagick I<convert> and I<ffmpeg> tools.
+=======
+This plugin wraps the ImageMagick F<convert> and F<ffmpeg> tools.
+
+=head2 Testing Audio and Video Conversion
+
+When files are uploaded to EPrints a file format identification process occurs. This is based on the C<EP_TRIGGER_MEDIA_INFO> callbacks. A set of callbacks are provided by F<lib/cfg.d/media_info.pl>. To customise these copy the file to your repository's F<cfg.d/> directory.
+
+This plugin relies on the C<media> info added by the file format identification. To check this is working export the EPrint as XML and check for a <media> entry in your document:
+
+	./bin/export [archiveid] eprint XML [eprintid]
+
+At any time you can re-run the file format identification by using C<redo_mime_type> in epadmin:
+
+	./bin/epadmin redo_mime_type [archiveid] eprint [eprintid] --verbose
+
+If F<ffprobe> is configured correctly you should see it being called for each document.
+
+Finally, to regenerate thumbnails do:
+
+	./bin/epadmin redo_thumbnails [archiveid] [eprintid] --verbose
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 PARAMETERS
 
@@ -54,7 +76,11 @@ Define the formats supported for input by the call_ffmpeg() method.
 
 Define the size of thumbnails that can be generated e.g. "small => [66,50]". The image dimensions generated may be smaller than those specified if the aspect ratio of the source document is different.
 
+<<<<<<< HEAD
 Images are output in 8-bit paletted PNG.
+=======
+Images are output as JPGs.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =item video = 1
 
@@ -205,6 +231,10 @@ $DEFAULT{video_mp4} = {
 	video_frame_rate => "10.00",
 	video_bitrate => "500k",
 	container => "mp4",
+<<<<<<< HEAD
+=======
+	preset => "default",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 };
 $DEFAULT{video_ogg} = {
 	audio_codec => "libvorbis",
@@ -409,7 +439,11 @@ sub export
 		$geom = $self->{sizes}->{$size};
 		return () if !defined $geom;
 
+<<<<<<< HEAD
 		$self->{_mime_type} = "image/png";
+=======
+		$self->{_mime_type} = "image/jpeg";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	my @files;
@@ -704,7 +738,11 @@ sub export_video
 	my $duration = $doc->get_value( "media_duration" );
 	my $aspect = $doc->get_value( "media_aspect_ratio" );
 	my $ratio = 4 / 3;
+<<<<<<< HEAD
 	if( defined $aspect && $aspect =~ /^(\d+):(\d+)$/ && ( $1 / $2 ) != 0 ) # ignore 0:n
+=======
+	if( defined $aspect && $aspect =~ /^(\d+):(\d+)$/ )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		$ratio = $1 / $2;
 	}

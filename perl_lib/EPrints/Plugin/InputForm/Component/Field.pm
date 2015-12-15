@@ -28,6 +28,11 @@ sub parse_config
 {
 	my( $self, $config_dom ) = @_;
 
+<<<<<<< HEAD
+=======
+	$self->SUPER::parse_config( $config_dom );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my @fields = $config_dom->getElementsByTagName( "field" );
 
 	if( scalar @fields != 1 )
@@ -53,7 +58,11 @@ sub export
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	my $frag = $self->render_content;
+=======
+	my $frag = $self->render;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	print $self->{session}->xhtml->to_xhtml( $frag );
 	$self->{session}->xml->dispose( $frag );

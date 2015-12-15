@@ -162,8 +162,12 @@ sub get_system_field_info
 			input_tags=>\&main_input_tags,
 			render_option=>\&main_render_option },
 
+<<<<<<< HEAD
 		{ name=>"date_embargo", type=>"date", required=>0,
 			min_resolution=>"year" },	
+=======
+		{ name=>"date_embargo", type=>"date", required=>0, },	
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 		{ name=>"content", type=>"namedset", required=>0, input_rows=>1,
 			set_name=>"content" },
@@ -1769,6 +1773,10 @@ sub render_icon_link
 		$aopts{onmouseover} = "EPJS_ShowPreview( event, '$preview_id' );";
 		$aopts{onmouseout} = "EPJS_HidePreview( event, '$preview_id' );";
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $a = $self->{session}->make_element( "a", %aopts );
 	$a->appendChild( $self->{session}->make_element( 
 		"img", 
@@ -1776,6 +1784,17 @@ sub render_icon_link
 		alt=>"[img]",
 		src=>$self->icon_url( public=>$opts{public} ),
 		border=>0 ));
+<<<<<<< HEAD
+=======
+
+	if( !$self->is_public )
+	{
+		$a->appendChild( $self->{session}->make_element( 'span', 
+			class => 'ep_doc_icon_restricted', 
+			title => $self->{session}->phrase( 'page:item_restricted' ) ) );
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $f = $self->{session}->make_doc_fragment;
 	$f->appendChild( $a ) ;
 	if( $opts{preview} )

@@ -993,12 +993,17 @@ sub trim_whitespace
 
 }
 
+<<<<<<< HEAD
+=======
+# See EPrints::DataObj::EPM::add_to_xml()
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub add_to_xml
 {
 	my ($filename,$node,$id) = @_;
 	
 	my $xml = EPrints::XML::parse_xml( $filename );
 
+<<<<<<< HEAD
 	$xml = _remove_blank_nodes($xml);
 
 	my $main_node;
@@ -1028,12 +1033,40 @@ sub add_to_xml
 	return $ret;
 }
 
+=======
+	if( !ref($node) )
+	{
+		$node = EPrints::XML::parse_string( undef, $node );
+		$node = $node->documentElement;
+	}
+	elsif( $node->nodeType == EPrints::Const::XML_DOCUMENT_NODE )
+	{
+		$node = $node->documentElement;
+	}
+
+	$node = $xml->importNode( $node, 1 );
+
+	for($node->childNodes)
+	{
+		EPrints::DataObj::EPM->_merge( $xml->documentElement, $_, $id );
+	}
+
+	open(my $fh, ">", $filename) or die "Error writing to $filename: $!";
+	$xml->toFH( $fh );
+	close($fh);
+
+	return 1;
+}
+
+# See EPrints::DataObj::EPM::remove_from_xml()
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub remove_package_from_xml
 {
 	my( $filename, $id ) = @_;
 	
 	my $xml = EPrints::XML::parse_xml( $filename );
 
+<<<<<<< HEAD
 	$xml = _remove_blank_nodes($xml);
 
 	my $main_node;
@@ -1188,11 +1221,21 @@ sub _write_xml
 
 	print $fh EPrints::XML::to_string( $xml_in );
 
+=======
+	for($xml->childNodes)
+	{
+		EPrints::DataObj::EPM->_remove_from_xml( $_, $id );
+	}
+
+	open(my $fh, ">", $filename) or die "Error writing to $filename: $!";
+	$xml->ownerDocument->toFH( $fh );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	close($fh);
 
 	return 1;
 }
 
+<<<<<<< HEAD
 sub _enable_disabled_nodes
 {
 	my ( $xml, $id ) = @_;
@@ -1328,6 +1371,8 @@ sub _get_id_string
 	return $id_string;
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # DEPRECATED
 sub make_document_fragment
 {

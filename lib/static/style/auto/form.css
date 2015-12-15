@@ -57,7 +57,11 @@ select, input.ep_form_text, textarea {
 /* input fields grid */
 
 
+<<<<<<< HEAD
 .ep_form_input_grid th {
+=======
+.ep_form_input_grid > th {
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	vertical-align: middle;
 	text-align: center;
 	font-size: 80%;

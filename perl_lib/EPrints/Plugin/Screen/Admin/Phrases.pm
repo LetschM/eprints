@@ -253,6 +253,7 @@ sub export_mimetype
 	return "text/html";
 }
 
+<<<<<<< HEAD
 
 sub render_style
 {
@@ -316,6 +317,8 @@ END
 
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # stop post requests redirecting to GETs
 sub redirect_to_me_url
 {
@@ -356,8 +359,11 @@ sub render
 
 	my $f = $session->make_doc_fragment;
 	
+<<<<<<< HEAD
 	$f->appendChild( $self->render_style );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$f->appendChild( $self->html_phrase( "intro" ) );
 
 	if( !defined $self->{phrase_ids} )
@@ -530,9 +536,13 @@ sub render_new_phrase
 	my $f = $session->make_doc_fragment;
 	
 	my $add_div = $session->make_element( "div", id=>"ep_phraseedit_addbar" );
+<<<<<<< HEAD
 	my $form = $session->render_form( "get",
 		$session->config( "rel_cgipath" )."/users/home" );
 	$form->appendChild( $self->render_hidden_bits );
+=======
+	my $form = $self->render_form;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$form->appendChild(
 		$session->render_noenter_input_field( 
 			size => "50",

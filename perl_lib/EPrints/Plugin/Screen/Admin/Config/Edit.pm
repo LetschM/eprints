@@ -314,7 +314,11 @@ sub action_process_image_upload
 		}
 		seek($tmpfile, 0, 0);
 		
+<<<<<<< HEAD
 		rename($tmpfile,$image_location);
+=======
+		EPrints::Utils::copy($tmpfile,$image_location);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		
 		$self->{processor}->add_message( 
 			"message", 
@@ -795,10 +799,15 @@ sub action_download_full_file {
 		$template = $session->xml->text_contents_of( $page_parts->{template} );
 	}
 
+<<<<<<< HEAD
 	####
 	my $template_parts = $session->get_repository->get_template_parts( 
 			$session->get_langid, 
 			$template );
+=======
+	my $template_parts = $session->template( $template )->parts;
+	####
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	#print join( "\n\n*****\n\n", @{$template_parts} )."\n";
 	my @output = ();
 	my $is_html = 0;
@@ -1352,9 +1361,13 @@ sub get_images
 	}
 
 	####
+<<<<<<< HEAD
 	my $template_parts = $session->get_repository->get_template_parts( 
 			$session->get_langid, 
 			$template );
+=======
+	my $template_parts = $session->template( $template )->parts;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	#print join( "\n\n*****\n\n", @{$template_parts} )."\n";
 	my @output = ();
 	my $is_html = 0;

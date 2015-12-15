@@ -8,6 +8,7 @@
 #
 ######################################################################
 
+<<<<<<< HEAD
 # Example page hooks to mess around with the metadata
 # submission page.
 
@@ -18,6 +19,8 @@
 # $c->{pagehooks}->{submission_meta}->{head} = $link;
 # $c->{pagehooks}->{submission_meta}->{bodyattr}->{bgcolor} = '#ff0000';
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 # If you use the Latex render function and want to use the mimetex
 # package rather than the latex->dvi->ps->png route then enable this
@@ -36,7 +39,11 @@ $c->{cookie_auth} = 1;
 # by setting this option:
 $c->{skip_buffer} = 0;
 
+<<<<<<< HEAD
 # Supress the public user information page. Useful if you have
+=======
+# Suppress the public user information page. Useful if you have
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # data protection concerns.
 $c->{disable_userinfo} = 0;
 

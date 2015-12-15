@@ -167,7 +167,11 @@ sub render_content
 	my( $self, $surround ) = @_;
 	
 	my $session = $self->{session};
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my @screen_opts = $self->{processor}->list_items( 
 			"upload_methods",
 			params => {
@@ -227,6 +231,11 @@ sub parse_config
 {
 	my( $self, $config_dom ) = @_;
 
+<<<<<<< HEAD
+=======
+	$self->SUPER::parse_config( $config_dom );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my @uploadmethods = $config_dom->getElementsByTagName( "upload-methods" );
 	if( defined $uploadmethods[0] )
 	{

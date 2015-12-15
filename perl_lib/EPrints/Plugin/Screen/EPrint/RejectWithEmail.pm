@@ -86,6 +86,7 @@ sub render
 	my $user = $eprint->get_user();
 	# We can't bounce it if there's no user associated 
 
+<<<<<<< HEAD
 	if( !defined $user )
 	{
 		$self->{session}->render_error( 
@@ -95,6 +96,8 @@ sub render
 		return;
 	}
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $page = $self->{session}->make_doc_fragment();
 
 	$page->appendChild( 

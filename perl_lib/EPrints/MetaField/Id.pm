@@ -31,6 +31,7 @@ use EPrints::MetaField;
 
 use strict;
 
+<<<<<<< HEAD
 ######################################################################
 =pod
 
@@ -53,6 +54,8 @@ sub value_from_sql_row
 	return shift @$row;
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item @row = $field->sql_row_from_value( $session, $value )
 
 Returns the value as an appropriate value for the database.

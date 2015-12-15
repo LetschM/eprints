@@ -18,7 +18,11 @@ my %invocations = (
 	 'doc2txt' => '$(perl) $(doc2txt) $(SOURCE) $(TARGET)',
 	 'rmall' => '$(rm) -rf $(TARGET)/*',
 	 'ffmpeg_i' => '$(ffmpeg) -i $(SOURCE)',
+<<<<<<< HEAD
 	 'ffmpeg_video_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b $(video_bitrate) -s $(width)x$(height) $(TARGET)',
+=======
+	 'ffmpeg_video_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -vpre $(preset) -r $(video_frame_rate) -b $(video_bitrate) -s $(width)x$(height) $(TARGET)',
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	 'ffmpeg_video_ogg' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) -vcodec $(video_codec) -r $(video_frame_rate) -b $(video_bitrate) -s $(width)x$(height) $(TARGET)',
 	 'ffmpeg_audio_mp4' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) $(TARGET)',
 	 'ffmpeg_audio_ogg' => '$(ffmpeg) -y -i $(SOURCE) -acodec $(audio_codec) -ac 2 -ar $(audio_sampling) -ab $(audio_bitrate) -f $(container) $(TARGET)',

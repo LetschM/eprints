@@ -48,7 +48,11 @@ The numerical ID of the object in the dataset.
 =item revision (int)
 
 The revision of the object. This is the revision number after the
+<<<<<<< HEAD
 action occured. Not all actions increase the revision number.
+=======
+action occurred. Not all actions increase the revision number.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =item timestamp (time)
 
@@ -252,7 +256,11 @@ sub get_defaults
 	else
 	{
 		# command line or not logged in. Store script name.
+<<<<<<< HEAD
 		$data->{actor} = $0;
+=======
+		$data->{actor} = "$0 @ARGV";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	return $data;

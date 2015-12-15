@@ -7,11 +7,14 @@
 
 # Allow users to sign up for an account on
 # the web.
+<<<<<<< HEAD
 # NOTE: If you disable this you should edit the template file 
 #   cfg/template-en.xml
 # and the error page 
 #   cfg/static/en/error401.xpage 
 # to remove the links to web registration.
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 $c->{allow_web_signup} = 1;
 
 # Allow users to change their password via the web?

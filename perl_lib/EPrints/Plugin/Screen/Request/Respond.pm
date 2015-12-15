@@ -240,7 +240,11 @@ sub render
 		document => $self->render_document,
 	) );
 
+<<<<<<< HEAD
 	my $form =  $session->render_form( "post" );
+=======
+	my $form =  $self->render_form;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$page->appendChild( $form );
 	
 	if( $action eq "reject" )
@@ -254,10 +258,14 @@ sub render
 		$form->appendChild( $textarea );
 	}
 
+<<<<<<< HEAD
 	# Only display the 'Make this document OA' form if the user
 	# has privilege to edit this document
 	if( $action eq "accept"
 		 && $self->allow( 'eprint/archive/edit', $self->{processor}->{eprint} ) )
+=======
+	if( $action eq "accept" )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my $p = $session->make_element( "p" );
 		$form->appendChild( $p );
@@ -270,7 +278,10 @@ sub render
 		$p->appendChild( $label );
 	}
 
+<<<<<<< HEAD
 	$form->appendChild( $session->render_hidden_field( "screen", $self->{processor}->{screenid} ) );
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$form->appendChild( $session->render_hidden_field( "requestid", $self->{processor}->{request}->get_id ) );
 	$form->appendChild( $session->render_hidden_field( "action", $action ) );
 

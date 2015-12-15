@@ -24,11 +24,16 @@ sub new
 	$self->{name} = "DOI (via CrossRef)";
 	$self->{visible} = "all";
 	$self->{produce} = [ 'dataobj/eprint', 'list/eprint' ];
+<<<<<<< HEAD
 	$self->{screen} = "Import::DOI";
+=======
+	$self->{input_file} = 0;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }
 
+<<<<<<< HEAD
 sub screen
 {
 	my( $self, %params ) = @_;
@@ -36,6 +41,8 @@ sub screen
 	return $self->{repository}->plugin( "Screen::Import::DOI", %params );
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub input_text_fh
 {
 	my( $plugin, %opts ) = @_;
@@ -43,9 +50,12 @@ sub input_text_fh
 	my @ids;
 
 	my $pid = $plugin->param( "pid" );
+<<<<<<< HEAD
         my $session = $plugin->{repository};
         my $use_prefix = $plugin->param( "use_prefix" ) || 1;
         my $doi_field = $plugin->param( "doi_field" ) || 'id_number';
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	unless( $pid )
 	{
@@ -60,6 +70,7 @@ sub input_text_fh
 		$doi =~ s/\s+$//;
 
 		next unless length($doi);
+<<<<<<< HEAD
 		# Only include prefix if config parameter set - Alan Stiles, Open University, 20140408
 		if ( $use_prefix )
 		{
@@ -85,6 +96,10 @@ sub input_text_fh
 			next;
 		}
 		# END check and exclude DOI from fetch if DOI already exists in the 'archive' dataset - Alan Stiles, Open University, 20140408
+=======
+
+		$doi =~ s/^(doi:)?/doi:/i;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 		my %params = (
 			pid => $pid,
@@ -152,6 +167,12 @@ sub input_text_fh
 		my $epdata = $plugin->convert_input( $data );
 		next unless( defined $epdata );
 
+<<<<<<< HEAD
+=======
+		# link back to import source
+		$epdata->{source} = $doi;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my $dataobj = $plugin->epdata_to_dataobj( $opts{dataset}, $epdata );
 		if( defined $dataobj )
 		{
@@ -199,10 +220,13 @@ sub convert_input
 	my( $plugin, $data ) = @_;
 
 	my $epdata = {};
+<<<<<<< HEAD
         my $use_prefix = $plugin->param( "use_prefix" );
         my $doi_field = $plugin->param( "doi_field" );
         $use_prefix = 1 unless defined ( $use_prefix );
         $doi_field = "id_number" unless defined ( $doi_field );
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	if( defined $data->{creators} )
 	{
@@ -232,11 +256,18 @@ sub convert_input
 	}
 	if( defined $data->{"doi"} )
 	{
+<<<<<<< HEAD
 		#Use doi field identified from config parameter, in case it has been customised. Alan Stiles, Open University 20140408
 		$epdata->{$doi_field} = $data->{"doi"};
 		my $doi = $data->{"doi"};
 		$doi =~ s/^\s*doi:\s*//gi;
 		$epdata->{official_url} = "http://doi.org/$doi";
+=======
+		$epdata->{id_number} = $data->{"doi"};
+		my $doi = $data->{"doi"};
+		$doi =~ s/^\s*doi:\s*//gi;
+		$epdata->{official_url} = "http://dx.doi.org/$doi";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	if( defined $data->{"volume_title"} )
 	{
@@ -296,6 +327,7 @@ sub convert_input
 	return $epdata;
 }
 
+<<<<<<< HEAD
 sub url_encode
 {
         my ($str) = @_;
@@ -303,6 +335,8 @@ sub url_encode
         return $str;
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 =head1 COPYRIGHT

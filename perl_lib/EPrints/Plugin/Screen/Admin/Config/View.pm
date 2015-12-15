@@ -87,7 +87,11 @@ sub render
 	my $doc_link = $self->{session}->render_link("http://eprints.org/d/?keyword=${1}ConfigFile&filename=".$self->{processor}->{configfile});
 	$page->appendChild( $self->{session}->html_phrase( "Plugin/Screen/Admin/Config/View:documentation", link=>$doc_link ));
 
+<<<<<<< HEAD
 	if( $edit_screen->can_be_viewed )
+=======
+	if( defined $edit_screen && $edit_screen->can_be_viewed )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my $edit_config_button = $edit_screen->render_action_button( {
 			screen => $edit_screen,

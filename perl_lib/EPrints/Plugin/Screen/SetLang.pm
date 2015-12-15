@@ -20,6 +20,7 @@ sub from
 	my $langid = $session->param( "lang" );
 	$langid = "" if !defined $langid;
 
+<<<<<<< HEAD
 	my $cookie = $session->{query}->cookie(
 		-name    => "eprints_lang",
 		-path    => "/",
@@ -28,6 +29,14 @@ sub from
 		-expires => ($langid ? "+10y" : "+0s"), # really long time
 		-domain  => $session->config("cookie_domain") );
 	$session->{request}->err_headers_out->add('Set-Cookie' => $cookie);
+=======
+	EPrints::Cookie::set_cookie( $session, "eprints_lang", $langid,
+			-expires => ($langid ? "+10y" : "+0s"), # really long time
+		);
+	EPrints::Cookie::set_secure_cookie( $session, "eprints_lang", $langid,
+			-expires => ($langid ? "+10y" : "+0s"), # really long time
+		);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $referrer = $session->param( "referrer" );
         $referrer = EPrints::Apache::AnApache::header_in( $session->get_request, 'Referer' ) unless( EPrints::Utils::is_set( $referrer ) );
@@ -40,6 +49,7 @@ sub render_action_link
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	my $session = $self->{session};
 
 	my $xml = $session->xml;
@@ -105,6 +115,45 @@ sub render_action_link
 	$div->appendChild( $link );
 
 	return $div;
+=======
+	my $repo = $self->{session};
+
+	my $xml = $repo->xml;
+	my $f = $xml->create_document_fragment;
+
+	my $languages = $repo->config( "languages" );
+	return $f if @$languages == 1;
+
+	$f->appendChild( my $ul = $xml->create_element( "ul",
+			class => "ep_tm_languages",
+		) );
+
+	my $uri = $repo->get_url( path => "cgi", "set_lang" );
+	$uri->query_form( referrer => $repo->get_url( host => 1, query => 1 ) )
+		if $repo->get_online;
+
+	foreach my $langid (@$languages)
+	{
+		my $u = $uri->clone;
+		$u->query_form(
+				$uri->query_form,
+				lang => $langid,
+			);
+		{
+			local $repo->{lang};
+			$repo->change_lang( $langid );
+			$ul->appendChild( $xml->create_data_element( "li", [
+					[ "a", $repo->html_phrase( "languages_typename_".$langid ), href => $u ]
+				]) );
+		}
+	}
+
+	$ul->appendChild( $xml->create_data_element( "li", [
+			[ "a", $repo->html_phrase( "cgi/set_lang:clear_cookie" ), href => $uri ]
+		]) );
+
+	return $f;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 1;

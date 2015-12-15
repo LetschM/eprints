@@ -81,9 +81,14 @@ sub render
 			class => 'ep_form_action_button', );
 	$repo->xml->dispose( $title );
 
+<<<<<<< HEAD
 	my $form = $repo->render_form( "POST" );
 
 	$form->appendChild( $self->render_hidden_bits );
+=======
+	my $form = $self->render_form;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$form->appendChild( $repo->html_phrase( "cgi/login:page_layout", %bits ) );
 
 	my $script = $repo->make_javascript( '$("login_username").focus()' );

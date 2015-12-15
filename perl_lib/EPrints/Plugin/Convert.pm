@@ -2,6 +2,11 @@ package EPrints::Plugin::Convert;
 
 =pod
 
+<<<<<<< HEAD
+=======
+=for Pod2Wiki
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 NAME
 
 EPrints::Plugin::Convert - Convert EPrints::DataObj::Document into different formats
@@ -18,6 +23,7 @@ To allow for simpler local configuration Convert plugins should use SystemSettin
 
 =head1 SYNOPSIS
 
+<<<<<<< HEAD
 	my $root = $session->plugin( 'Convert' );
 
 	my %available = $root->can_convert( $document );
@@ -25,6 +31,18 @@ To allow for simpler local configuration Convert plugins should use SystemSettin
 	# Convert a document to plain-text
 	my $txt_tool = $available{'text/plain'};
 	my $plugin = $txt_tool->{ plugin };
+=======
+	my $root = $repo->plugin( 'Convert' );
+	
+	# Get the the available conversions for all plugins
+	my %available = $root->can_convert( $document );
+	
+	# Get a conversion scheme for text/plain
+	my $txt_tool = $available{'text/plain'};
+	
+	# Use the plugin to convert the document to text/plain
+	my $plugin = $txt_tool->{'plugin'};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$plugin->convert( $eprint, $document, 'text/plain' );
 
 =head1 METHODS
@@ -149,6 +167,7 @@ A value between 0 and 1 representing the 'quality' or confidence in this convers
 
 sub can_convert
 {
+<<<<<<< HEAD
 	my ($plugin, $doc, $type, %params) = @_;
 	
 	my $session = $plugin->{ "session" };
@@ -159,6 +178,17 @@ sub can_convert
 	{
 		next if $_ eq $plugin->get_id;
 		my %avail = $session->plugin( $_ )->can_convert( $doc, $type );
+=======
+	my ($self, $doc, $type, %params) = @_;
+	
+	my $repo = $self->repository;
+
+	my %types;
+	foreach my $plugin ($repo->plugins( type => 'Convert', %params ))
+	{
+		next if $self->id eq $plugin->id;
+		my %avail = $plugin->can_convert( $doc, $type );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		while( my( $mt, $def ) = each %avail )
 		{
 			next if defined( $type ) && $mt ne $type;

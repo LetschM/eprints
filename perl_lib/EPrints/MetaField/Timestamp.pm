@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::MetaField::Timestamp;
@@ -12,11 +13,23 @@
 =head1 NAME
 
 B<EPrints::MetaField::Timestamp> - a date/time
+=======
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::MetaField::Timestamp - date + time
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 DESCRIPTION
 
 A date/time that defaults to the current time in UTC.
 
+<<<<<<< HEAD
+=======
+=head1 METHODS
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =over 4
 
 =cut
@@ -51,6 +64,11 @@ sub is_type
 ######################################################################
 1;
 
+<<<<<<< HEAD
+=======
+=back
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

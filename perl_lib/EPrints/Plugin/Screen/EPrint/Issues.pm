@@ -34,6 +34,7 @@ sub can_be_viewed
 	return $self->allow( "eprint/issues" );
 }
 
+<<<<<<< HEAD
 sub render
 {
 	my( $self ) = @_;
@@ -57,12 +58,81 @@ sub render
 	}
 
 	if( scalar @issues ) 
+=======
+sub render_tab_title
+{
+	my( $self ) = @_;
+
+	my $repo = $self->repository;
+	my $eprint = $self->{processor}->{eprint};
+
+	my $id = "eprint_issues_tab_title";
+
+	my $title = $repo->xml->create_element( "span",
+			id => $id,
+		);
+	
+	$title->appendChild( $self->SUPER::render_tab_title );
+
+	my $url = $repo->current_url( query => 0 );
+	$url->query_form(
+			$self->hidden_bits,
+			ajax => 1,
+		);
+	$title->appendChild( $repo->make_javascript( <<"EOJ" ) );
+new Ajax.Updater('$id', '$url', { method: 'get' });
+EOJ
+
+	return $title;
+}
+
+sub wishes_to_export { shift->EPrints::Plugin::Screen::EPrint::View::wishes_to_export }
+sub export_mime_type { shift->EPrints::Plugin::Screen::EPrint::View::export_mime_type }
+
+sub export
+{
+	my( $self ) = @_;
+
+	my $xml = $self->repository->xml;
+
+	my $title = $self->SUPER::render_tab_title;
+
+	if( $self->issues )
+	{
+		my $url = $self->repository->current_url( path => "static",
+				"style/images/warning-icon.png" );
+		$title = $xml->create_data_element( "span", $title,
+			style => "padding-left: 20px; background: url('$url') no-repeat;",
+		);
+	}
+
+	binmode(STDOUT, ":utf8");
+	print $self->repository->xhtml->to_xhtml( $title );
+	$xml->dispose( $title );
+}
+
+sub render
+{
+	my( $self ) = @_;
+
+	my $eprint = $self->{processor}->{eprint};
+	my $session = $eprint->{session};
+
+	my $page = $session->make_doc_fragment;
+	$page->appendChild( $self->html_phrase( "live_audit_intro" ) );
+
+	if( my @issues = $self->issues )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my $ol = $session->make_element( "ol" );
 		foreach my $issue ( @issues )
 		{
 			my $li = $session->make_element( "li" );
+<<<<<<< HEAD
 			$li->appendChild( $issue->{description} );
+=======
+			$li->appendChild( $issue->render_description );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			$ol->appendChild( $li );
 		}
 		$page->appendChild( $ol );
@@ -72,6 +142,7 @@ sub render
 		$page->appendChild( $self->html_phrase( "no_live_issues" ) );
 	}
 
+<<<<<<< HEAD
 	if( $eprint->get_value( "item_issues_count" ) > 0 )
 	{
 		$page->appendChild( $self->html_phrase( "issues" ) );
@@ -79,6 +150,55 @@ sub render
 	}
 
 	return $page;
+=======
+	return $page;
+}
+
+sub issues
+{
+	my( $self ) = @_;
+
+	my $repo = $self->repository;
+	my $eprint = $self->{processor}->{eprint};
+
+	my @issues;
+
+	foreach my $issue (@{$eprint->value( "item_issues" )})
+	{
+		if( $issue->value( "status" ) =~ /^discovered|reported$/ )
+		{
+			push @issues, $issue;
+		}
+	}
+
+	my $epdata_to_dataobj = sub {
+		my( $epdata ) = @_;
+
+		push @issues, $repo->dataset( "issue" )->make_dataobj( $epdata );
+
+		return undef;
+	};
+
+	# Run all available Issues plugins
+	my @plugins = $repo->get_plugins(
+		{
+			Handler => EPrints::CLIProcessor->new(
+				session => $repo,
+				epdata_to_dataobj => $epdata_to_dataobj,
+			),
+		},
+		type => "Issues",
+		can_accept => "dataobj/eprint",
+	);
+
+	foreach my $plugin ( @plugins )
+	{
+		$plugin->process_dataobj( $eprint );
+		$plugin->finish;
+	}
+
+	return @issues;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 

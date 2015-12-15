@@ -29,11 +29,16 @@ reload_apache()
 
 case "$1" in
     purge|remove|abort-install|disappear)
+<<<<<<< HEAD
 	if [ -f /etc/apache2/sites-available/@PACKAGE@.conf ]; then
 	        rm -f /etc/apache2/sites-available/@PACKAGE@.conf
 	else
 		rm -f /etc/apache2/sites-available/@PACKAGE@
 	fi
+=======
+	rm -f /etc/apache2/sites-enabled/@PACKAGE@
+	rm -f /etc/apache2/sites-available/@PACKAGE@
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	update-rc.d -f epindexer remove
 	rm -f /etc/init.d/epindexer
 	if getent passwd @INSTALL_USER@ >/dev/null; then

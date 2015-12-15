@@ -45,10 +45,23 @@ sub can_be_viewed
 	return $self->allow( $self->{processor}->{dataset}->id."/edit" );
 }
 
+<<<<<<< HEAD
+=======
+sub allow_action { shift->can_be_viewed }
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub from
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
+=======
+	if( $self->{processor}->{internal} || $self->{processor}->{action} )
+	{
+		return if !$self->verify_csrf;
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( defined $self->{processor}->{internal} )
 	{
 		if( my $component = $self->current_component )
@@ -81,7 +94,11 @@ sub from
 		return;
 	}
 
+<<<<<<< HEAD
 	$self->EPrints::Plugin::Screen::from;
+=======
+	$self->SUPER::from;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub wishes_to_export
@@ -118,7 +135,19 @@ sub action_stop
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	$self->{processor}->{screenid} = $self->view_screen;
+=======
+	my $return_to = $self->repository->param('return_to');
+	if ($return_to)
+	{
+		$self->{processor}->{redirect} = $return_to;
+	}
+	else
+	{
+		$self->{processor}->{screenid} = $self->view_screen;
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }	
 
 sub action_save

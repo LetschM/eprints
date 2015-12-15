@@ -505,6 +505,67 @@ sub get_citation_type
 	return $citation->type;
 }
 
+<<<<<<< HEAD
+=======
+sub plugin_list
+{
+	my( $self, %restrictions ) = @_;
+
+	return
+		map { $_->get_id() }
+		$self->plugins( %restrictions );
+}
+
+sub get_plugins { shift->plugins( @_ ) }
+
+package EPrints::Database;
+
+sub save_user_message
+{
+	EPrints->deprecated;
+	my( $self, $userid, $type, $xhtml ) = @_;
+
+	my $user = $self->{session}->user( $userid );
+	return undef if !defined $user;
+
+	return $user->create_subdataobj("messages", {
+		type => $type,
+		message => $xhtml,
+	});
+}
+
+sub get_user_messages
+{
+	EPrints->deprecated;
+	my( $self, $userid, %opts ) = @_;
+
+	my $user = $self->{session}->user( $userid );
+	return undef if !defined $user;
+
+	my @messages = @{$user->value( "messages" )};
+
+	if( $opts{clear} )
+	{
+		$_->remove for @messages;
+	}
+
+	return @messages;
+}
+
+sub clear_user_messages
+{
+	EPrints->deprecated;
+	my( $self, $userid ) = @_;
+
+	my $user = $self->{session}->user( $userid );
+	return undef if !defined $user;
+
+	$_->remove for @{$user->value( "messages" )};
+}
+
+
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 1;
 

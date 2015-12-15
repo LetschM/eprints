@@ -148,6 +148,13 @@ sub make_name_string
 		$secondbit .= " ".$name->{lineage};
 	}
 
+<<<<<<< HEAD
+=======
+	if( !length( $firstbit ) )
+	{
+		return $secondbit;
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	
 	if( defined $familylast && $familylast )
 	{
@@ -452,6 +459,13 @@ sub wget
 	}
 
 	my $ua = LWP::UserAgent->new();
+<<<<<<< HEAD
+=======
+        if ( $session->config( "proxy" ))
+        {
+          $ua->proxy(['http', 'https', 'ftp'], $session->config( "proxy" ));
+        }
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $r = $ua->get( $url,
 		":content_file" => $target
@@ -1249,9 +1263,12 @@ following the same pattern.
 
 eg. Input of 1234 gives "1kB", input of 934 gives "934B".
 
+<<<<<<< HEAD
 This is not internationalised, I don't think it needs to be. Let me
 know if this is a problem. support@eprints.org
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 ######################################################################
@@ -1260,6 +1277,7 @@ sub human_filesize
 {
 	my( $size_in_bytes ) = @_;
 
+<<<<<<< HEAD
 	my $tsize = $size_in_bytes;
 	my $prefixes = [ 'B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB' ];
 	my $i = 0;
@@ -1272,6 +1290,14 @@ sub human_filesize
 
 	$tsize .= $prefixes->[$i];
 	return $tsize;
+=======
+	return "0B" if $size_in_bytes <= 0;
+
+	my @units_prefix = qw( B kB MB GB TB PB EB );
+
+	my $i =  int( ( length( $size_in_bytes ) - 1 ) / 3 );
+	return int( $size_in_bytes / 1000 ** $i ) . $units_prefix[$i];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 my %REQUIRED_CACHE;
@@ -1427,6 +1453,22 @@ sub make_sitemap_url
 	return $url;
 }
 
+<<<<<<< HEAD
+=======
+=item $ok = cmp_deeply(LEFT, RIGHT)
+
+Compare structures LEFT and RIGHT using C<eq>, but descend into any array or hash references.
+
+Note: this calls the L<EPrints::DataObj/_equal> internal method.
+
+=cut
+
+sub cmp_deeply
+{
+	&EPrints::DataObj::_equal;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 =head1 COPYRIGHT

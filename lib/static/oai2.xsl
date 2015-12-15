@@ -143,7 +143,11 @@ ul.quicklinks {
 ul.quicklinks li {
 	font-size: 80%;
 	display: inline;
+<<<<<<< HEAD
 	list-stlye: none;
+=======
+	list-style: none;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	font-family: sans-serif;
 }
 p.intro {

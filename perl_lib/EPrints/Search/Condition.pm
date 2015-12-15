@@ -72,6 +72,10 @@ use EPrints::Search::Condition::NameMatch;
 use EPrints::Search::Condition::InSubject;
 use EPrints::Search::Condition::IsNull;
 use EPrints::Search::Condition::IsNotNull;
+<<<<<<< HEAD
+=======
+use EPrints::Search::Condition::IsSet;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use EPrints::Search::Condition::Comparison;
 use EPrints::Search::Condition::Regexp;
 use EPrints::Search::Condition::SubQuery;
@@ -111,6 +115,10 @@ sub new
 	if( $op eq "in_subject" ) { return EPrints::Search::Condition::InSubject->new( @params ); }
 	if( $op eq "is_null" ) { return EPrints::Search::Condition::IsNull->new( @params ); }
 	if( $op eq "is_not_null" ) { return EPrints::Search::Condition::IsNotNull->new( @params ); }
+<<<<<<< HEAD
+=======
+	if( $op eq "is_set" ) { return EPrints::Search::Condition::IsSet->new( @params ); }
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( $op eq "grep" ) { return EPrints::Search::Condition::Grep->new( @params ); }
 	if( $op eq "regexp" ) { return EPrints::Search::Condition::Regexp->new( @params ); }
 	if ( $op =~ m/^(=|<=|>=|<|>)$/ )
@@ -334,6 +342,11 @@ sub sql
 {
 	my( $self, %opts ) = @_;
 
+<<<<<<< HEAD
+=======
+	my $depth = $opts{depth} ||= 0;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $session = $opts{session};
 	my $db = $session->get_database;
 
@@ -360,9 +373,33 @@ sub sql
 		$ov_table = $dataset->get_sql_table_name();
 	}
 
+<<<<<<< HEAD
 	my $sql = "";
 	my @joins;
 
+=======
+	my $_sql = "";
+	my @joins;
+
+	my $sql = sub {
+		$_sql .= '  'x($depth+1).$_."\n" for @_;
+	};
+	my $sql_heading = sub {
+		$_sql .= '  'x$depth.$_."\n" for @_;
+	};
+	my $sql_join = sub {
+		my $glue = shift;
+		foreach my $i (0..$#_)
+		{
+			$_sql .= '  'x($depth+1).$_[$i];
+			$_sql .= $glue if $i < $#_;
+			$_sql .= "\n";
+		}
+	};
+
+	&$sql_heading( "SELECT" );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $distinctby_table;
 	my $groupby_table;
 
@@ -370,16 +407,26 @@ sub sql
 	{
 		$distinctby_table = $dataset->get_sql_table_name;
 		# SELECT main.distinctby, main.id
+<<<<<<< HEAD
 		$sql .= "SELECT ";
 		my $i = 0;
 		$sql .= join ",", map { $_.$db->sql_AS."D".$i++ } map { $db->quote_identifier( $distinctby_table, $_ ) } $distinctby->get_sql_names, $key_field->get_sql_name;
+=======
+		my $i = 0;
+		&$sql_join( ",", map { $_.$db->sql_AS."D".$i++ } map { $db->quote_identifier( $distinctby_table, $_ ) } $distinctby->get_sql_names, $key_field->get_sql_name );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	elsif( defined $distinctby && $distinctby->property( "multiple" ) )
 	{
 		$distinctby_table = "distinctby_".refaddr($self);
+<<<<<<< HEAD
 		$sql .= "SELECT ";
 		my $i = 0;
 		$sql .= join ",", map { $_.$db->sql_AS."D".$i++ } map { $db->quote_identifier( $distinctby_table, $_ ) } $distinctby->get_sql_names, $key_field->get_sql_name;
+=======
+		my $i = 0;
+		&$sql_join( ",", map { $_.$db->sql_AS."D".$i++ } map { $db->quote_identifier( $distinctby_table, $_ ) } $distinctby->get_sql_names, $key_field->get_sql_name );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		push @joins, {
 			type => "inner",
 			table => $dataset->get_sql_sub_table_name( $distinctby ),
@@ -391,17 +438,31 @@ sub sql
 	{
 		$groupby_table = $dataset->get_sql_table_name;
 		# SELECT dataset_main_table.groupby, COUNT(DISTINCT dataset_main_table.key_field)
+<<<<<<< HEAD
 		$sql .= "SELECT ";
 		$sql .= join ", ", map { $db->quote_identifier( $groupby_table, $_ ) } $groupby->get_sql_names;
 		$sql .= ", COUNT(DISTINCT ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ).")";
+=======
+		&$sql_join( ",", 
+			(map { $db->quote_identifier( $groupby_table, $_ ) } $groupby->get_sql_names),
+			"COUNT(DISTINCT ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ).")",
+		);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	elsif( defined $groupby && $groupby->property( "multiple" ) )
 	{
 		$groupby_table = "groupby_".refaddr( $self );
 		# SELECT groupby_table.groupby, COUNT(DISTINCT dataset_main_table.key_field)
+<<<<<<< HEAD
 		$sql .= "SELECT ";
 		$sql .= join ", ", map { $db->quote_identifier( $groupby_table, $_ ) } $groupby->get_sql_names;
 		$sql .= ", COUNT(DISTINCT ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ).")";
+=======
+		&$sql_join( ",",
+			(map { $db->quote_identifier( $groupby_table, $_ ) } $groupby->get_sql_names),
+			"COUNT(DISTINCT ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ).")",
+		);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		push @joins, {
 			type => "inner",
 			table => $dataset->get_sql_sub_table_name( $groupby ),
@@ -412,20 +473,51 @@ sub sql
 	else
 	{
 		# SELECT dataset_main_table.key_field
+<<<<<<< HEAD
 		$sql .= "SELECT ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name );
 		if( defined $key_alias )
 		{
 			$sql .= $db->sql_AS.$db->quote_identifier( $key_alias );
+=======
+		if( defined $key_alias )
+		{
+			&$sql(
+				$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ) . 
+				$db->sql_AS . 
+				$db->quote_identifier( $key_alias )
+			);
+		}
+		else
+		{
+			&$sql($db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ));
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 	}
 
 	# FROM dataset_main_table
+<<<<<<< HEAD
 	$sql .= " FROM ".$db->quote_identifier( $dataset->get_sql_table_name );
 	# LEFT JOIN dataset_ordervalues
 	if( scalar @orders && $dataset->ordered )
 	{
 		$sql .= " LEFT JOIN ".$db->quote_identifier( $ov_table );
 		$sql .= " ON ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name )."=".$db->quote_identifier( $ov_table, $key_field->get_sql_name );
+=======
+	&$sql_heading("FROM");
+
+	&$sql($db->quote_identifier( $dataset->get_sql_table_name ));
+
+	# LEFT JOIN dataset_ordervalues
+	if( scalar @orders && $dataset->ordered )
+	{
+		&$sql("LEFT JOIN");
+		&$sql($db->quote_identifier( $ov_table ));
+		&$sql("ON");
+		&$sql(sprintf("%s=%s",
+			$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ),
+			$db->quote_identifier( $ov_table, $key_field->get_sql_name )
+		));
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	push @joins, $self->joins( %opts );
@@ -489,18 +581,30 @@ sub sql
 			EPrints::abort( "Unknown join type '$join->{type}' in table join construction" );
 		}
 	}
+<<<<<<< HEAD
 
 	$sql .= join("", map { ", $_" } @tables);
+=======
+	
+	chomp($_sql), $_sql.=",\n" if @tables;
+	&$sql_join( ",", @tables);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	push @logic, $self->logic( %opts );
 	if( @logic )
 	{
+<<<<<<< HEAD
 		$sql .= " WHERE ".join(" AND ", @logic);
+=======
+		&$sql_heading("WHERE");
+		&$sql_join(" AND ", @logic);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	# don't need to GROUP BY subqueries or DISTINCT BY
 	if( !defined $key_alias && !defined $distinctby )
 	{
+<<<<<<< HEAD
 		if( !defined $groupby )
 		{
 			$sql .= " GROUP BY ".$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name );
@@ -512,19 +616,40 @@ sub sql
 				}
 				$sql .= " ORDER BY ";
 				$sql .= join(", ", map { $db->quote_identifier( $ov_table, $_->[0] ) . " " . $_->[1] } @orders );
+=======
+		&$sql_heading("GROUP BY");
+		if( !defined $groupby )
+		{
+			&$sql_join( ",",
+				$db->quote_identifier( $dataset->get_sql_table_name, $key_field->get_sql_name ),
+				(map { $db->quote_identifier($ov_table, $_->[0]) } @orders),
+			);
+			if( scalar @orders )
+			{
+				&$sql_heading("ORDER BY");
+				&$sql_join(",", map { $db->quote_identifier( $ov_table, $_->[0] ) . " " . $_->[1] } @orders);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			}
 		}
 		else
 		{
+<<<<<<< HEAD
 			$sql .= " GROUP BY ";
 			$sql .= join ", ", map { $db->quote_identifier( $groupby_table, $_ ) } $groupby->get_sql_names;
+=======
+			&$sql_join(",", map { $db->quote_identifier( $groupby_table, $_ ) } $groupby->get_sql_names);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 	}
 
 #print STDERR $self->describe;
 #print STDERR "\nsql=$sql\n\n";
 
+<<<<<<< HEAD
 	return $sql;
+=======
+	return $_sql;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 # return a reference to an array of ID's

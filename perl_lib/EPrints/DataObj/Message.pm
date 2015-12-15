@@ -24,13 +24,22 @@ This is an internal class that shouldn't be used outside L<EPrints::Database>.
 
 package EPrints::DataObj::Message;
 
+<<<<<<< HEAD
 @ISA = ( 'EPrints::DataObj' );
+=======
+use EPrints::DataObj::SubObject;
+@ISA = ( 'EPrints::DataObj::SubObject' );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 use EPrints;
 
 use strict;
 
+<<<<<<< HEAD
 =item $thing = EPrints::DataObj::Access->get_system_field_info
+=======
+=item $thing = EPrints::DataObj::Message->get_system_field_info
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Core fields.
 
@@ -52,11 +61,27 @@ sub get_system_field_info
 		{ name=>"type", type=>"set", required=>1, text_index=>0,
 			options => [qw/ message warning error /] },
 
+<<<<<<< HEAD
 		{ name=>"message", type=>"longtext", required=>1, text_index=>0 },
+=======
+		{ name=>"message", type=>"xml", required=>1, text_index=>0 },
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	);
 }
 
+<<<<<<< HEAD
+=======
+sub DESTROY
+{
+	my( $self ) = @_;
+
+	# make sure we dispose of the message
+	$self->{session}->xml->dispose( $self->{data}->{message} )
+		if defined $self->{data}->{message};
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 
 =back
@@ -67,6 +92,22 @@ sub get_system_field_info
 
 ######################################################################
 
+<<<<<<< HEAD
+=======
+sub create_from_data
+{
+	my( $class, $session, $data, $dataset ) = @_;
+
+	my $parent = $data->{_parent};
+	if( defined $parent )
+	{
+		$data->{userid} = $parent->id;
+	}
+
+	return $class->SUPER::create_from_data( $session, $data, $dataset );
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 

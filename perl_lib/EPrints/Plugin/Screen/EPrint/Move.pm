@@ -18,7 +18,11 @@ sub new
 
 	#	$self->{priv} = # no specific priv - one per action
 
+<<<<<<< HEAD
 	$self->{actions} = [qw/ move_inbox move_buffer move_archive move_deletion /];
+=======
+	$self->{actions} = [qw/ move_inbox move_buffer move_archive move_deletion review_move_archive /];
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$self->{appears} = [
 { place => "eprint_actions", 	action => "move_inbox", 	position => 600, },
@@ -29,9 +33,18 @@ sub new
 { place => "eprint_actions_bar_archive", action => "move_buffer", position => 100, },
 { place => "eprint_actions_bar_archive", action => "move_deletion", position => 100, },
 { place => "eprint_actions_bar_deletion", action => "move_archive", position => 100, },
+<<<<<<< HEAD
 { place => "eprint_review_actions", action => "move_archive", postion => 200, },
 	];
 	$self->{action_icon} = { move_archive => "action_approve.png" };
+=======
+{ place => "eprint_review_actions", action => "review_move_archive", position => 200, },
+	];
+	$self->{action_icon} = {
+		move_archive => "action_approve.png",
+		review_move_archive => "action_approve.png",
+	};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }
@@ -83,10 +96,18 @@ sub action_move_inbox
 
 	if( !defined $user )
 	{
+<<<<<<< HEAD
 		$self->{session}->render_error( 
 			$self->{session}->html_phrase( 
 				"cgi/users/edit_eprint:no_user" ),
 			"error" );
+=======
+		$self->{processor}->add_message(
+				"error",
+				$self->{session}->html_phrase( "cgi/users/edit_eprint:no_user" )
+			);
+		$self->{processor}->{screenid} = "Error";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		return;
 	}
 
@@ -96,6 +117,10 @@ sub action_move_inbox
 }
 
 
+<<<<<<< HEAD
+=======
+sub allow_review_move_archive { shift->allow_move_archive( @_ ) }
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub allow_move_archive
 {
 	my( $self ) = @_;
@@ -111,6 +136,17 @@ sub action_move_archive
 
 	$self->add_result_message( $ok );
 }
+<<<<<<< HEAD
+=======
+sub action_review_move_archive
+{
+	my( $self ) = @_;
+
+	$self->action_move_archive;
+
+	$self->{processor}->{screenid} = "Review";
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 
 sub allow_move_deletion
@@ -139,6 +175,10 @@ sub add_result_message
 	{
 		$self->{processor}->add_message( "message",
 			$self->html_phrase( "status_changed",
+<<<<<<< HEAD
+=======
+				item=>$self->{processor}->{eprint}->render_citation_link,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				status=>$self->{processor}->{eprint}->render_value( "eprint_status" ) ) );
 	}
 	else

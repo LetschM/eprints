@@ -10,7 +10,11 @@
 # Screen Plugin Configuration
 # (Disabling a screen will also remove it and it's actions from all lists)
 
+<<<<<<< HEAD
 # To add the screen Screen::Items to the key_tools list at postion 200:
+=======
+# To add the screen Screen::Items to the key_tools list at position 200:
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # $c->{plugins}->{"Screen::Items"}->{appears}->{key_tools} = 200;
 
 # To remove the screen Screen::Items from the key_tools list:
@@ -23,7 +27,11 @@
 # (Disabling an action will also remove it from all lists)
 # $c->{plugins}->{"Screen::Items"}->{actions}->{blah}->{disable} = 1;
 
+<<<<<<< HEAD
 # To add action "blah" of Screen::Items to the key_tools list at postion 200: 
+=======
+# To add action "blah" of Screen::Items to the key_tools list at position 200:
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # $c->{plugins}->{"Screen::Items"}->{actions}->{blah}->{appears}->{key_tools} = 200;
 
 # To remove action "blah" of Screen::Items from the key_tools list
@@ -58,8 +66,11 @@
 # You should replace this with your own CrossRef account username and password.
 
 $c->{plugins}->{"Import::DOI"}->{params}->{pid} = "ourl_eprintsorg:eprintsorg";
+<<<<<<< HEAD
 # set the default options for the DOI import plugin - change these to reflect your
 # own repository requirements
 $c->{plugins}->{"Import::DOI"}->{params}->{doi_field} = "id_number";
 $c->{plugins}->{"Import::DOI"}->{params}->{use_prefix} = 1;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 

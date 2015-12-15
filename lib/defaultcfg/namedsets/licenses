@@ -6,6 +6,7 @@ cc_by_nc
 cc_by_nc_nd
 cc_by_nc_sa
 cc_by_sa
+<<<<<<< HEAD
 
 cc_by_nd_4
 cc_by_4
@@ -14,6 +15,8 @@ cc_by_nc_nd_4
 cc_by_nc_sa_4
 cc_by_sa_4
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 cc_public_domain
 cc_gnu_gpl
 cc_gnu_lgpl

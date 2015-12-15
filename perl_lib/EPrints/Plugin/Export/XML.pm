@@ -12,6 +12,20 @@ use EPrints::Plugin::Export::XMLFile;
 
 use strict;
 
+<<<<<<< HEAD
+=======
+my @PREFIXES = (
+	{
+		Prefix => '',
+		NamespaceURI => EPrints::Const::EP_NS_DATA,
+	},
+	{
+		Prefix => 'xsi',
+		NamespaceURI => 'http://www.w3.org/2001/XMLSchema-instance',
+	},
+);
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub new
 {
 	my( $class, %opts ) = @_;
@@ -29,6 +43,26 @@ sub new
 	return $self;
 }
 
+<<<<<<< HEAD
+=======
+sub root_attributes
+{
+	my ($self) = @_;
+
+	my $schema_location = $self->{session}->current_url( host => 1, path => 'cgi', 'schema/ep2.xsd' );
+
+	return (
+		'{http://www.w3.org/2001/XMLSchema-instance}schemaLocation' => {
+			Prefix => 'xsi',
+			LocalName => 'schemaLocation',
+			Name => 'xsi:schemaLocation',
+			NamespaceURI => 'http://www.w3.org/2001/XMLSchema-instance',
+			Value => EPrints::Const::EP_NS_DATA() . ' ' . $schema_location,
+		},
+	);
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub output_list
 {
 	my( $self, %opts ) = @_;
@@ -51,10 +85,14 @@ sub output_list
 			Encoding => 'utf-8',
 		});
 	}
+<<<<<<< HEAD
 	$wr->start_prefix_mapping({
 		Prefix => '',
 		NamespaceURI => EPrints::Const::EP_NS_DATA,
 	});
+=======
+	$wr->start_prefix_mapping($_) for @PREFIXES;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	if( !$opts{omit_root} )
 	{
@@ -63,7 +101,11 @@ sub output_list
 			LocalName => $toplevel,
 			Name => $toplevel,
 			NamespaceURI => EPrints::Const::EP_NS_DATA,
+<<<<<<< HEAD
 			Attributes => {},
+=======
+			Attributes => {$self->root_attributes},
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		});
 	}
 	$opts{list}->map( sub {
@@ -81,10 +123,14 @@ sub output_list
 			NamespaceURI => EPrints::Const::EP_NS_DATA,
 		});
 	}
+<<<<<<< HEAD
 	$wr->end_prefix_mapping({
 		Prefix => '',
 		NamespaceURI => EPrints::Const::EP_NS_DATA,
 	});
+=======
+	$wr->end_prefix_mapping($_) for @PREFIXES;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$wr->end_document({});
 
 	return $output;
@@ -118,10 +164,14 @@ sub output_dataobj
 			Encoding => 'utf-8',
 		});
 	}
+<<<<<<< HEAD
 	$wr->start_prefix_mapping({
 		Prefix => '',
 		NamespaceURI => EPrints::Const::EP_NS_DATA,
 	});
+=======
+	$wr->start_prefix_mapping($_) for @PREFIXES;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	if( !$opts{omit_root} )
 	{
 		$wr->start_element({
@@ -129,7 +179,11 @@ sub output_dataobj
 			LocalName => $toplevel,
 			Name => $toplevel,
 			NamespaceURI => EPrints::Const::EP_NS_DATA,
+<<<<<<< HEAD
 			Attributes => {},
+=======
+			Attributes => {$self->root_attributes},
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		});
 	}
 	$dataobj->to_sax( %opts, Handler => $wr );
@@ -142,10 +196,14 @@ sub output_dataobj
 			NamespaceURI => EPrints::Const::EP_NS_DATA,
 		});
 	}
+<<<<<<< HEAD
 	$wr->end_prefix_mapping({
 		Prefix => '',
 		NamespaceURI => EPrints::Const::EP_NS_DATA,
 	});
+=======
+	$wr->end_prefix_mapping($_) for @PREFIXES;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$wr->end_document({});
 
 	return $output;

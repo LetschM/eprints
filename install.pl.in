@@ -171,7 +171,11 @@ sub get_digest
 
 # Install $file from directory $dir into $dest. The permissions
 # from $perms are set, and the group and user are set from $group
+<<<<<<< HEAD
 # and $user. The %hash is used for MD5 comparisions - currently
+=======
+# and $user. The %hash is used for MD5 comparisons - currently
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # not doing anything active, but checking is enabled.
 
 sub install_file

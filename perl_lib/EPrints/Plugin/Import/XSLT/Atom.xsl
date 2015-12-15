@@ -24,6 +24,15 @@
 <eprints>
 <eprint>
 
+<<<<<<< HEAD
+=======
+<xsl:for-each select="atom:entry/*">
+<xsl:if test="namespace-uri() = 'http://eprints.org/ep2/data/2.0'">
+<xsl:copy-of select="." />
+</xsl:if>
+</xsl:for-each>
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 <xsl:if test="atom:entry/atom:author">
 <creators>
 <xsl:for-each select="atom:entry/atom:author">

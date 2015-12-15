@@ -7,7 +7,12 @@ EPrints::Plugin::Screen::Staff::IssueSearch
 
 package EPrints::Plugin::Screen::Staff::IssueSearch;
 
+<<<<<<< HEAD
 @ISA = ( 'EPrints::Plugin::Screen::AbstractSearch' );
+=======
+use EPrints::Plugin::Screen::Search;
+@ISA = ( 'EPrints::Plugin::Screen::Search' );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 use strict;
 
@@ -27,6 +32,7 @@ sub new
 	return $self;
 }
 
+<<<<<<< HEAD
 sub search_dataset
 {
 	my( $self ) = @_;
@@ -45,6 +51,8 @@ sub allow_export { return 1; }
 
 sub allow_export_redir { return 1; }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub can_be_viewed
 {
 	my( $self ) = @_;
@@ -52,6 +60,7 @@ sub can_be_viewed
 	return $self->allow( "staff/issue_search" );
 }
 
+<<<<<<< HEAD
 sub from
 {
 	my( $self ) = @_;
@@ -65,11 +74,22 @@ sub from
 	$self->{processor}->{sconf} = \%sopts;
 
 	$self->SUPER::from;
+=======
+sub properties_from
+{
+	my( $self ) = @_;
+
+	$self->{processor}->{dataset} = $self->repository->dataset( "eprint" );
+	$self->{processor}->{searchid} = "issues";
+
+	$self->SUPER::properties_from;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub default_search_config
 {
 	return {
+<<<<<<< HEAD
 	search_fields => [
 		{ meta_fields => [ "item_issues_type" ] },
 		{ meta_fields => [ "item_issues_timestamp" ] },
@@ -121,6 +141,36 @@ sub render_result_row
 			n => [$n,"INTEGER"] );
 }
 
+=======
+		search_fields => [
+			{ meta_fields => [ "item_issues.type" ] },
+			{ meta_fields => [ "item_issues.status" ], default=>'discovered reported' },
+			{ meta_fields => [ "userid.username" ] },
+			{ meta_fields => [ "eprint_status" ], default=>'buffer archive' },
+			{ meta_fields => [ "creators_name" ] },
+			{ meta_fields => [ "date" ] },
+			{ meta_fields => [ "subjects" ] },
+			{ meta_fields => [ "type" ] },
+		],
+		preamble_phrase => "search/issues:preamble",
+		title_phrase => "search/issues:title",
+		citation => "issue",
+		page_size => 100,
+		staff => 1,
+		order_methods => {
+			"byyear" 	 => "-date/creators_name/title",
+			"byyearoldest"	 => "date/creators_name/title",
+			"bydatestamp"	 => "-datestamp",
+			"bydatestampoldest" => "datestamp",
+			"byfirstseen" => "item_issues",
+			"bynissues" => "-item_issues_count",
+		},
+		default_order => "byfirstseen",
+		show_zero_results => 0,
+	};
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # Supress the anyall field - not interesting.
 sub render_anyall_field
 {
@@ -129,7 +179,15 @@ sub render_anyall_field
 	return $self->{session}->make_doc_fragment;
 }
 
+<<<<<<< HEAD
 
+=======
+# suppress dataset=
+sub hidden_bits
+{
+	return shift->EPrints::Plugin::Screen::AbstractSearch::hidden_bits();
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 1;
 

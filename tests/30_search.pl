@@ -1,6 +1,10 @@
 use strict;
 use utf8;
+<<<<<<< HEAD
 use Test::More tests => 35;
+=======
+use Test::More tests => 40;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 BEGIN { use_ok( "EPrints" ); }
 BEGIN { use_ok( "EPrints::Test" ); }
@@ -129,7 +133,11 @@ $searchexp->add_field( $dataset->get_field( "title" ), "legend", "IN" );
 
 $list = eval { $searchexp->perform_search };
 
+<<<<<<< HEAD
 ok(defined($list) && $list->count > 0, "satisfy-any, nomatch multiple");
+=======
+ok(defined($list) && $list->count > 0, "satisfy-any, nomatch multiple: ".describe($searchexp));
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 
 $searchexp = EPrints::Search->new(
@@ -423,6 +431,30 @@ $list = eval { $searchexp->perform_search };
 
 ok(defined($list) && $list->count > 0, "search multiple field".&describe($searchexp).&sql($searchexp));
 
+<<<<<<< HEAD
+=======
+
+my $issue = $sample_eprint->create_subdataobj( 'item_issues', {
+	type => "tests/30_search",
+	status => "resolved",
+});
+$issue = $session->dataset( 'issue' )->dataobj( "tests/30_search" )
+	if !defined $issue;
+
+$searchexp = EPrints::Search->new(
+	session => $session,
+	dataset => $dataset,
+);
+
+$searchexp->add_field( $session->dataset( 'issue' )->field( "status" ), "resolved" );
+
+$list = eval { $searchexp->perform_search };
+
+ok(defined($list) && $list->count > 0, "subobject join_path".&describe($searchexp).&sql($searchexp));
+
+$issue->remove if defined $issue;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 SKIP:
 {
 	skip "Enable Xapian", 1 if !defined $session->plugin( "Search::Xapian" );
@@ -439,6 +471,84 @@ SKIP:
 	ok($list->count > 0, "Xapian creators_name");
 }
 
+<<<<<<< HEAD
+=======
+$searchexp = EPrints::Search->new(
+	session => $session,
+	dataset => $dataset,
+	satisfy_all => 1
+);
+
+$searchexp->add_field( $dataset->get_field( "subjects" ), "BS PN" );
+$searchexp->add_field( $dataset->get_field( "eprintid" ), "1.." );
+#$searchexp->add_field( $dataset->get_field( "eprint_status" ), "buffer archive", "EQ", "ANY" );
+
+$list = eval { $searchexp->perform_search };
+
+ok(defined($list) && $list->count > 0, "multiple subjects: " . $searchexp->get_conditions->describe );
+
+$searchexp = EPrints::Search->new(
+	session => $session,
+	dataset => $dataset,
+	satisfy_all => 1
+);
+
+$searchexp->add_field( $dataset->get_field( "subjects" ), "subjects BS PN" );
+$searchexp->add_field( $dataset->get_field( "title" ), "eagle demonstration", "IN", "ANY" );
+$searchexp->add_field( $dataset->get_field( "abstract" ), "eagle demonstration", "IN", "ANY" );
+$searchexp->add_field( $udataset->get_field( "username" ), "admin user", "EQ", "ANY" );
+
+$list = eval { $searchexp->perform_search };
+
+ok(defined($list) && $list->count > 0, "AND(OR,OR,OR): " . $searchexp->get_conditions->describe );
+
+$searchexp = EPrints::Search->new(
+	session => $session,
+	dataset => $dataset,
+	satisfy_all => 1
+);
+
+$searchexp->add_field( $dataset->get_field( "abstract" ), "demonstration", "IN", "ANY" );
+$searchexp->add_field( $dataset->get_field( "documents" ), "demonstration", "IN", "ANY" );
+
+$list = eval { $searchexp->perform_search };
+
+ok(defined($list) && $list->count > 0, "IN(abstract) AND IN(documents): " . $searchexp->get_conditions->describe );
+
+{
+local $SIG{__DIE__};
+$list = $dataset->search(
+	allow_blank => 1,
+	limit => 100,
+);
+
+my $eprintid = 23;
+my $year = 2000;
+eval { $list->map(sub {
+	(undef, undef, my $eprint) = @_;
+
+	$year = $eprint->value("date");
+
+	$eprintid = $eprint->id, die "ok\n" if length($year) == 4;
+}) };
+die $@ if $@ && $@ ne "ok\n";
+
+$searchexp = EPrints::Search->new(
+	session => $session,
+	dataset => $dataset,
+	satisfy_all => 1,
+	limit => 100,
+);
+
+$searchexp->add_field( $dataset->get_field( "eprintid" ), $eprintid );
+$searchexp->add_field( $dataset->get_field( "date" ), "..$year-01-01" );
+
+$list = eval { $searchexp->perform_search };
+
+ok(defined($list) && $list->count > 0, "..YYYY-01-01 date match: " . $searchexp->get_conditions->describe );
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 $session->terminate;
 
 sub describe

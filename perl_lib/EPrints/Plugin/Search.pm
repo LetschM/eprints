@@ -4,23 +4,43 @@ package EPrints::Plugin::Search;
 
 use strict;
 
+<<<<<<< HEAD
+=======
+=for Pod2Wiki
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 NAME
 
 EPrints::Plugin::Search - pluggable search engines
 
 =head1 SYNOPSIS
 
+<<<<<<< HEAD
 	$searchexp = $repo->plugin( "Search::XXX",
 		dataset => $repo->dataset( "archive" ),
 		...
 	);
 
 	($searchexp) = $repo->get_plugins({
+=======
+	# use a specific engine
+	$searchexp = $repo->plugin( "Search::XXX",
+		dataset => $repo->dataset( "archive" ),
+		filters => [{
+			meta_fields => [qw( meta_visibility )], value => 'show',
+		}],
+		...
+	);
+	
+	# find the best engine for a given search configuration
+	@engines = $repo->get_plugins({
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			dataset => $repo->dataset( "archive" )
 		},
 		type => "Search",
 		can_search => "simple/eprint",
 	);
+<<<<<<< HEAD
 
 	# methods to set up query
 	$form->appendChild(
@@ -29,11 +49,50 @@ EPrints::Plugin::Search - pluggable search engines
 
 	$searchexp->from_form();
 
+=======
+	@engines = sort {
+			$b->param('qs') <=> $a->param('qs')
+		} @engines;
+	
+	# render a search input form
+	$form->appendChild(
+		$searchexp->render_simple_fields
+	);
+	
+	# read the user input terms
+	$searchexp->from_form();
+	
+	# and execute to get some results
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$results = $searchexp->execute();
 
 =head1 DESCRIPTION
 
+<<<<<<< HEAD
 Search plugins implement the features required to render search query inputs, perform queries and return resulting objects.
+=======
+Search plugins implement the features required to render search query form inputs, perform queries and return matching objects.
+
+The main function of a search plugin is to retrieve objects from a L<dataset|EPrints::DataSet> based on a set of search criteria. The criteria are search fields and search filters. The terms used in search fields are usually provided by the user (e.g. from a Web form) while filters are defined by the search configuration. Search fields also define the "setness" of a search - if the user hasn't supplied any search terms the search is deemed to be empty. Filters tend to provide more options than those currently available from the Web UI, for instance testing whether a value is or is not set.
+
+In the default EPrints configuration there are C<simple> and C<advanced> searches for objects of class L<EPrints::DataObj::EPrint>. These (at least) define the form input boxes provided to the user and the fields that those user-supplied values are matched against. The search configuration can also define the choice of ordering of results, additional filters etc. Not all options will be supported by every engine - see the engine-specific plugins for details.
+
+There are currently two engines provided as part of the EPrints core:
+
+=over 4
+
+=item Internal
+
+L<EPrints::Plugin::Search::Internal> is a wrapper around L<EPrints::Search>.
+
+This supports querying any object type and in any search configuration (matches C<*/*>).
+
+=item Xapian
+
+L<EPrints::Plugin::Search::Xapian> is a wrapper around the L<Search::Xapian> module (must be installed separately). Xapian supports relevance matches, phrase searching, stemming and other advanced text index approaches.
+
+Currently only C<simple> searches are supported.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 METHODS
 
@@ -46,6 +105,10 @@ Search plugins implement the features required to render search query inputs, pe
 Create a new Search plugin object. Options:
 
 	custom_order - stringified order specification
+<<<<<<< HEAD
+=======
+	qs - quality score
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 
@@ -56,6 +119,14 @@ sub new
 	$params{custom_order} = "" if !exists $params{custom_order};
 	$params{filters} = [] if !exists $params{filters};
 
+<<<<<<< HEAD
+=======
+	# advertise this search engine
+	$params{advertise} = exists $params{advertise} ? $params{advertise} : 1;
+	# searches an external dataset
+	$params{external} = exists $params{external} ? $params{external} : 0;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $self = $class->SUPER::new( %params );
 
 	# distinguish plugins by a quality score
@@ -74,7 +145,11 @@ sub plugins
 {
 	my( $self, @args ) = @_;
 
+<<<<<<< HEAD
 	my @plugins = $self->{session}->get_plugins( @args, type => "Search" );
+=======
+	my @plugins = $self->{session}->get_plugins( @args, type => "Search", is_external => 0, );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	@plugins = sort { $b->param( "qs" ) <=> $a->param( "qs" ) } @plugins;
 
@@ -89,6 +164,17 @@ sub matches
 	{
 		return $self->can_search( $param );
 	}
+<<<<<<< HEAD
+=======
+	if( $test eq "is_advertised" )
+	{
+		return $self->param( "advertise" ) == $param;
+	}
+	if( $test eq "is_external" )
+	{
+		return $self->param( "external" ) == $param;
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self->SUPER::matches( $test, $param );
 }
@@ -545,7 +631,11 @@ L<EPrints::Const/EP_TRIGGER_INDEX_FIELDS>, L<EPrints::Search>, L<EPrints::List>.
 
 =for COPYRIGHT BEGIN
 
+<<<<<<< HEAD
 Copyright 2000-2011 University of Southampton.
+=======
+Copyright 2000-2013 University of Southampton.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =for COPYRIGHT END
 

@@ -54,7 +54,11 @@ sub get_system_field_info
 
 		{ name=>"email", type=>"text", required=>1 },
 
+<<<<<<< HEAD
 		{ name=>"requester_email", type=>"email", required=>1 },
+=======
+		{ name=>"requester_email", type=>"text", required=>1 },
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 		{ name=>"reason", type=>"longtext", required=>0 },
 

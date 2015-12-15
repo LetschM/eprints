@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::MetaField::Time;
@@ -12,6 +13,13 @@
 =head1 NAME
 
 B<EPrints::MetaField::Time> - no description
+=======
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::MetaField::Time - date + time
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 DESCRIPTION
 
@@ -32,6 +40,7 @@ Where:
 
 Note: if you set the time using ISO datetime format (YYYY-MM-DDThh:mm:ssZ) it will automatically be converted into the native format.
 
+<<<<<<< HEAD
 =head1 METHODS
 
 =over 4
@@ -130,10 +139,61 @@ sub get_basic_input_ids
 }
 
 sub get_basic_input_elements
+=======
+=head1 PROPERTIES
+
+In addition to those properties available in L<EPrints::MetaField::Date> and L<EPrints::MetaField>:
+
+=head2 render_res
+
+Reduce the resolution the date is shown as.
+
+=over 4
+
+=item B<"second">
+
+=item "minute"
+
+=item "hour"
+
+=back
+
+=head1 METHODS
+
+=over 4
+
+=cut
+
+
+package EPrints::MetaField::Time;
+
+use EPrints::MetaField::Date;
+
+@ISA = qw( EPrints::MetaField::Date );
+
+use strict;
+
+sub get_property_defaults
+{
+	my( $self ) = @_;
+	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{input_style} = "long";
+	$defaults{render_res} = "second";
+	$defaults{maxlength} = 19;
+	$defaults{regexp} = qr/\d\d\d\d(?:-\d\d(?:-\d\d(?:[ T]\d\d(?::\d\d(?::\d\dZ?)?)?)?)?)?/;
+	$defaults{parts} = [qw( year month day hour minute second )];
+	return %defaults;
+}
+
+sub should_reverse_order { return 1; }
+
+sub get_basic_input_elements_short
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self, $session, $value, $basename, $staff, $obj ) = @_;
 
 	my $frag = $session->make_doc_fragment;
+<<<<<<< HEAD
 		
 	my $min_res = $self->get_property( "min_resolution" );
 	
@@ -291,10 +351,28 @@ sub get_basic_input_elements
 
 
 	$frag->appendChild( $div );
+=======
+
+	$frag->appendChild( $session->xhtml->input_field( $basename, substr($value,0,10),
+		type => "text",
+		class => "ep_form_text",
+		noenter => 1,
+		size => 10,
+		maxlength => 10,
+	) );
+	$frag->appendChild( $session->xhtml->input_field( $basename . "_time", substr($value,11),
+		type => "text",
+		class => "ep_form_text",
+		noenter => 1,
+		size => 8,
+		maxlength => 8,
+	) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	
 	return [ [ { el=>$frag } ] ];
 }
 
+<<<<<<< HEAD
 sub form_value_basic
 {
 	my( $self, $session, $basename ) = @_;
@@ -365,6 +443,92 @@ sub get_property_defaults
 
 sub should_reverse_order { return 1; }
 
+=======
+sub render_hour_input
+{
+	my( $self, $basename, $value ) = @_;
+
+	my $repo = $self->{repository};
+
+	my @values = map { sprintf("%02d", $_) } 0..23;
+	my %labels = map {
+			$_ => $_,
+		} @values;
+	unshift @values, "";
+	$labels{""} = "?";
+
+	return $repo->render_option_list(
+		name => "${basename}_hour",
+		id => "${basename}_hour",
+		values => \@values,
+		default => $value,
+		labels => \%labels );
+}
+
+sub render_minute_input
+{
+	my( $self, $basename, $value ) = @_;
+
+	my $repo = $self->{repository};
+
+	my @values = map { sprintf("%02d", $_) } 0..59;
+	my %labels = map {
+			$_ => $_,
+		} @values;
+	unshift @values, "";
+	$labels{""} = "?";
+
+	return $repo->render_option_list(
+		name => "${basename}_minute",
+		id => "${basename}_minute",
+		values => \@values,
+		default => $value,
+		labels => \%labels );
+}
+
+sub render_second_input
+{
+	my( $self, $basename, $value ) = @_;
+
+	my $repo = $self->{repository};
+
+	my @values = map { sprintf("%02d", $_) } 0..59;
+	my %labels = map {
+			$_ => $_,
+		} @values;
+	unshift @values, "";
+	$labels{""} = "?";
+
+	return $repo->render_option_list(
+		name => "${basename}_minute",
+		id => "${basename}_minute",
+		values => \@values,
+		default => $value,
+		labels => \%labels );
+}
+
+sub form_value_basic
+{
+	my( $self, $session, $basename ) = @_;
+	
+	my $value = $self->SUPER::form_value_basic( $session, $basename );
+
+	if( $self->{input_style} eq "short" )
+	{
+		my $time = $session->param( "$basename\_time" );
+		if(
+			EPrints::Utils::is_set( $value ) && length($value) == 10 &&
+			EPrints::Utils::is_set( $time )
+		  )
+		{
+			$value = $self->_build_value( "$value $time" );
+		}
+	}
+
+	return $value;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub render_xml_schema_type
 {
 	my( $self, $session ) = @_;
@@ -407,6 +571,11 @@ L<EPrints::MetaField::Date>.
 ######################################################################
 1;
 
+<<<<<<< HEAD
+=======
+=back
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

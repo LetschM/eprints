@@ -16,6 +16,14 @@ $c->add_trigger( EP_TRIGGER_DOC_URL_REWRITE, sub {
 		$filename = $doc->get_main;
 	}
 
+<<<<<<< HEAD
 	$request->pnotes( dataobj => $doc );
 	$request->pnotes( filename => $filename );
+=======
+	if( @$relations )
+	{
+		$request->pnotes( dataobj => $doc->stored_file( $filename ) );
+		$request->pnotes( filename => $filename );
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }, priority => 100 );

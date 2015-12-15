@@ -213,8 +213,12 @@ sub render_workflow
 	my $processor = $self->{processor};
 	my $repo = $self->{repository};
 
+<<<<<<< HEAD
 	my $form = $repo->render_form( "POST" );
 	$form->appendChild( $self->render_hidden_bits );
+=======
+	my $form = $self->render_form;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	# avoid getting the 'stage' hidden input
 	my $workflow = $self->workflow;

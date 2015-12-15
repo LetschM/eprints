@@ -201,6 +201,10 @@ use strict;
 my %CONTENTSMAP = (
 	"EPrints::DataObj::EPrint" => "documents",
 	"EPrints::DataObj::Document" => "files",
+<<<<<<< HEAD
+=======
+	"EPrints::DataObj::File" => "data",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	);
 
 sub new
@@ -275,9 +279,12 @@ sub new
 				return;
 			}
 			$self{field} = $self{dataset}->field( $fieldid );
+<<<<<<< HEAD
 			$self{dataset} = $repo->dataset(
 					$self{field}->property( "datasetid" )
 				);
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 		elsif( !$self{dataset}->has_field( $self{fieldid} ) )
 		{
@@ -297,6 +304,14 @@ sub new
 		$self{plugin} = $self->content_negotiate_best_plugin;
 	}
 
+<<<<<<< HEAD
+=======
+	if( !defined $self{import_plugin} && $self->is_write )
+	{
+		$self{import_plugin} = $self->content_negotiate_best_import_plugin;
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $self;
 }
 
@@ -372,6 +387,17 @@ Returns the available HTTP verbs for the current request.
 
 sub options { @{$_[0]->{options}} }
 
+<<<<<<< HEAD
+=======
+=item $plugin = $crud->import_plugin()
+
+Returns the current plugin for parsing input.
+
+=cut
+
+sub import_plugin { $_[0]->{import_plugin} }
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $plugin = $crud->plugin()
 
 Returns the current plugin (if available).
@@ -477,11 +503,14 @@ sub _priv
 	if( $self->scope eq CRUD_SCOPE_CONTENTS )
 	{
 		$priv = $self->is_write ? "edit" : "view";
+<<<<<<< HEAD
 		$dataobj = $dataobj->parent
 			if $dataobj->isa( "EPrints::DataObj::File" );
 		$dataobj = $dataobj->parent
 			if $dataobj->isa( "EPrints::DataObj::Document" );
 		$dataset = $dataobj->get_dataset;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	elsif( $self->method eq "POST" )
 	{
@@ -626,6 +655,15 @@ sub authz
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	print STDERR sprintf("Access denied to %s on %s: user requires one of %s privileges\n",
+		(defined $user ? $user->value("username") : 'anonymous'),
+		$r->uri,
+		join(',', @privs),
+	);
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return HTTP_FORBIDDEN;
 }
 
@@ -737,7 +775,10 @@ sub create_dataobj
 	if( $dataset->base_id eq "eprint" )
 	{
 		$epdata->{userid} = $owner->id;
+<<<<<<< HEAD
 		$epdata->{eprint_status} = "inbox";
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	return $dataset->create_dataobj( $epdata );
@@ -803,6 +844,7 @@ sub export_plugins
 		} @plugins;
 }
 
+<<<<<<< HEAD
 =item $plugin = $crud->content_negotiate_best_plugin()
 
 Work out the best plugin to export/update an object based on the client-headers.
@@ -810,6 +852,15 @@ Work out the best plugin to export/update an object based on the client-headers.
 =cut
 
 sub content_negotiate_best_plugin
+=======
+=item $plugin = $crud->content_negotiate_best_import_plugin()
+
+Work out the best plugin to create/update an object based on the client-headers.
+
+=cut
+
+sub content_negotiate_best_import_plugin
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self ) = @_;
 
@@ -826,6 +877,7 @@ sub content_negotiate_best_plugin
 
 	if( defined(my $package = $headers->{packaging}) )
 	{
+<<<<<<< HEAD
 		my $plugin;
 		if( $self->is_write )
 		{
@@ -854,14 +906,23 @@ sub content_negotiate_best_plugin
 	{
 		@plugins = $self->export_plugins();
 	}
+=======
+		my ($plugin) = $self->import_plugins(
+				can_accept => $PACKAGING_PREFIX.$package,
+				can_action => $headers->{actions},
+			);
+		return $plugin;
+	}
+
+	my @plugins = $self->import_plugins(
+			can_action => $headers->{actions},
+		);
 
 	my %pset;
 
 	foreach my $plugin ( @plugins )
 	{
-		my $mimetype = $plugin->get_type eq "Export" ?
-			$plugin->param( "produce" ) :
-			$plugin->param( "accept" );
+		my $mimetype = $plugin->param( "accept" );
 		$mimetype = join ',', @$mimetype;
 		for( HTTP::Headers::Util::split_header_words( $mimetype ) )
 		{
@@ -885,6 +946,78 @@ sub content_negotiate_best_plugin
 		$pset{$b}->[0]->{q} <=> $pset{$a}->[0]->{q}
 	} keys %pset;
 
+	my $accept = $r->headers_in->{'Content-Type'};
+
+	return $self->_http_negotiate($accept, \@pset_order, \%pset);
+}
+
+=item $plugin = $crud->content_negotiate_best_plugin()
+
+Work out the best plugin to export/update an object based on the client-headers.
+
+=cut
+
+sub content_negotiate_best_plugin
+{
+	my( $self ) = @_;
+
+	my $r = $self->request;
+	my $repo = $self->repository;
+	my $dataset = $self->dataset;
+	my $field = $self->field;
+
+	my $headers = $self->headers;
+
+	return undef if $self->method eq "DELETE";
+
+	my $accept_type = $self->accept_type;
+
+	if( defined(my $package = $headers->{packaging}) )
+	{
+		my ($plugin) = $self->export_plugins(
+				can_produce => $PACKAGING_PREFIX.$package,
+			);
+		return $plugin;
+	}
+
+	my @plugins = $self->export_plugins();
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
+
+	my %pset;
+
+	foreach my $plugin ( @plugins )
+	{
+<<<<<<< HEAD
+		my $mimetype = $plugin->get_type eq "Export" ?
+			$plugin->param( "produce" ) :
+			$plugin->param( "accept" );
+=======
+		my $mimetype = $plugin->param( "produce" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
+		$mimetype = join ',', @$mimetype;
+		for( HTTP::Headers::Util::split_header_words( $mimetype ) )
+		{
+			my( $type, undef, %params ) = @$_;
+
+			push @{$pset{$type}}, {
+				%params,
+				plugin => $plugin,
+				q => $plugin->param( "qs" ),
+				id => $plugin->get_id,
+			};
+		}
+	}
+	# sort plugins internally by q then id
+	for(values(%pset))
+	{
+		@$_ = sort { $b->{q} <=> $a->{q} || $a->{id} cmp $b->{id} } @$_;
+	}
+	# sort supported types by the highest plugin score
+	my @pset_order = sort {
+		$pset{$b}->[0]->{q} <=> $pset{$a}->[0]->{q}
+	} keys %pset;
+
+<<<<<<< HEAD
 	my $accept;
 	if( $self->is_write )
 	{
@@ -914,6 +1047,39 @@ sub content_negotiate_best_plugin
 		$accept = $r->headers_in->{Accept} || "*/*";
 	}
 
+=======
+	my $accept = $r->headers_in->{Accept} || "*/*";
+
+	# summary page is higher priority than anything else for /id/eprint/23
+	# and /id/contents
+	if( $self->scope == CRUD_SCOPE_DATAOBJ || $self->scope == CRUD_SCOPE_USER_CONTENTS )
+	{
+		my $plugin = $repo->plugin( "Export::SummaryPage" );
+		my $mimetype = $plugin->param( "produce" );
+		$mimetype = join ',', @$mimetype;
+		for( HTTP::Headers::Util::split_header_words( $mimetype ) )
+		{
+			my( $type, undef, %params ) = @$_;
+			unshift @pset_order, $type;
+			unshift @{$pset{$type}}, {
+				charset => 'utf-8',
+				q => $plugin->param( "qs" ),
+				plugin => $plugin,
+			};
+		}
+	}
+
+	return $self->_http_negotiate($accept, \@pset_order, \%pset);
+}
+
+sub _http_negotiate
+{
+	my ($self, $accept, $pset_order, $pset) = @_;
+
+	my @pset_order = @$pset_order;
+	my %pset = %$pset;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my @accept = parse_media_range( $accept || "" );
 
 	my $match;
@@ -935,14 +1101,20 @@ sub content_negotiate_best_plugin
 				}
 			}
 			$match = (sort { $b->{q} <=> $a->{q} || $a->{id} cmp $b->{id} } @$plugins)[0]->{plugin};
+<<<<<<< HEAD
 			$r->pnotes->{mime_type} = $mime_type;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			last CHOICE;
 		}
 		# */*
 		elsif( $type eq '*' && $subtype eq '*' )
 		{
 			$match = $pset{$pset_order[0]}->[0]->{plugin};
+<<<<<<< HEAD
 			$r->pnotes->{mime_type} = $mime_type;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			last CHOICE;
 		}
 		# text/*
@@ -953,7 +1125,10 @@ sub content_negotiate_best_plugin
 				if( m#^$type/# )
 				{
 					$match = $pset{$_}->[0]->{plugin};
+<<<<<<< HEAD
 					$r->pnotes->{mime_type} = $mime_type;
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 					last CHOICE;
 				}
 			}
@@ -1001,7 +1176,11 @@ sub handler
 
 	my $user = $repo->current_user;
 
+<<<<<<< HEAD
 	my( $rc, $owner ) = on_behalf_of( $repo, $r, $user );
+=======
+	my( $rc, $owner ) = $self->on_behalf_of( $user );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $rc if $rc != OK;
 
 	# Subject URI's redirect to the top of that particular subject tree
@@ -1157,8 +1336,22 @@ sub GET
 	my $field = $self->field;
 	my $plugin = $self->plugin;
 
+<<<<<<< HEAD
 	# what to do when the user doesn't ask for a specific content type
 	if( $r->pnotes->{mime_type} eq "*/*" )
+=======
+	# contents of a file is always the file content
+	if( $dataobj->isa( "EPrints::DataObj::File" ) && $self->scope == CRUD_SCOPE_CONTENTS )
+	{
+		$r->pnotes( dataobj => $dataobj );
+		return EPrints::Apache::Storage::handler( $r );
+	}
+
+	my $accept = $r->headers_in->{'Accept'};
+
+	# what to do when the user doesn't ask for a specific content type
+	if( !$accept || $accept eq '*/*' )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		# GET/HEAD XX/contents without mime type, default to content
 		if( $self->scope == CRUD_SCOPE_CONTENTS )
@@ -1339,6 +1532,10 @@ sub POST
 	my $dataobj = $self->dataobj;
 	my $field = $self->field;
 	my $plugin = $self->plugin;
+<<<<<<< HEAD
+=======
+	my $import_plugin = $self->import_plugin;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $user = $repo->current_user;
 
@@ -1357,9 +1554,21 @@ sub POST
 	return $rc if $rc != OK;
 
 	# we can import any file type into /contents
+<<<<<<< HEAD
 	if( !defined $plugin )
 	{
 		$plugin = $repo->plugin( "Import::Binary" );
+=======
+	if( !defined $import_plugin )
+	{
+		$import_plugin = $repo->plugin( "Import::Binary" );
+	}
+
+	# default to Atom output
+	if( !defined $plugin )
+	{
+		$plugin = $repo->plugin( "Export::Atom" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	my @items;
@@ -1372,8 +1581,15 @@ sub POST
 		$status = "archive" if ($repo->config("skip_buffer") and $status eq "buffer");
 	}
 
+<<<<<<< HEAD
 	my $list = $self->parse_input( $plugin, sub {
 			my( $epdata ) = @_;
+=======
+	my $list = $self->parse_input( $import_plugin, sub {
+			my( $epdata, %opts ) = @_;
+
+			my $dataset = $opts{dataset};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 			if( $self->scope == CRUD_SCOPE_USER_CONTENTS )
 			{
@@ -1384,9 +1600,25 @@ sub POST
 
 				push @items, $dataset->create_dataobj( $epdata );
 			}
+<<<<<<< HEAD
 			else
 			{
 				push @items, $dataobj->create_subdataobj( $field->name, $epdata );
+=======
+			elsif( $field->property( "multiple" ) )
+			{
+				push @items, $dataobj->create_subdataobj(
+					$field->name,
+					$epdata->{$field->name}[0],
+				);
+			}
+			else
+			{
+				push @items, $dataobj->create_subdataobj(
+					$field->name,
+					$epdata->{$field->name},
+				);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			}
 
 			return $items[-1];
@@ -1399,15 +1631,23 @@ sub POST
 		$self->metadata_relevant( $items[0] );
 	}
 
+<<<<<<< HEAD
 	my $atom = $repo->plugin( "Export::Atom" );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	# producing more than one item (potentially)
 	if( $self->scope == CRUD_SCOPE_CONTENTS && $headers->{flags}->{unpack} )
 	{
 		return $self->send_response(
 			HTTP_CREATED,
+<<<<<<< HEAD
 			$atom->param( "mimetype" ),
 			$atom->output_list( list => $list ),
+=======
+			$plugin->param( "mimetype" ),
+			$plugin->output_list( list => $list ),
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		);
 	}
 	else
@@ -1422,8 +1662,13 @@ $r->err_headers_out->{Location} = $items[0]->uri . '/contents';
 
 		return $self->send_response(
 			HTTP_CREATED,
+<<<<<<< HEAD
 			$atom->param( "mimetype" ),
 			$atom->output_dataobj( $items[0] ),
+=======
+			$plugin->param( "mimetype" ),
+			$plugin->output_dataobj( $items[0] ),
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		);
 	}
 }
@@ -1476,6 +1721,7 @@ sub PUT
 	my $rc = $self->check_packaging;
 	return $rc if $rc != OK;
 
+<<<<<<< HEAD
 	if( !defined $plugin && $dataset->base_id eq "file" )
 	{
 		$plugin = $repo->plugin( "Import::Binary" );
@@ -1483,6 +1729,8 @@ sub PUT
 
 	return HTTP_UNSUPPORTED_MEDIA_TYPE if !defined $plugin;
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	# We support Content-Ranges for writing to files
 	if( defined(my $offset = $headers->{offset}) )
 	{
@@ -1511,11 +1759,25 @@ sub PUT
 				summary => "Error occurred during writing - check server logs",
 			) if !defined $rlen;
 
+<<<<<<< HEAD
+=======
+		# if the client has sent the entire file, we can calculate the MD5
+		if ($dataobj->value( 'filesize' ) == $total)
+		{
+			$dataobj->update_md5();
+		}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$dataobj->commit;
 
 		return HTTP_NO_CONTENT;
 	}
 
+<<<<<<< HEAD
+=======
+	return HTTP_UNSUPPORTED_MEDIA_TYPE if !defined $plugin;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $epdata;
 
 	my $list = $self->parse_input( $plugin, sub {
@@ -1729,10 +1991,17 @@ sub servicedocument
 
 	my $user = $repo->current_user;
 	EPrints->abort( "unprotected" ) if !defined $user; # Rewrite foobar
+<<<<<<< HEAD
 	my $on_behalf_of = on_behalf_of( $repo, $r, $user );
 	if( $on_behalf_of->{status} != OK )
 	{
 		return sword_error( $repo, $r, %$on_behalf_of );
+=======
+	my $on_behalf_of = $self->on_behalf_of( $user );
+	if( $on_behalf_of->{status} != OK )
+	{
+		return $self->sword_error( %$on_behalf_of );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 	$on_behalf_of = $on_behalf_of->{on_behalf_of};
 
@@ -1819,7 +2088,11 @@ sub servicedocument
 
 	return $self->send_response(
 		OK,
+<<<<<<< HEAD
 		'application/xtomsvc+xml; charset=utf-8',
+=======
+		'application/atomsvc+xml; charset=utf-8',
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$content
 	);
 }
@@ -1828,7 +2101,14 @@ sub servicedocument
 
 sub on_behalf_of
 {
+<<<<<<< HEAD
 	my( $repo, $r, $user ) = @_;
+=======
+	my( $self, $user ) = @_;
+
+	my $repo = $self->repository;
+	my $r = $self->request;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $err = {
 		status => HTTP_FORBIDDEN,
@@ -1844,9 +2124,15 @@ sub on_behalf_of
 
 	my $owner = $repo->user_by_username( $on_behalf_of );
 
+<<<<<<< HEAD
 	return sword_error($repo, $r, %$err )
 		if !defined $owner;
 	return sword_error($repo, $r, %$err ) 
+=======
+	return $self->sword_error( %$err )
+		if !defined $owner;
+	return $self->sword_error( %$err ) 
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if !$user->allow( "user/mediate", $owner );
 
 	return( OK, $owner );
@@ -2000,6 +2286,10 @@ sub plugin_error
 
 	my $ul = $repo->xml->create_element( "ul" );
 	for(@{$messages}) {
+<<<<<<< HEAD
+=======
+		$_ = Encode::decode_utf8($_) if !utf8::is_utf8($_);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$ul->appendChild( $repo->xml->create_data_element( "li", $_ ) );
 	}
 	my $err = $repo->xhtml->to_xhtml( $ul );
@@ -2036,7 +2326,11 @@ sub generate_error_document
 		href => $opts{href},
 	);
 
+<<<<<<< HEAD
 	return "<?xml version='1.0' encoding='UTF-8'?>\n" .
+=======
+	return "<?xml version='1.0' encoding='utf-8'?>\n" .
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$xml->to_string( $error, indent => 1 );
 }
 

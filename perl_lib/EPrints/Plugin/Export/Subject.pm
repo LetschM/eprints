@@ -45,10 +45,14 @@ sub output_dataobj
 	}
 	my $parents = $dataobj->get_value( "parents" );
 	push @parts, join ",", @$parents;
+<<<<<<< HEAD
 	push @parts, $dataobj->is_set( "depositable" ) && $dataobj->get_value( "depositable" ) eq "TRUE" ? "1" : "0";
 
 	# percent-encode ":" to "%3A"
 	@parts = map { s/:/%3A/g } @parts;
+=======
+	push @parts, $dataobj->get_value( "depositable" ) eq "TRUE" ? "1" : "0";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return join(":", @parts)."\n";
 }

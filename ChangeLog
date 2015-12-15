@@ -1,0 +1,2541 @@
+2015-12-09  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	change copy request requester_email to 'email'
+	Email extends Id, so changing from Text _should_ be safe.
+
+	Closes #212
+
+2015-10-14  Jiadi Yao  <jiadiyao@users.noreply.github.com>
+
+	Merge pull request #320 from MrkGrgsn/search-test-fixes
+	Removes broken test searching nonexistent issues dataset
+
+	Merge pull request #309 from eprints/IRUS-CAG-counter-compliance
+	Log 304 responses to be COUNTER compliant
+
+	Merge pull request #273 from QUTlib/eprint-render-doc
+	Corrects documentation for eprint_render function
+
+	Merge pull request #330 from mpbraendle/patch-1
+	Update xapian_warning.xml
+
+	Merge pull request #318 from MrkGrgsn/rand-data-thesis-fix
+	Modified thesis_type field test data to match repo default config
+
+	Merge pull request #319 from MrkGrgsn/sword_test
+	Stops checking of SSL certificate during SWORD unit tests
+
+	Merge pull request #347 from eprints/remove-duplicate-cgi-register-phrase
+	Remove duplicated phrase 'cgi/register:intro'.
+
+2015-09-22  Jiadi Yao  <jiadiyao@users.noreply.github.com>
+
+	Update Subobject.pm
+	we have seen that in some upgraded systems (upgrading from eprints 2), $indexcodes_doc is defined, but there is no $indexcodes_file, hence the indexer bails. Added extra checks to catch this situation.
+
+2015-09-18  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Remove duplicated phrase 'cgi/register:intro'.
+	Duplicated phrases were different.
+	Retained text of second phrase (as this would have overridden the first defined phrase) and corrected text.
+	
+	Moved location of cgi/register:intro_minimal to be with other registration phrases and refined text.
+
+2015-09-10  Adam Field  <adam@adamfield.net>
+
+	Tested with the following script, and can confirm that the fix works for the cron lines below.  However, would recomment replacing with DateTime::Event::Cron at some point.
+	```
+
+	use strict;
+	use warnings;
+
+	use DateTime::Event::Cron;
+	use EPrints;
+	my $ep = EPrints->new();
+	my $repo = $ep->repository('devbox');
+	my $plugin = $repo->plugin('Event');
+
+	foreach my $cron_line (
+	"* * * * *",
+	"30 * * * *",
+	"5,10,15,20,25,30,35,40,45,50,55,0 * * * *",
+	"10 10 * * *",
+	'30 8 1 * *',
+	'54 3 * 2 *',
+	'54 3 7 2 *',
+	)
+	{
+	        test_cron_line($cron_line);
+	}
+
+	sub test_cron_line
+	{
+	        my ($cron_line) = @_;
+
+	        my $now = gmtime(time);
+	        my $next_time = $plugin->_next_execution_time($cron_line);
+	        $next_time = gmtime($next_time);
+
+	        my $c = DateTime::Event::Cron->new_from_cron($cron_line);
+	        my $next_time2 = $c->next();
+
+	        print <<END;
+	Cron line $cron_line
+	Now     :  $now
+	EPrints : $next_time
+	Cronlib : $next_time2
+
+	END
+
+	}
+	```
+
+	Merge branch 'jesusbagpuss-3.3-event-logic-fix' into 3.3
+
+	Merge branch '3.3' into jesusbagpuss-3.3-event-logic-fix
+
+2015-07-20  Rory McNicholl  <rory.mcnicholl@ulcc.ac.uk>
+
+	Merge branch '3.3' of https://github.com/eprints/eprints into 3.3
+
+2015-09-10  Jiadi Yao  <jiadiyao@users.noreply.github.com>
+
+	Merge pull request #337 from gitter-badger/gitter-badge
+	Add a Gitter chat badge to README.pod
+
+	Merge pull request #317 from MrkGrgsn/crud-typo
+	Typo in comments CRUD.pm
+
+2015-09-10  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	https://github.com/eprints/eprints/pull/253
+
+2015-09-04  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	improve rendering of possible DOI links
+
+2015-08-12  The Gitter Badger  <badger@gitter.im>
+
+	Added Gitter badge
+
+2015-07-20  Rory McNicholl  <rory.mcnicholl@ulcc.ac.uk>
+
+	Merge branch 'unused-qa-screen' into 3.3
+
+	Merge branch '3.3' into unused-qa-screen
+
+	removed the QA_title phrase from system.xml
+
+2015-08-03  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Delete QA.pm
+	Looks like this does nothing? Can't see any other references to qa_actions in the codebase?
+	Was it a precursor to Issues?
+
+2015-07-14  Martin Brändle  <mpbraendle@users.noreply.github.com>
+
+	Update xapian_warning.xml
+	ISO-8859-1 encoding should generally be changed to UTF-8 because of other translations.
+
+2015-07-08  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #329 from mpbraendle/patch-1
+	Update Views.pm
+
+2015-07-08  mpbraendle  <mpbraendle@users.noreply.github.com>
+
+	Update Views.pm
+	Typo on line 1209
+
+2015-05-03  Mark Gregson  <mgregson@tpg.com.au>
+
+	Stops checking of SSL certificate during SWORD unit tests
+
+	Removes broken test searching nonexistent issues dataset
+
+	Modified thesis_type field test data to match repo default config
+
+2015-05-03  Mark Gregson  <MrkGrgsn@users.noreply.github.com>
+
+	Typo in comments CRUD.pm
+
+2015-04-30  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Broken day-of-week and day-of-month logic
+	Previously when day or week was set to \*, the logic meant that it would always run on the next day (because every day of the week was valid).
+	The tests should be ORd together to produce the right result.
+
+2015-04-24  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Update LogHandler.pm
+	COUNTER compliance - log 304's too.
+
+2015-04-17  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	Added direct link to the installation guide
+
+2015-04-16  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	3.3.14
+
+2015-04-15  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	Multilang field: always render the 1st sub_field's sub_name. Override this render_value if you need something different to be rendered.
+
+	phrase change as now multilang field is default to the 1st sub-field. https://github.com/eprints/eprints/pull/306
+
+2015-04-15  Jiadi Yao  <jiadiyao@users.noreply.github.com>
+
+	Merge pull request #306 from drtjmb/3.3
+	Fix subjects/divisions being displayed in all languages after upgrade to 3.3.13
+
+2015-04-14  Timothy Miles-Board  <timothy.miles-board@london.ac.uk>
+
+	Fix subjects/divisions being displayed in all languages after upgrade to 3.3.13
+
+2015-04-01  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	bug fixes. Atom.pm - added missing const use statement; Grid.pm - set visibly to none for this abstract exporter
+
+	added template for overwrite the default max_items variable
+
+2015-03-27  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	Bazaar Client improvements: Added - show package accolade attribute; Added - search and filtering packages by accolade. Committed on behalf of jb4.
+
+2015-03-19  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	added the missing 'remove_field' to SYNOPSIS
+
+	Changed 'database' to 'dataset'. Typo? https://github.com/eprints/eprints/commit/a2c9961170fc0836660c61da1a0968f9c0239609
+
+	Added check for 'replacedby' for backward compatibility of upgraded repositories. Added phrase 'alternative version' since the suggested item can be a later or eariler version.
+
+2015-03-17  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	Temp fix for the subject search in workflow. q style is different depending on whether xapian is enabled on the system. Related issue https://github.com/eprints/eprints/issues/117
+
+	fix issue 265 https://github.com/eprints/eprints/issues/265 EPrints dies with unhelpful error message if Time::HiRes is not installed. code provided by MrkGrgsn
+
+2015-03-12  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	rename dx.doi.org to doi.org
+
+2015-03-06  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	Merge branch '3.3' of upstream
+
+	armor previous commit against 3.3.13 breaking changes
+
+2015-03-03  William Fyson  <williamfyson89@hotmail.com>
+
+	Added an extra check for getting the remote IP as some servers didn't seem to be able to respond to either 'useragent_ip' or 'client_ip' and as such the requester ID wasn't being populated in the 'access' table.
+
+2015-03-02  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	old "replacedby" fallback, if "succeeds" is not set
+
+2015-02-06  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	FIX: Multi-parent subjects are not rendered in workflow. CAUTION:this may cause page hang if the subject tree contains cycle. Cycle is checked in the subject editor, but may be introduced from the commandline.
+
+	FIX: subjects not clickable in subject editor in IE7-9
+
+2015-02-03  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #292 from QUTlib/bugfix/291-import-subjects
+	don't assign value of map/s back to array
+
+2015-02-03  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	don't assign value of map/s back to array
+	Resolves #291
+
+2015-01-28  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Removed a2dissite from Debian prerm and used symbolic links to make sure both eprints and eprints.conf appear in sites-available.  Ensured older versions of /etc/sites-available/eprints are maintained but with a warning if the do need match the package version.
+
+2015-01-27  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Change from url to uri for rendering 'more docs' link for individual EPrint results.  So if the EPrint is not yet live, admins get redirected to the admin page rather than a non-existent EPrint abstract page.
+
+2015-01-26  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Updated EPrints:Update::Views module to allow grouping of authors ignoring accents on characters.
+
+2015-01-23  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Moved a2dissite to post remove but runs only if config file is a .conf.
+
+	Used a2dissite rather than removing conf file from sites-enabled and run check for correct file to delete from sites-available.
+
+2015-01-22  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Amended mpm check if statement for debian preinst so it is /bin/sh compliant.
+
+	Added if statement to check where mpm apache modules need to be swtiched berween event and prefork for deb package preinst.
+
+	Added -q flag to a2dismod mpm_event so it does not error if installing on vanilla Ubuntu 12.04.
+
+2015-01-12  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Fixed misordering of year and month in final example search string for time (date) search field help.
+
+2015-01-09  Justin Bradley  <jb4@ecs.soton.ac.uk>
+
+	type fix
+
+2015-01-07  Justin Bradley  <jb4@ecs.soton.ac.uk>
+
+	3.3.13
+
+2015-01-06  Justin Bradley  <jb4@ecs.soton.ac.uk>
+
+	update credits and copyright year
+
+2014-12-23  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	Added new licenses. Fixed wrong license links (https://github.com/eprints/eprints/issues/127).
+
+	This resolves issue 287. If IE generates an additional UUID then EPrints only tries to do something with it if it has a file associated. Fix contributed by Lizz Jennings
+
+2014-12-10  Justin Bradley  <jb4@ryu.omii.ac.uk>
+
+	Updated EPrints contact details
+
+2014-12-05  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	change handling of max_items in view list
+	Closes #259
+
+2014-12-05  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Render the preamble phrase in simple searches
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7821 9491667e-5006-0410-a446-efbe8990b998
+
+2014-12-05  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #281 from QUTlib/bugfix/file-import-filesize
+	Ensures that DataObj::File sets filesize when outputting embedded file d...
+
+	Merge pull request #277 from QUTlib/bugfix/convert-plaintext-multiple-files
+	Makes the names of the output files of Plugin::Convert::PlainText unique...
+
+	Merge pull request #275 from QUTlib/feature/subjects-quote-colon
+	escape colons in flat subject file export
+
+2014-12-05  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	resolve conflict with 3.3 branch
+
+2014-11-28  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	commited code by TMB for addition of Subject sort name field. Need to update database to add the new field to Subject DataObj.  Fixed an issue where the subject order value is not respected in browse view menu (e.g browse by division)
+
+2014-11-25  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Added missing phrase document_typename_application/adobe
+
+2014-10-30  Mark Gregson  <mark.gregson@qut.edu.au>
+
+	Ensures that DataObj::File sets filesize when outputting embedded file data to a temporary file
+
+2014-10-24  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #279 from QUTlib/feature/untaint_config
+	untaint config data for epindexer
+
+2014-10-24  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	use $prefix for base_path
+
+	untaint config data for epindexer
+	Uses perl regexp capture groups to untaint config data before using it
+	to execute the indexer. Also provides some actual sanitisation.
+
+	Fixes an issue introduced at 8fefac3
+
+2014-10-24  Mark Gregson  <mark.gregson@qut.edu.au>
+
+	Makes the names of the output files of Plugin::Convert::PlainText unique so it doesn't overwrite them.
+
+2014-10-24  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	parse XFF header in remote_ip()
+	Discussion in #214 highlighted that XFF may contain multiple forwarded
+	IP address, separated by commas. This patch takes only the first such
+	address from the list (i.e. the original client's address).
+
+2014-10-21  Timothy  <timothy.miles-board@london.ac.uk>
+
+	Fix typo which was overwriting dbuser
+
+2014-10-17  Timothy Miles-Board  <drtjmb@gmail.com>
+
+	site_lib phrases should override lib phrases Phrases were being loaded in the wrong order
+
+	site_lib lang/static should be used in favour of lib lang/static
+
+2014-10-17  Timothy  <timothy.miles-board@london.ac.uk>
+
+	Add dbengine to config_db (default=MyISAM)
+
+2014-10-16  Timothy Miles-Board  <timothy.miles-board@london.ac.uk>
+
+	#274 consider search field 'set' if match=SET (no value)
+
+2014-10-16  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	escape colons in flat subject file export
+	Resolves #266
+
+2014-10-16  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #252 from QUTlib/20140725-handle-undefs
+	handle undef objects
+
+2014-10-14  Mark Gregson  <mark.gregson@qut.edu.au>
+
+	Corrects documentation for eprint_render function
+
+2014-10-09  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Example of template config in eprint_render
+	Added example for defining a template to use for the abstract page.
+
+2014-10-07  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	Merge branch '3.3' of upstream
+
+2014-10-07  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Remove unwanted SavedSearch columns
+	Removed saved_search.pos (unused)
+	Added "columns" to saved_search dataset spec, to only show id and name
+
+2014-10-03  Sébastien François  <sf2@ecs.soton.ac.uk>
+
+	Merge pull request #271 from jesusbagpuss/patch-1
+	Update 80_metafield.js
+
+2014-10-03  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Update 80_metafield.js
+	fixes #270
+
+2014-09-24  David R Newman  <drn@ecs.soton.ac.uk>
+
+	Typo fixed in XML syntax for document_typename_application/vnd.openxmlformats-officedocument.wordprocessingml.document.
+
+	Added document_typename_application/vnd.openxmlformats-officedocument.wordprocessingml.document for .docx files.
+
+2014-09-10  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	clean up possible_doi logic
+	* don't mangle the $value string before testing it
+	* make the 'doi:' namespace pattern match more stupid permutations I've
+	  seen in the wild
+	* make sure the test matches the entire string
+
+	Related to discussion in #268
+
+2014-09-01  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #264 from QUTlib/feature/base64-xsd-fixes
+	XSD schema fix for inline Base64 file data
+
+2014-08-21  Mark Gregson  <mark.gregson@qut.edu.au>
+
+	Comments and formatting
+
+	XSD schema fix for inline Base64 file data GNUEPRINTS-145
+
+2014-08-19  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	don't use SummaryPage to export subject dataobjs
+
+	inject dynamic SW content to static sitemap
+	Teaches the sitemap handler to parse an existing sitemap.xml file (if any), and appropriately exist the dynamic semantic-web content. Supports both sitemapindex and sitemap files.
+	Also adds a URL/handler to fetch just the unadulterated semantic-web content.
+
+2014-08-18  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Only show 'Make document OA' form to editors
+	... when responding to a view request. This depends on e2c9a73
+
+	have Plugin::Screen::allow accept a DataObj item and pass it through
+
+2014-08-14  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	add two secret-field methods to EPrints::Database
+	These provide special functionality similar to ...::valid_login, which would probably be better handled in a DataObj but for whatever reason are defined in the DAO. EPrints::Database::secret_matches is like the inverse of the "fromform" attribute of "secret" metafields
+
+2014-08-08  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	merge of https://github.com/eprints/eprints/commit/c68f9f93c92d0d76b6c01dfa1f3a2e2a0420b98a
+
+2014-08-07  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	use $prefix from epinder script
+
+	add optional epindexer configuration
+
+2014-08-05  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	updated ffmpeg parametersand codec used
+
+2014-08-05  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #258 from QUTlib/20140805-tex-charmap
+	make TeX codes work with tralics 2.15.1
+
+2014-08-04  Matthew Kerwin  <matthew@kerwin.net.au>
+
+	Merge pull request #255 from QUTlib/backport-6e0b1c6-207e86a
+	Backport 6e0b1c6 + 207e86a to 3.3
+
+2014-07-31  MrkGrgsn  <mark.gregson@qut.edu.au>
+
+	Added unit tests for EPScript one_of() (cherry picked from commit 207e86aabc8e4325fda51854d1fd5c09c00ade1b)
+
+	Modified EPScript one_of() to accept an array ref or a list of items as arguments. (cherry picked from commit 6e0b1c6f1219fb7417110fc9e7882140c735ebd9)
+	Conflicts:
+
+		perl_lib/EPrints/Script/Compiled.pm
+
+2014-07-30  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Applied epscript fixes from Mark Gregson <mark.gregson@qut.edu.au>
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7824 9491667e-5006-0410-a446-efbe8990b998
+
+2014-07-03  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	revert defining  - cherry-picked commit from master branch instead
+
+2014-07-03  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed undef warning
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7391 9491667e-5006-0410-a446-efbe8990b998
+
+2014-07-03  Justin Bradley  <jb4@ecs.soton.ac.uk>
+
+	Update Listing.pm
+	Fixes https://github.com/eprints/eprints/issues/242
+
+2014-07-03  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	fixes #4075 - also will be able to store user's favourite filters on any screen implementing Listing.pm
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7855 9491667e-5006-0410-a446-efbe8990b998
+
+2014-05-30  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	unit_test: check ->remote_ip in place for Apache v2.4+
+
+	#214 - further ref to request->connection->client_ip
+
+	#214 - removes references to request->connection->client_ip
+
+	Fixes #237
+
+	Fixes #236
+
+2014-05-29  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	another step towards fixing #214
+
+	attempt at solving #214 - testing in progress
+
+	Partial fix for #88 and using EPrints with PERL v5.16+
+
+	fixes wrong ordering of diacritics on a browse view section - e.g. french accentuated letters appearing at the end of the list
+
+2014-05-09  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	If only 1 result returned, records is not an arrayref in some versions of SOAP::Lite, see #235
+
+	Fix issue with ISIWoK import assuming multiple sources/other data #235
+
+2014-05-07  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Load archive-level plugins before disabling lib plugins #234 Otherwise if a lib plugin is aliased to an archive-level plugin get_plugin() will generate an error when the lib plugin is disabled.
+
+	Observed videos with aspect ratio of 0:1; use width/height instead
+
+2014-05-06  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Merge branch '3.3' of github.com:eprints/eprints into 3.3
+
+	Use realpath to get canonical path from path returned by Findbin fixing #232
+
+2014-05-06  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Merge pull request #224 from eprints/fix_system_plugins
+	SYSTEM_PLUGINS is shared by PluginFactory instances so need list of lib ...
+
+2014-05-02  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Import defaults (including maxlength from MetaField::Longtext fixing #233
+
+2014-04-15  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Update DOI.pm
+	Minor changes after merging Alan's pull request.
+
+2014-04-14  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Merge pull request #225 from Ainmhidh/3.3
+	amended DOI import plugin to ignore DOIs already present
+
+2014-04-14  Ainmhidh  <alan@studentarchery.org.uk>
+
+	amended DOI import plugin to check for and ignore DOIs already in the repository.  Added a phrase to system.xml and 2 config values to plugins.pl to allow control of the field holding the DOI and how it deals with the "doi:" prefix on the value to account for local differences.
+
+2014-04-12  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	SYSTEM_PLUGINS is shared by PluginFactory instances so need list of lib plugins for each repo to disable #223
+
+2014-04-02  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Make public saved searches actually public #137 Bug applies to any subobject - the result of parent->permit will override subobject->permit
+
+	Merge branch '3.3' of github.com:eprints/eprints into 3.3
+
+	Fix type in error message
+
+2014-03-29  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	dataobjref sub-field 'id' should be of type 'itemref' (to allow e.g. searching by reference: field_id.field_from_target_dataset)
+
+2014-03-28  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Add 'Show All' option to paginated lists #219
+
+2014-03-27  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Merge branch '3.3' of github.com:eprints/eprints into 3.3
+
+	Fix problem communicating with ISI WoK SOAP service #215 The ISI WoK WSDL defines operations (like "authenticate") like this:
+	    <wsdl:operation name="authenticate">
+	      <soap:operation soapAction="" style="document"/>
+
+	But SOAP::Lite by default sends a SOAPAction header like this:
+
+	SOAPAction: "http://auth.cxf.wokmws.thomsonreuters.com#authenticate"
+
+	It seems that some SOAP servers don't like this, see for example anecdotal evidence here:
+	http://stackoverflow.com/questions/13902874/apache-cxf-the-given-soapaction-does-not-match-an-operation
+
+	Removing the SOAPAction header fixed the problem.
+
+2014-03-26  Jiadi Yao  <jy2e08@ecs.soton.ac.uk>
+
+	adding missing coversheet deprecate button image
+
+2014-03-24  eprints  <eprints@ubuntu.localdomain>
+
+	Improved endnote importer's author name recognition.
+
+2014-03-22  Tim Miles-Board  <tmb@ecs.soton.ac.uk>
+
+	Deep copy $SYSTEMCONF to prevent one repository load affecting another #216
+
+2014-03-18  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Redirect /foo to /foo/ if foo is a static directory #186
+
+2014-03-13  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	allows the registration form to specify any user type (e.g. Demoprints allows user to register with any type)
+
+2014-03-12  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	internationalisation++
+
+2014-03-12  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Check for existence of workflows and citations dirs before loading #213
+
+2014-03-11  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #211
+
+2014-03-07  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	bin/epadmin also needs to explicitly check for 'yes' or 'no' #209
+
+	Only write Redirect config if redirect='yes' #209 $aliasinfo->{redirect} will be 'yes' or 'no', so if( $aliasinfo->{redirect} ) will always be true.
+
+2014-03-04  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Fix edit URL used in saved search alerts #207 User::SavedSearch::Edit no longer exists - superceded by Workflow::Edit
+
+2014-02-04  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #200
+
+2014-02-03  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Workaround for lightbox preview not showing details in IE9 #199 This is a workaround - we need to consider updating the lightbox libraries to the latest version - the current version used by EPrints is very old.
+
+2014-01-27  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Merge pull request #198 from jesusbagpuss/patch-1
+	Fixed broken link in registration email
+
+2014-01-27  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Fixed broken link in registration email
+	URL for deposit was relative - needed base_url.
+
+2014-01-22  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #139 #159 - using Mark's regex, simple enough
+
+	Fixes #150
+
+	Fixes #48 - deletes ordervalues then insert them
+
+2014-01-21  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2014-01-20  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	https://github.com/eprints/eprints/commit/f38fde34494cce3c665cd7088050ccfd88c9d527
+
+	tmp2
+
+	tmp
+
+2014-01-16  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2014-01-15  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #175
+
+2014-01-10  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2014-01-09  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	respects the text_index property
+
+2014-01-09  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2014-01-08  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Merge branch 'bl-oai_uketd_dc-changes' into 3.3
+
+2013-12-11  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2013-12-09  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Publish 'doi' field via Dublin Core Follow on to 3c17d1062dfa1441a92a23b73c2a2ae6d878e3fd - many IRs have added a 'doi' field
+
+2013-12-05  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2013-12-04  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Show warning for '?plugin=Xapian&amp;searchid=simple' saved searches #169 Email alerts will not work for saved 'simple' searches that are run with the xapian engine. This changeset shows a warning when editing a saved search.
+
+2013-11-30  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2013-11-29  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Disables the sending of alerts when the Search was created with Xapian - see #169 for more information
+
+2013-11-15  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2013-11-14  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	fixes minor bug - sending 'To: name@host <name@host>' seems to confuse SMTP
+
+	Fixes #161
+
+	Merge branch '3.3' of github.com:eprints/eprints into 3.3
+
+2013-11-14  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2013-11-13  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Replace &copy; with numeric equivalent #69 Workaround for libxml2 issue with named entities
+
+2013-11-12  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	British Library requested we use dcterms:accessRights to expose document.security
+
+2013-11-11  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	backported jesusbagpuss's pull requests to epritns/master
+
+2013-11-01  EPrints  <eprints@nightly.eprints.org>
+
+	Merge branches '3.3', '3.3', '3.3', '3.3', '3.3', '3.3', '3.3' and '3.3' of github.com:eprints/eprints into 3.3
+
+2013-10-31  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	added possibility to have /site_lib/cgi - the order of exec is 1. local cgi, 2. site_lib cgi, 3. global cgi
+
+2013-10-31  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Some IRs may have a thesis_name field but not include it in the workflow I don't think it is harmful to try and derive a qualfication name from thesis_type if !$eprint->exists_and_set( "thesis_name" )
+
+2013-10-25  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Enable document.language for all deposit types British Library recommended document.language should be available for theses, I have extended this to all deposit types.
+
+	Only use thesis_type for qualname if thesis_name doesn't exist, extra docs
+
+2013-10-24  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Remove producers, directors etc. - superceded by contributors If contributors is included in all deposit workflows by default, makes sense to use that instead of individual fields for producer, director etc.
+
+	Add contributors to deposit workflow for every item type British Library recommendation was to add contributors to thesis workflow by default to allow thesis supervisor to be captured.
+	I have extended this to all deposit workflows.
+
+	Add new thesis_name field (British Library recommendation) Historically thesis_type has contained a mix of qualification names (eg. phd) and qualification levels (eg. masters). British Library recommendation is to capture qualification name and qualification level separately.
+
+	 OAI_UKETD_DC plugin updates - make better use of information available in default EPrints schema 1) uketdterms:qualificationname
+	If no thesis_name field detected, attempt to derive qualificationname from the thesis_type value (for example if thesis_type = phd, qualificationname = phd).
+	Allow configuration level override of thesis_type -> qualificationname mapping.
+
+	Note: BL requested that "other" option be removed but I think this is best filtered at BL end
+
+	2) uketdterms:qualificationlevel
+
+	If default thesis_type options detected, attempt to derive a suitable qualificationlevel (eg. if thesis_type = phd, qualificationlevel = doctoral)
+
+	Allow configuration level override of thesis_type -> qualificationlevel mapping
+
+	Note: BL requested that "other" option be removed but I think this is best filtered at BL end
+
+	3) uketdterms:advisor
+
+	Look in the contributors field for any contributors with a "Thesis Advisor" role (http://www.loc.gov/loc.terms/relators/THS)
+
+	Allow configuration level override of the contributor_type
+
+	4) dc:language
+
+	Output a dc:language element for each document.language (in addition to eprint.language which is not a default field)
+
+	5) uketdterms:sponsor
+
+	If sponsors field is not available (not a default field), look in the funders field.
+
+	6) uketdterms:embargodate
+
+	Output a uketdterms:embargodate element for each document.date_embargo (in addition to eprint.date_embargo which is not a default field)
+
+	Fix typo - plugin incorrectly outputs uketdterms:date_embargo - should be uketdterms:embargodate
+
+	7) dc:rights
+
+	Output a dc:rights element for each document.security (in addition to eprint.rights which is not a default field)
+
+2013-10-11  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	epadmin added method to migrate single field to multilang - useful for existing data/repository
+
+2013-10-02  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #129
+
+2013-09-23  Matthew Kerwin  <matthew.kerwin@qut.edu.au>
+
+	fix typo in Plugin::Export::DC
+
+2013-09-18  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	should always ->query and not the direct hash value {query} cos the method initiates its state if it's undef
+
+2013-09-12  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	fixes #130
+
+2013-08-19  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #101
+
+	Fixes #123 using tjmb's diff
+
+2013-08-19  jesusbagpuss  <j.salter@leeds.ac.uk>
+
+	Accommodate child pin in subject removal phrase
+
+	Added additional pin to display name of child node being deleted
+	Also requires change to system.xml phrase 'Plugin/Screen/Subject/Edit:confirm_form'.
+
+2013-08-19  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	see https://github.com/QUTlib/citation-import/commit/d0dd0e5a7956cf0d3bad6286ea6c32d0309033f7
+
+2013-08-14  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #121
+
+2013-08-08  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #117
+
+2013-08-06  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Fix tooltip on summary page 'Preview' link #116
+
+2013-08-05  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Merge branch '3.3' of github.com:eprints/eprints into 3.3
+
+	better test to check if a user is staff or not - allows adding extra user types derived from editors/admins
+
+2013-08-01  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	test change
+
+	Fixes https://github.com/eprints/eprints/pull/113
+
+2013-07-30  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	defaulting to installing eprints as user/group 'eprints'
+
+2013-07-24  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Fix repeated path in RPM install DESTDIR
+
+2013-07-24  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	key++
+
+	updated maintainer/keys
+
+2013-07-19  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Updated tools/epm to current master version
+	Adds link_cfg
+
+	Fixed back-porting of 2a8603018159b1019ae9156e6b511503fc0c1238
+
+	Pass processor into Workflow components
+	Conflicts:
+
+		perl_lib/EPrints/Plugin/InputForm/Component.pm
+
+	Ignore epms from the main eprints directory
+
+	Added SQL_DECIMAL type
+	DECIMAL(9,2)
+
+	Should be supported in Oracle and PostgreSQL.
+
+2013-07-18  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	added :hover to the link since Chrome applies the :hover CSS when the user clicks on the button
+
+	added phrases to potentially change the page results' title/desc
+
+	removed hard-coded CSS style
+
+2013-07-17  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Use "mimetype" for export plugin MIME type #108 Default XSLT stylesheet was using "mime_type" instead of "mimetype" which meant that the default MIME type was used. Also fixed GScholar export.
+
+2013-07-16  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	prevents deep recursion if we have a circular reference between 2 objects
+
+2013-07-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Index dataobjref fields into the parent text index
+	Get all of the index codes from the related object and index them into the
+	parent object's index.
+
+2013-07-16  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #107
+
+2013-06-21  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	missing phrase - context: adv search for multi-lang fields - comment: is that phrase actually useful to users?
+
+	Fixes #93
+
+2013-06-20  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Use input_name_cols to determine name col length
+	Fixes #92.
+
+2013-06-18  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Strip whitespace from start/end of text
+	Fixes #11.
+
+2013-06-13  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	fixes #87
+
+2013-06-13  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Supporting changes for projects/funders
+	Pass processor to export* functions in components.
+
+	Draggable styling.
+
+	Support "return_to" URL for returning to a different page from workflow
+	screens.
+
+2013-06-12  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	merged latest changes of Utils.pm::human_filesize to the 3.3 branch
+
+2013-06-11  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	this was committed to 'master' some time ago but wasn't merged in 3.3.12 (and I need it)
+
+2013-06-04  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Fix MetaField::Search always applying id fields
+	The Search::add_field(@ARY) syntax will always make the field is_set(), which
+	causes blank id fields to apply an "IsNull" condition. Replacing with
+	Search::add_field(%HASH) allows the search field to be not-set i.e. the value
+	doesn't exist at all.
+
+2013-05-22  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	It is possible to create sane configuration where $pins{controls} has not yet been initialised causing an internal error
+
+2013-05-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Fix login failure on sub-domains
+	Where there is already an eprints cookie set on the parent domain.
+
+	Conflicts:
+
+		perl_lib/EPrints/DataObj/LoginTicket.pm
+
+	Backported 0ae43eaa6b11466b523cdc7c1934c52bcc6f8ee1
+
+	s/Label/label/ typo
+
+	SOAP::Lite does not always return arrays
+
+	Support $opts{dataset} in epdata_to_dataobj
+	This is dumb:
+	$opts{dataset} ||= $dataset;
+	$dataset->id
+
+	Support Lite-service imports
+
+	Merge branch 'isi_wok' into 3.3
+
+2013-05-14  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	partial roll-back of https://github.com/eprints/eprints/commit/951d5e53371475222f6520dec0adb08f606bbb8c (eprint_search_advanced.pl shouldn't have been committed)
+
+2013-05-10  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	typo in pod
+
+	Adding /static/ directories to /site_lib/
+
+	bug fix - http://trac.eprints.org/eprints/ticket/3556
+
+	This fixes some typos
+
+	New options for latest_tool: "show_conditions" and "template"
+
+	optional 'notify_embargo_expiry' method called when embargos are lifted
+
+	Follow-up on 545155fa2aba297285b6e9223ca286fd4e9241c8 - now this also loads namedsets, workflows, citations and phrases from /site_lib/
+
+	typos
+
+2013-05-10  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Fix upgrading changed repository files
+	DataObj::EPM::enable() would throw an error if a repository file already
+	existed and differed to its checksum.
+
+	Correct behaviour:
+	DataObj::EPM moves the modified file to .epmsave
+	Screen::EPMC recognises the .epmsave and replaces the new version with
+	.epmsave, saving the new version as .epmnew
+
+	Work-around:
+
+	Before upgrading, disable the package, upgrade and then re-enable it.
+
+	Reported by Samuel Pearce @ Open (CORE)
+
+2013-05-09  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes #74
+
+	0012-minor-change-sanity-check
+
+	0011-use-optional-local-config-request_copy_cc
+
+	0010-http-trac.eprints.org-epservices-changeset-233
+
+	0007-RCA-93-search-for-subjects-when-pressing-enter
+
+	customisation-for-type-specific-help-on-the-eprint-workflow
+
+	0005-HUDDERSFIELD-76-keep-apostrophes-in-names
+
+	0004-Data-clean-up-opens-up-the-DOI-in-a-new-window
+
+	0003-Adds-optional-cc_list-parameter-to-mail
+
+	0002-SALFORD-180-make-roles-searchable
+
+	0001-Request-a-copy-now-done-via-a-Cookie
+
+2013-05-08  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	(on behalf of pjw) missing commit method after updating metadata (see http://trac.eprints.org/eprints/changeset/7386)
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7773 9491667e-5006-0410-a446-efbe8990b998
+
+2013-04-26  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Publish more metadata via Dublin Core
+	id_number => relation
+	language => language
+	document.license => rights
+	document.language => language
+
+	This should increase the likelihood of a DOI making it into the Dublin Core.
+
+2013-04-18  Tim Miles-Board  <tmb@ecs.soton.ac.uk>
+
+	Replace named entities with numeric equivalents to workaround libxml2 issue #69 To help alleviate the issues caused by the libxml2 bug (https://bugzilla.redhat.com/show_bug.cgi?id=863166), replace named entities with numeric equivalents - this will at least mean new EPrints installs with the bad libxml2 version don't immediately run into a problem.
+
+2013-04-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Fix uninstall not triggering due to wrong SIG path
+
+	Make Debian scripts respect configure
+	New configure parameters:
+	--with-debian-stable
+	--with-debian-unstable
+
+	Fixed debian install scripts trashing the eprints user (blocking upgrades).
+
+	Use --prefix, --with-user and --with-group to set debian locations.
+
+	debian packaging scripts
+
+	Merge branch '3.3' of github.com:eprints/eprints into 3.3
+
+	Fixes to Makefile.am and install.pl.in
+	make test shouldn't require the eprints user
+	Added missing README.pod to distribution (debian)
+	Added missing DESTDIR to install-data-hook
+	Make directories for installing files into
+	DESTDIR ought to be additive
+	Use make_path to create parent directories too
+	File::Path::make_path
+	make dist without prefix
+	Use $ENV{PREFIX} in install.pl
+	Fixed install.pl installing with PREFIX under make dist
+
+	Added missing README.pod to distribution (debian)
+
+2013-04-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	make test shouldn't require the eprints user
+
+	 * Skip loading configuration directories that don't exist, fixes warning
+	Conflicts:
+
+		perl_lib/EPrints/Config.pm
+
+	Don't have create_test available in 3.3
+
+	 * Fixed warning if /cfg doesn't exist (!)
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7425 9491667e-5006-0410-a446-efbe8990b998
+
+	s/POD/pod/
+
+	github.com only recognises .pod (case sensitive)
+
+	Added GPL v3 COPYING to source and more Makefile tweaks
+	Moved README to README.POD
+
+	Tidied-up installation vs. dist in Makefile
+
+	Fixed call to install_file
+
+	Added RPM dependencies to make dist
+
+	Added missing gitlog-to-changelog tools
+
+	Generate bin/epindexer from configure
+
+	write out eprints.spec
+
+	Generate eprints.spec from eprints.spec.in file
+
+	3.3.12
+
+2013-04-15  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	aclocal is a generated file as well
+
+	Added eprints.spec
+
+	tar.gz distribution source files
+
+2013-04-11  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Fix session no longer being passed to eprint_to_uketd_dc #66
+
+2013-04-09  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Link to staff view of item from Admin search When rendering Admin search results link to the staff view of the item instead of the public view, fixing #62
+
+2013-03-28  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Calls can_be_viewed before processing the search
+	Fixes #59
+
+2013-03-26  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	has_role(admin) more global than is_type(admin)
+	Fixes #55
+
+	Upgrade Prototype to 1.7.1
+	Fixes #56.
+
+2013-03-07  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Show Staff export plugins in generic searches, if the user is staff
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7818 9491667e-5006-0410-a446-efbe8990b998
+
+2013-02-22  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Added support for username/password & grants
+	Set "username" and "password" parameters on Import::ISIWoK to use basic auth
+	with WoK.
+
+	Import funding bodies into eprint.funders and grant ids into eprint.projects.
+
+2013-02-21  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Added support for ISI 'lite' interface
+	Set the 'lite' param on Import::ISIWoK to true to use.
+
+	Added --dump option to bin/import
+	For debugging.
+
+	Added --dump option to bin/import
+	For debugging.
+
+2013-02-21  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Fix incorrect eprint type being set by BibTeX import
+
+2013-02-20  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Added support for importing email addresses
+
+	Update ISI WoK import to API v.3
+
+2013-02-18  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Improved support for CSV export
+	Export::MultilineCSV now works with any object type.
+
+	CSV subclasses MultilineCSV to provide public CSV exports.
+
+	Grid works for MetaField::Multiparts.
+
+	REMOVED pos from column 2 - would require painful hacks around field lists.
+
+	Use "\r\n" as line-endings (helps Excel). '\r' will be stripped from values.
+
+	Added utf-8 to text/csv mime-type.
+
+	Export raw values in CSV
+
+	Description for Export::CSV
+
+	Added public CSV export plugin
+	Duplicates Grid & MultilineCSV to some extent.
+
+2013-02-11  Timothy Miles-Board  <tmb@asdf.ecs.soton.ac.uk>
+
+	Database::get_ids_by_field_values() should process %opts fixing #32
+
+2013-02-11  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Force commit in lift_embargoes
+	Fixes #21.
+
+	Backport of c5d7e524e7ebbb8cecd9d6a3d4e841395d375efe.
+
+	Most of the time lift_embargoes will cause an eprint commit (/revision) due to
+	fileinfo changing. However if there is no icon on the document the eprint will
+	not be committed, causing any triggered behaviour (e.g. full_text_status) to
+	not occur.
+
+	This change calls a force-commit on the document (which will force-commit the
+	eprint in turn).
+
+2013-02-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Generate logical OR instead of OrSubQueries
+	Instead of UNIONing 'Or' conditions, use a logical OR.
+
+	Added some more unit tests, but it is possible there is an edge case that
+	removing the UNION'ed sub-queries was intended to fix. Or it could be that edge
+	case has been fixed elsewhere (Subjects?) meaning we don't need the sub-queries
+	anymore.
+
+2013-02-06  Adam Field  <af05v@ecs.soton.ac.uk>
+
+	pass offset parameter through to the database prepare
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7379 9491667e-5006-0410-a446-efbe8990b998
+
+2013-02-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Allow any-of simple search over subjects
+	Fixes #15
+
+	InSubject mints a new prefix in join and logic, but SubQuery (as inherited by
+	OrSubQuery) only uses the join from the first sub-op. Hence the perfix used in
+	logic for any other ORed InSubject sub-ops would not match the prefix used in
+	the join.
+
+	Fixed by always setting a prefix in the call to join() and logic() - empty
+	string so we don't make the SQL any more difficult to read than it already is.
+
+	 * Default right hand side of join_path should be key_field
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7526 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Added support for a 1-dimensional join_path (allows foo.bar, where foo may be any field and not just a Subobject)
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7525 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Support join paths using fields with multiple set
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7522 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Added support for finding a join-path between a SubObject and parent
+	git-svn-id: https://svn.eprints.org/eprints/trunk/system@7367 9491667e-5006-0410-a446-efbe8990b998
+
+2013-02-05  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	Check code/securecode are set for login
+	Fixes #31.
+
+	If securecode is NULL (e.g. bad external log-in code) then any user from the
+	same IP can gain access if they don't have a securecode cookie set.
+
+	Limit the number of items on a browse view page
+	Fixes #25.
+
+	Update::Views calls get_record() for the complete result set on a page. This
+	can break memory/processing limits when generating views on large sites.
+
+	As a crude fix we'll apply a limit to the maximum number of items on a single page. It's not clever to send huge HTML files to users anyway.
+
+	Fixed /cgi/schema validation for EPrints XML
+	Manually applied from master:
+	01c78f5f78c1e1b8a41c42bd1b47e26a0eae0c6e
+	cc1dc564c8e02f28ddecc4dcc0e379f02ee4376e
+	86ec7bc6d267c2aec71b2014d4ebedf7f6ad302c
+
+	(Still learning how to do things properly in git)
+
+	 * Added empty directories
+
+	Synced with SVN 3.3 using dumb export
+	History squashing, but at least nothing will be missed out:
+
+	svn export https://svn.eprints.org/eprints/branches/3.3/system .
+
+2012-09-12  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Added empty directories
+
+2012-08-30  Timothy Miles-Board  <tmb@ecs.soton.ac.uk>
+
+	 * Merged [7256] use FindBin not hardcoded paths  * Merged [7228] user by username  * Merged [7455] allow the Documents component to work without any fields defined  * Merged [7678] allow to set the page_size in the local conf  * Merged [7374] typo  * Merged [7371] don't call tagName on Text nodes
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7885 9491667e-5006-0410-a446-efbe8990b998
+
+2012-08-24  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * ignore dynamic files in svn
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7872 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7844] Reworked action lists to use <ul> and <dl>  * added XHTML::action_list() and XHTML::action_definition_list()  * this will be used by the new Import/generalises the concept of action buttons
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7868 9491667e-5006-0410-a446-efbe8990b998
+
+2012-08-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Check the database driver when converting to utf-8, allowing Database::mysql to be sub-classed
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7839 9491667e-5006-0410-a446-efbe8990b998
+
+2012-08-03  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged r7833, Added screenshot uploading and displaying to plugins.
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7838 9491667e-5006-0410-a446-efbe8990b998
+
+2012-07-26  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7828] Always set volatiles to "other" in redo_mime_type, fixing #4070
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7829 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7820] When retrieving for get_local_copy in Storage, set the file extension, fixing #4069
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7827 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7822] MetaField needs to know how to find its parent, for testing permissions, fixing #4071
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7823 9491667e-5006-0410-a446-efbe8990b998
+
+2012-07-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7368] Only use the "default" value for search fields when rendering/retrieving the form value (otherwise the Search object can never be "is_blank")
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7809 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7365] Added EPrints::Search::sql() convenience method to get the SQL of the search expression
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7808 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7514] Added Plugin::Search::describe() method to describe the search query
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7807 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7805] Fixed re-def warning for my $sconf
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7806 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7802] EPrintSearch is now just a redirect to search/eprint/staff, which allows it to be used with saved searches, fixing #4059
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7804 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7382] allow search config (when ds = 'archive') to be retrieved with the old style conf AS WELL AS the new style..
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7803 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7800] Avoid an overflow in xml diffs where the return char is too wide
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7801 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7798] Screen::EPrint::History now shows a paginated list of history items, fixing #4058
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7799 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7796] Place apachevhost.conf before <Location "">, fixing #4061
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7797 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7794] Use the text of a search as the saved search's title, fixing #4065
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7795 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7792] Concantenate all abstracts from PubMed, fixing #4064
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7793 9491667e-5006-0410-a446-efbe8990b998
+
+2012-07-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7790] Make latest_tool "filters" actually search_fields, which causes them to be shown, fixing #4062
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7791 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7788] Applied patch from #4060, supply Postgres data using the DBI PG_BYTEA type
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7789 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7786] Fixed columns losing their ordered-ness, filters still disappear if you add/remove columns (which they probably should do anyway), fixing #4056
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7787 9491667e-5006-0410-a446-efbe8990b998
+
+	   * [7783] [7782] Order Feeds by datestamp in View exports, fixing #4068
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7785 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7782] Order Feeds by datestamp in View exports, fixing #4068
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7783 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-29  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7761] Fixed XMLFiles export truncating output, #4057
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7762 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-28  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7755] $doc should be passed to formvalue() for documents (in the EPrint workflow)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7756 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-24  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged Search::Internal change from r7369
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7751 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7749] fixes a JS problem with IE7 (ajax-y buttons were missing on the workflow)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7750 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-23  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7746] Missed from previous commit
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7748 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-21  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7744] Show unknown subjects in subjects input, so they can be removed
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7745 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-18  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed #4054, remove references to repository in Languages
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7740 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7730] Pass form prefix when unserialising search fields - proposed fix for #4055
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7731 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * 3.3.10
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7718 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7716] ø = oe
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7717 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-15  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7713] Fixed an undef warning in EPrints::System::bin_path()
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7714 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7711] Force IE out of compatibility mode (in addition to the HTTP header, which may be overridden by 'intranet'ness?)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7712 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7708] Recaptcha is always is_virtual()  * Print the error in the workflow if the public_key is unset   * [7709] Modified cgi/request_doc to use a workflow, which in turn allows the use of Recaptcha
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7710 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7706] Updated software credits page - should every bundled Perl module be credited?
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7707 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7704] Updated CodeMirror to 2.24, fixing #4049  * Refactored the codemirror loading code (new version has a different API)  * Moved codemirror into its own directory, making it easier to upgrade
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7705 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-14  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7700] Refactored BatchEdit, fixing #4050
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7701 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7698] Fixed drag-drop detection under Firefox (12)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7699 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7676] fixes Internal Server Error when using a non-supported language
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7697 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7695] #4053 Hide the 'Upload' button for Javascript users (stop users double-uploading)  * Dragging a file will now show a hilite box to drop to  * Added Cancel button to Ajax file uploads via the File input
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7696 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-10  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7689] Removed trailing comma from javascript {} (didn't break webkit?!)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7690 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-09  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7686] Fixed #4051, export links getting joined with 'n'
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7688 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-08  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7684] Fixed #4043, typo
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7685 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7682] Fixed #4047, title_duplicates should still work with old "eprintid" parameter  * Fixed title_duplicates expecting a <div> from render_message
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7683 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7679] Removed DataObj::Subject::subject_label(), which has a fatal bug that has existed since 2001. Reported by Florian Heß   * [7680] Fixes #4048, "Edit page" on home page causes 500
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7681 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-02  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7674] Should be 'xml:lang' for the XML lang attribute
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7675 9491667e-5006-0410-a446-efbe8990b998
+
+2012-05-01  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7669] Fixed quotes being used in indexing but not in search terms  * Split index terms on anything that isn't a character/number
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7670 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7667] Fixed "PIRUS" not matching due to the search term being lowercased then stemmed where the index term is not stemmed ("pirus" won't match "PIRUS" though)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7668 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Fixed #4046, simple searches not getting metadata_visibility="show"
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7666 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-30  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7664] Oops, forget to - previous line
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7665 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7662] Fixed edit phrases breaking on http/https AJAX callbacks, fixing #4045
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7663 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7659] Fixed InputForm::Component::Field::Subjects search function, fixing #4044  * Pass options through to Search::Field::render() to allow noenter to get through
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7660 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-19  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7635] Fixed searching via documents.* from the eprint dataset   * [7636] Added unit test for documents.format join path
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7637 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7628] Fixed Edit Page failing when the page has a custom template, fixing #4041
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7629 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7625] Bumped URI version to 1.60, which should fix issues with UTF-8 and query() for those using the bundled URI
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7626 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7459] Fixed authentication always being demanded for /id/ URLs  * Fixed cgi/export for dataobjs (the call to CRUD)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7624 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-13  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7618] Don't render titles for empty action lists   * [7619] DataObj::permit() now checks for virtual dataset privileges e.g. permit("eprint/view") will also check permit("eprint/archive/view")  * Tweaks to Screen::EPrint* to reduce the number of calls to permit()
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7622 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7616] Only allow owners & editors to EPrint::View an item (otherwise the user gets an unhelpful blank page), fixes regression introduced in r6557
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7617 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7614] Use the system Unicode::Collate, which has been core since at least Perl 5.8.8
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7615 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7611] Fixed tests/40_views writing to current directory and added tests to check whether files are being written to the correct location
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7612 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-12  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7609] Allow Digest::SHA::PurePerl (supplied) to be used whenever Digest::SHA is referenced
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7610 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-11  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7607] Refactored Time::iso_value() to take a value (more consistent)  * Reworked POD for Date + Time
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7608 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7604] Added JSON to EPrints  * cgi/ajax/phrase now accepts a JSON query to enable multiple phrases to be retrieved simultaneously  * Tweaked Javascript EPrints API: s/CurrentRepository/currentRepository/
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7605 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7602] Fixed Xapian missing the termgenerator if a remove happens before an add
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7603 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-04  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * 3.3.9
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7598 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7596] Allow secure_auto.js, auto.js and auto.css to be named auto[-eprints version], which forces them to be updated at least when EPrints is upgraded
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7597 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7593] Fixes for Internet Explorer  * Added support for Prototype.Browser.IE[6-9] to test for specific IE versions   * [7594] Move workarounds higher in the load-order, so they're available to the higher-leve javascript
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7595 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-03  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7591] Use workflow stage titles from the base dataset (fixes missing name phrase for public_saved_search)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7592 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7589] The parent of a SavedSearch is the userid
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7590 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7587] Queue files_modified once a file has finished uploading
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7588 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Added additional debug lines for ./bin/indexer debug
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7585 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7583] Fixed regression in Database::dequeue_events not getting any events (allow_blank => 0)  * Cleaned up some deprecated EPrints::Search->new() calls
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7584 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7581] Removed Apache::DBI, use DBI::connect_cached instead
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7582 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7579] Improved EPrints::Email error messages
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7580 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7577] Oops
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7578 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7575] Fixed regression in CRUD not supporting document relations under /id/document/
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7576 9491667e-5006-0410-a446-efbe8990b998
+
+2012-04-02  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7573] Added privileges to view/export subjects to anybody
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7574 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7570] Added POD for Import/Export/Plugin
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7571 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7567] Fixed =items always being lowercased  * Fixed =item list text contents in non-METHOD sections getting bullet points  * Added support =for MediaWiki to embed arbitrary MediaWIki
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7568 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-30  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Default eprint_status to 'inbox'
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7566 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7385] Added proper labels for atom:category  * Use MetaField::Time::iso_value() to render ISO datetimes  * Use "title" in preference to render_description() for atom:title  * Added atom:published  * Fixed sword: namespace missing on feeds   * [7392] Render description if title is unavailable
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7565 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7563] Fixed /id/contents not showing SummaryPage in Web browsers
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7564 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7561] Fixed parse_media_range wrong array ref placement
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7562 9491667e-5006-0410-a446-efbe8990b998
+
+	 * r7494 for Export.pm
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7560 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7384] Removed redundant $session requirement
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7559 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Missing bits from r7459
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7558 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Oops, missed bracket in previous commit
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7556 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7554] If no securehost then always supply the http host in URL
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7555 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7538] Firefox doesn't like NativeMethods being copied as a different attribute name
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7553 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7535] Added human_filesize() method, equivalent to EPrints::Utils::human_filesize()   * [7536] Added 'EPrints' and 'EPrints.Repository' Javascript classes  * Added EPrints.Repository.phrase() to retrieve a phrase (with pins) from the Web server
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7552 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7458] Missed file from r7456
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7551 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7498] Fixed unknown constant error
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7550 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7388] Refactoured Apache::CRUD to be a class and (hopefully) made it easier to decipher  * Added "upsert" privilege, which is to update or insert a record at a given identifier: PUT http://myrepo/id/eprint/23 [creates 23 if it doesn't already exist]  * Add Subject::top() method to get the top of the current subject tree  * Added unit test for CRUD/SWORD  * Reworked atom:category to use EP_NS_DATA for eprint status, it's a core field after all   * [7424] Added to Wiki POD, added descriptive text for using CRUD   * [7456] Default MIME type to 'application/x-eprint-[plugin name]', to allow HTTP negotiation for all plugins (except where explicitly overridden)   * [7471] Fixed PUTting an eprint update failing if the status is set on the new data   * [7491] Fixed CRUD not allowing a destroy() when the user has eprint/destroy instead of eprint/buffer/destroy   * [7494] Add "produce" parameter to Plugin::Export that allows multiple MIME types, when HTTP content-type negotiating  * Plugin::Import/Plugin::Export now always include Plugin::mime_type() in 'accept'/'produce' respectively (and hence 'can_accept', 'can_produce')  * SWORD service document now only shows advertised plugins that are within the user's scope (staff/all visibility)   * [7495] Tweaks to Import/Export plugins MIME types.   * [7496] Fixed regression in previous commit   * [7531] Added support for Content-Range to CRUD PUT on file objects (existing files only)  * Added DataObj::permit() method to test whether a privilege is available on an item  * Storage plugins now take an optional $offset to "open_write", which causes the layer to open the existing file and seek to the given offset  * Storage::store() and Storage::open_write() now take an optional $offset   * [7534] Use 'X-Method' header or '_method' CGI for PUT/DELETE via POSTs (useful for AJAX)   * [7537] Added support for drag & drop files onto the File UploadMethod, although needs (browser-specific) indication that this is possible
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7549 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7547] Fixed bug in DataObj::update() not creating multiple subdataobjs
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7548 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7545] If a sub-object fails on create_dataobj() include the parent object's id in the error message  * Only show ITEM_PARSED in bin/import when --parse-only  * Print ITEM_FAILED in bin/import when an item fails to import
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7546 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-29  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7395] If sub objects are passed to /id/eprint/23 upsert (PUT) then replace all the existing /contents  * Return ATOM XML on PUT upsert
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7544 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7412] Fixed DefaultXML not passing in Handler (the processor handler) to DataObj  * Re-implemented warning on a field being repeated in XML import
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7543 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7386] Added DataObj::update() utility method to safely update the values in a dataobj:  	$dataobj->update( { title => "Catch 22" } ); 	$dataobj->commit;   * [7427] Re-implemented bin/import --update
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7542 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7540] Fixed BatchEdit - use "progressid" consistently, instead of progress_id and progressid
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7541 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-28  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7532] Fixed login_params not getting passed correctly to login, causing the login redirect to always go to Items  * Avoid consuming POSTs when logging in via auth_cookie
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7533 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-23  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7528] Tweaked ImageMagick settings to hopefully fix grayed-out/black previews of PDFs  * If noise > 1 print the executed statements from Convert::Thumbnails
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7529 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-22  Timothy Miles-Board  <tmb@ecs.soton.ac.uk>
+
+	 * [7523] Don't apply new simple search rendering if simple search has >1 search_field, fixing #4039
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7524 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-21  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7520] Fixed attributesHash() under IE7 document model mode, which is the default for IE8/IE9 "compatibility" mode, maybe what causes #4032
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7521 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-20  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7518] Follow symlinks in Plugin directories
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7519 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7511] Fixed PubmedXML import throwing an error on the top_level_node  * show_stderr on Screen::Import now redirects all warnings/errors to the Apache log  * Fixed a seg fault on XML::LibXML importing PubMed XML containing non-ASCII characters
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7512 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7509] Added trigger EP_TRIGGER_THUMBNAIL_TYPES to add extra thumbnail types  * Added more trigger documentation
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7510 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7507] Fixed undefined warning in BibTeX::Parser::Entry::new() (patch from upstream)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7508 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-15  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7505] trim_whitespace does not return anything useful
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7506 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7503] Added "trim-whitespace" attribute to <cite:citation> to support old-style whitespace removal (WARNING! trim_whitespace() has known bugs)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7504 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7497] Disable EPrints::XSLT if enable_libxml is false   * [7499] Fixed XML::DOM NamedNodeMap error due to double-disposing the Screen plugin's title
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7500 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-14  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7492] Added DataObj::User::is_staff() method to test whether the user is a "staff"-type user (editor|admin)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7493 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7488] Use the defaultlanguage for the Xapian stemmer #4034  * Added list of stop-words for Xapian indexing  * Tweaked Xapian indexing to cache if Xapian should *not* be used, to avoid slowing down non-Xapian repositories
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7489 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-13  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7486] Index names as [given][family], instead of [given family] in Xapian
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7487 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-12  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7481] Removed "catch404" redirect, which appears to be impossible under Apache 2 (if it ever worked)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7482 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7474] Fixed SET disappearing from searches (when used as a filter)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7480 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7478] Some Import plugins (e.g. PubmedID) don't expect a BOM and will break if given it, instead set 'encoding' option to UTF-8 for imports via form text field, fixing #4035
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7479 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-09  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7475] Restored EventQueue::new_from_hash(), although hidden. To retrieve a specific event after creation use a UUID!
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7476 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-08  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7468] Given up trying to back workflow backwards compatible, so instead throw a friendly error
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7469 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-07  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7462] ffprobe can output 'N/A' for duration, so ignore that
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7463 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7460] Added "public_saved_search" virtual dataset to allow saved searches to be viewed by anybody, fixing #4031  * Re-instated 'public' to the saved_search workflow
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7461 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7453] Use ffprobe instead of ffmpeg for identifying media file codecs  * Search the system bin path for executables
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7454 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7451] Implemented EP_TRIGGER_BEGIN_REQUEST/EP_TRIGGER_END_REQUEST
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7452 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7449] Fixup ordervalues for repositories that regressed in 3.3.8
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7450 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7447] Fixed regression in previous fix (audio_*/video_* are profiles, not flags!)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7448 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-05  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7443] Actually implement "audio"/"video" switches on Convert::Thumbnails
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7444 9491667e-5006-0410-a446-efbe8990b998
+
+2012-03-01  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7436] Fixed new records not getting ordervalues
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7437 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7434] Fixed EPrint::Details erroring when there is no edit screen available
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7435 9491667e-5006-0410-a446-efbe8990b998
+
+2012-02-28  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7414] Refactored Database::create_table() to not take a DataSet argument, instead create_dataset_tables() takes care of creating auxillary tables (which is makes more sense)  * Added FOREIGN KEY constraints between dataset auxiallary tables and the main table  * Refactored Database::drop_table() to accept multiple tables
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7428 9491667e-5006-0410-a446-efbe8990b998
+
+2012-02-24  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7422] Fixed editorial alerts sending all eprints and not just 'review'  * Fixed editorial alert email profile link (User::Edit redirects to Workflow::Edit)  * Refactored User to remove deprecated functions
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7423 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7420] Fixed undef warning
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7421 9491667e-5006-0410-a446-efbe8990b998
+
+	   * [7416] [7415] Fixed regression in document icons not showing MIME type formats (application/zip)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7418 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7415] Fixed regression in document icons not showing MIME type formats (application/zip)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7416 9491667e-5006-0410-a446-efbe8990b998
+
+2012-02-20  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7403] Fixed Views immediately unlinking index files on the first request
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7404 9491667e-5006-0410-a446-efbe8990b998
+
+2012-02-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7401] Fixed s/,/;/g typos
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7402 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7399] Added "allow_null" option to variations, which defaults to 0 to hide NULL values
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7400 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7393] #4030 Unable to open tree nodes when more than one Subjects included in the workflow
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7394 9491667e-5006-0410-a446-efbe8990b998
+
+2012-02-07  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed undefined node error when rejecting an eprint
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7380 9491667e-5006-0410-a446-efbe8990b998
+
+2012-01-26  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7375] Fixed regression in template code that causes IE to show a blank page
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7376 9491667e-5006-0410-a446-efbe8990b998
+
+2012-01-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Don't output unverified user email addresses (i.e. users with 'pin' set)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7372 9491667e-5006-0410-a446-efbe8990b998
+
+2012-01-12  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Allow filters to be specified through $processor->{filters}  * Removed hard-coded metadata_visiblity=show from Screen::Search  * Fixed Screen::Search clobbering the core config
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7366 9491667e-5006-0410-a446-efbe8990b998
+
+2012-01-09  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7359] #4026 Use SHA512 to crypt new passwords.  * user.password can contain multiple password crypt schemes by using ?method=X, where X is a method defined in EPrints::Utils::crypt(). If no ?method then default to CORE::crypt() with all its limitations.  * Added EPrints::Utils::crypt() and EPrints::Utils::crypt_equals() to crypt and test password matching.
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7360 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7357] #4025 Fix default_order being ignored on search results
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7358 9491667e-5006-0410-a446-efbe8990b998
+
+2012-01-05  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7344] Fixed offset/limit on database query
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7346 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-22  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7210] Updated FileSelector component to use XHTML::tree
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7340 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Removed redundant Subject::Check (and Subject dependency)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7339 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7232] Added support for Corporate creators in EndNote + bug fix to force '0' to be sorted first  * Merged [7233] EPServices customer report (http://trac.eprints.org/epservices/changeset/1118) - no need to decode  * Merged [7249] [epservices] fix for http://trac.eprints.org/eprints/ticket/3978  * Merged [7271] added parsing of Content-Disposition HTTP header (if available) to help EPrints get the right filename   * [7320] Made the removal-request email language generic
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7338 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7304] Added "debug" argument, which infers --once --notdaemon --loglevel=5
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7337 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7257] sets the right width for the Lightbox on firefox
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7336 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7255] removed hard-coded english sentences
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7335 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7288] [epservices] fixes problems whereas the ajax loader spins forever
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7334 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7287] [epservices] removed hard-coded english sentence
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7333 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7286] [epservices] no Verb supplied results in badVerb error
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7332 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Removed Convert::Unpack - unused?
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7331 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7236] fixes http://trac.eprints.org/eprints/ticket/3899
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7330 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7319] Use get_control_url() for the eprint's control URL
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7329 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7238] try to get the Referer from the HTTP headers too
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7328 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Never used (removed from trunk)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7327 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7261] fixes bug whereas 'Thu Jan  1 01:00:01 1970 GMT' is always displayed when calling human_time with a parameter
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7326 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7246] Added "nofollow" to thumbnail links, which asks crawlers not to index thumbnail documents
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7325 9491667e-5006-0410-a446-efbe8990b998
+
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7324 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7230] fix for http://trac.eprints.org/eprints/ticket/3754
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7323 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7321] Fixed author groupings failing on non-ASCII text, fixing #4022
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7322 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7317] Fixed RejectWithEmail supplying a relative link, fixing #4017
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7318 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7312] Allow ?mainonly=yes on static pages   * [7311] Output a list of citations with Export::SummaryPage (e.g. for /id/contents requested in a browser)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7316 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-21  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Next version will be 3.3.8
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7310 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Missing files
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7309 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7297] Added unit test for generating the index page   * [7298] Added trigger EP_TRIGGER_DYNAMIC_TEMPLATE to manipulate template pins  * Moved <links> and <styles> from template <head> to config files - highly unlikely a user will ever need to change these  * Removed secure.xml template  * Removed EPrints::Page::Text (made EPrints::Page meaningful)  * Added XHTML::doc_type() and made every instance of XHTML doc-type use it  * Moved print.css into auto.css  * Moved jscss.js into auto.js  * Added some <meta> tags for Generator, Content-Type and Content-Language   * [7301] priority is an option   * [7307] Fixed EPrint::Page unit tests + bug in EPrints::Page::DOM::write_to_file()
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7308 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7305] Tweaked Database::add_record() to avoid a race condition between exists() and actually writing a record, by INSERT(PRIMARY KEY) then UPDATE()  * EventQueue::create_unique now uses eventqueueid as the hash field, so it should be impossible to create two 'unique' events. Non-unique events use UUIDs
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7306 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-20  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	  * [7302] Fixed multi-level views writing to the wrong place (target)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7303 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7299] Fixed generate_static scanning directories in the wrong order
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7300 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7295] #4016 /rest matches /rest*
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7296 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7293] Use phrase for Search button in default templates
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7294 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-16  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7275] Allow PluginFactory to keep going if new() fails  * Added "rebuild" option to tools/epm to re-write the .epm file  * Added --force argument to "link_lib" option in tools/epm to overwrite existing files  * Fixes and tweaks to root-repository mode - added storage and plugins
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7276 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7269] Fixed generate_views generating 'view.html' in the /en/ directory
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7270 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7267] Restored old document type phrases
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7268 9491667e-5006-0410-a446-efbe8990b998
+
+	  * [7265] Fixed crash when attempting to retire an eprint that succeeds a non-existant eprint
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7266 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7258:7260]  * s/get_template_dirs/template_dirs/ and added POD  * Fixed update_wiki_page for the new wiki server (use API too)  * Added POD for templates ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7264 9491667e-5006-0410-a446-efbe8990b998
+
+	 * [7262] Fixed POD example
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7263 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-13  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Made "Move Left", "Move Right", "Remove Column" phrases  * Fixed "Reset the Form" for Listing  * Made Review a sub-class of Listing  * Added "render_top_bar" and "render_dataobj_actions" to Listing (for sub-classing)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7254 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-05  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed empty pages appearing at the end of OAI partial lists  * Use '..' for date ranges
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7227 9491667e-5006-0410-a446-efbe8990b998
+
+2011-12-01  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7223] Cause import paste box to be centered
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7224 9491667e-5006-0410-a446-efbe8990b998
+
+2011-11-30  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7221] Fixed pasted imports not setting UTF-8  * Stay on the same tab on the import screen  * Allow the user to specify the imported file encoding (default latin-1)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7222 9491667e-5006-0410-a446-efbe8990b998
+
+	 [7219] Check env HTTP proxy settings when accessing the bazaar
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7220 9491667e-5006-0410-a446-efbe8990b998
+
+2011-11-29  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7213] #4020 Fixed View screen calling non-existant XHTML object
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7214 9491667e-5006-0410-a446-efbe8990b998
+
+2011-11-02  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed undef warning on undefined indexer parameters  * Fixed Index causing failed events if an index was called on an undefined value (shouldn't happen though!)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7207 9491667e-5006-0410-a446-efbe8990b998
+
+	 * 3.3.7
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7204 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7199:7202]  * Removed redundant/deprecated reload_metafields  * Added missing files from trunk merge  * Fixed a bunch of undef warnings in the unit tests
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7203 9491667e-5006-0410-a446-efbe8990b998
+
+2011-11-01  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Added missing files from trunk merge
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7201 9491667e-5006-0410-a446-efbe8990b998
+
+	 * [7199] Removed redundant/deprecated reload_metafields
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7200 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Added EP_TRIGGER_REMOVED dataset trigger (c.f. EP_TRIGGER_CREATED)  * Fixed bugs in BibTeX import, updated BibTeX::Parser  * Split http/https cookies to improve https security  * sendmail email method now sets utf8  * Fixed disabled plugins not being aliasable  * Fixed some issues with generate_views placing files in the wrong places  * import_rand_data can now use SciGen to generate believable-looking English entries
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7198 9491667e-5006-0410-a446-efbe8990b998
+
+2011-10-24  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Missing use() before inheritance
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7180 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged all trunk changes  * Subjects editing has been re-worked to use a workflow file  * document.mime_type added
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7179 9491667e-5006-0410-a446-efbe8990b998
+
+2011-10-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7172] UTF-8 decode data from indexcodes text files
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7174 9491667e-5006-0410-a446-efbe8990b998
+
+2011-10-11  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7170] Show executions in noise > 1 mode  * [7170] Fixed ffmpeg not defaulting to 5-second offset for cells when no sample_start is specified
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7171 9491667e-5006-0410-a446-efbe8990b998
+
+2011-10-10  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7168] Fixed typos and broken JS for batch editing (never tested it in 3.3?!) ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7169 9491667e-5006-0410-a446-efbe8990b998
+
+	 * [7166] Default to matching all records in advanced search
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7167 9491667e-5006-0410-a446-efbe8990b998
+
+2011-10-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [7161,7154,7155,7156,7157,7151,7144,7145,7142,7140]  * Can now upload any file as a "bibliography" and if there is an import plugin that supports its mime-type (e.g. text/x-bibtex) then it can be exported via oai_bibl  * Fixed name-fields getting NULL parts (again)  * Refactored XHTML::tree() to produce the parent <div> and javascript fragment  * XHTML trees are now only <dl>s to make the implementation simpler  * Subjects input component now uses XHTML tree and can take a "citation" attribute that will cause the given citation to be used instead of render_description()  * Pass a "render_value" argument to XHTML tree to control the rendering of the <dt> elements (<dd> elements are now just containers for nested <dl>s)  * Spot any drive letter for IE uploads (sigh)  * render_icon_link() now links to the document using a relative path, so you don't go to http: from https: locations when editing an item.  * Added DataObj::path() method that returns the URL path to the object.  * Added Document::file_path() method that returns the URL path to a file in a document.  * Fixed missing $session argument to has_phrase()  * Block Microsoft Office OPTIONS challenges on documents  * Removed Subject, Subject::Check  * Subject::Edit is now a sub-class of Workflow::Edit  * Subject::Edit and Subject avoid infinite loops on recursive structures (mostly)  * Fixed AJAX workflow components in Subjects and Workflow  * Should *show* errors with $quiet is off, not hide them when $quiet is off  * Improved and phrased error messages coming out of Screen::Import  * Fixed DataSet::citation() dying if no default citation available  * Files have no workflow available, fixing #4006  * Use "" to quote quotes in CSV output, fixing #4010  * Re-instated EPrints::System::join_path (back-compatibility)  * Allow XHTML::tabs() to be used offline, fixes an issue with the Kultur plugin  * Updated to current TeX::Encode version
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7163 9491667e-5006-0410-a446-efbe8990b998
+
+2011-09-21  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Next version will be 3.3.7
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7134 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Don't make Archive Title white (clobbers old-style templates)  * Don't die if aliases are undefined  * Build epindexer from Makefile ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7127 9491667e-5006-0410-a446-efbe8990b998
+
+2011-09-14  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Multilang fields should default to INdex searching (when is multilang not going to be text?)  * In search, if the datasetid does not match an existing dataset and no searchid was given assume datasetid is actually a searchid for 'archive'  * Fixed cachemaps not getting reaped - '-10' is now a negative number when performing searches, not "upto and including 10". Use '..10'. Holy overloaded operator meanings Batman!  * Added UpdateDatabase Admin screen for updating the database post-configuration changes  * Admin::Reload now returns true if the action_reload_config succeeded  * Fixed OAI_Bibliography clobbering oai_dc  * Multilang uses the "languages" namedset  * The "languages" namedset is equivalent to the supported typenames in system.xml phrases  * Removed wacky '?' language (use UNSPECIFIED)  * Removed MetaField::most_local (belongs in Multilang)  * Fixed DC/OAI_DC for use with Multilang title/abstract  * NOTE: to order-by a multi-lang you must order-by on the Multilang field and not its sub-field(s), this was broken and is now unsupported - ordering by the sub-field will result in an order-by of the first value, not the current language, which is consistent with general multiple fields  * Fixed Set field options breaking in the GUI metafield editor  * Avoid an ARRAY REF options die for existing broken fields  * Fixed Available contents never showing on EPrints Bazaar when no packages are installed typo - fixes #4012  * Multilang fields should default to INdex searching (when is multilang not going to be text?)  * In search, if the datasetid does not match an existing dataset and no searchid was given assume datasetid is actually a searchid for 'archive'  * Fixed cachemaps not getting reaped - '-10' is now a negative number when performing searches, not "upto and including 10". Use '..10'. Holy overloaded operator meanings Batman!  * Fixed --version not showing the actual EPrints version (also added database schema version & fixed ./bin/imports --version name)  * Don't let old versions of enabled files clobber new versions in EPM  * Uploading an EPM will now upgrade (or downgrade) an installed EPM of the same name  * Allow "extra_fields" to be specified for the EPrint staff search ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7117 9491667e-5006-0410-a446-efbe8990b998
+
+2011-09-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Added UpdateDatabase Admin screen for updating the database post-configuration changes  * Admin::Reload now returns true if the action_reload_config succeeded  * Fixed OAI_Bibliography clobbering oai_dc  * Multilang uses the "languages" namedset  * The "languages" namedset is equivalent to the supported typenames in system.xml phrases  * Removed wacky '?' language (use UNSPECIFIED)  * Removed MetaField::most_local (belongs in Multilang)  * Fixed DC/OAI_DC for use with Multilang title/abstract  * NOTE: to order-by a multi-lang you must order-by on the Multilang field and not its sub-field(s), this was broken and is now unsupported - ordering by the sub-field will result in an order-by of the first value, not the current language, which is consistent with general multiple fields  * Fixed Set field options breaking in the GUI metafield editor  * Avoid an ARRAY REF options die for existing broken fields  * Fixed Available contents never showing on EPrints Bazaar when no packages are installed typo - fixes #4012  * Multilang fields should default to INdex searching (when is multilang not going to be text?)  * In search, if the datasetid does not match an existing dataset and no searchid was given assume datasetid is actually a searchid for 'archive'  * Fixed cachemaps not getting reaped - '-10' is now a negative number when performing searches, not "upto and including 10". Use '..10'. Holy overloaded operator meanings Batman! ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7113 9491667e-5006-0410-a446-efbe8990b998
+
+2011-09-02  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	typo: Subject::create calling User::create_from_data
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7108 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-31  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7098] Added Repository::id() to get the repository's ID
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7099 9491667e-5006-0410-a446-efbe8990b998
+
+	 * [7096] render_quiet now suppresses UNSPECIFIEDs for multiple values ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7097 9491667e-5006-0410-a446-efbe8990b998
+
+	 * [7094] Added OrgUnit (for project-funders) to CERIF XML export  * [7093] Respect 'render_quiet' in Compound sub-fields  * [7082] Added Plugin::Event to Wiki API ------------------------------------------------------------------------ ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7095 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7087-7091]  * Backwards compatibility for cgi/export_redirect (defaults to 'archive')  * Added missing lib/searchfield:help_subobject phrase  * Fixed missing 'Of' causing indexcodes to always be regenerated  * Added Repository::init_from_indexer to properly init the Repository object in the indexer MAINLOOP (currently database, language & check-config-change)  * Periodically write the Xapian changes, to avoid crazy memory footprints ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7092 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-26  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7084] Efficiency tweaks for re-indexing (esp. on upgrade). Fixed "Unpack" ignoring the 'type' target, re-use existing doc/file objects for indexcodes, avoid a secondary commit when converting to new document objects  * [7085] Fixed indexer loop not re-loading the database object ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7086 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-25  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * [7080] Thumbnail support for JPEG 2000, if the system 'convert' supports it ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7081 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-22  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [7061]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7076 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7059], [7060], [7062], [7067]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7075 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7073]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7074 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7071]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7072 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7063], unknown image for EPMs
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7070 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7068], fix for file imports
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7069 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-10  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Next version 3.3.5
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7058 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7034-7033]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7057 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-09  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Don't include the directory in PlainText output files (e.g. for elinks conversion)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7029 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Don't attempt to decode doc conversions already in UTF-8
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7028 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7026]  * Fixes for indexing in xapian and an undef warning from MetaField::Id
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7027 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [7015]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7016 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-08  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [7011]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7012 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Added XML::SAX::Base (useful generic XML::SAX driver but with screwed-up CPAN dependencies)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7007 9491667e-5006-0410-a446-efbe8990b998
+
+	 * 3.2.4 will be the next version
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7003 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6991], [6993], [6995:7001]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@7002 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-04  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed date/time fields not working with multiples (introduced bug in previous messing around with date/time inheritance)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6989 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-03  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6980], [6976]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6983 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-02  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	re-phrased 'add additional files' link
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6979 9491667e-5006-0410-a446-efbe8990b998
+
+2011-08-01  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6974]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6975 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-29  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged trunk changes
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6972 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-28  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged some random whitespace changes?
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6961 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6959]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6960 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged trunk changes in
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6958 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-27  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	removed the search_format field, it's easy to add it in the local config if needed
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6949 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-27  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6939:6944]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6945 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-26  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6913:6914], [6916:6936] from trunk
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6937 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-21  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	Fixes bugs with the Bibtex importer: - doesn't parse correctly non-ASCII characters - redecode ->{type}, un-necessary
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6915 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-20  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6911] - fixes metadata_visibility issues
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6912 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6908:6909]  * Missing file from previous Workflow error handling  * s/opensearch/search/ ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6910 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Next version 3.3.3
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6906 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Show the user's history and not the current user's history in user profile page
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6903 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-19  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6901]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6902 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6885:6887] and [6892:6893]  * Added capture_stderr/restore_stderr to System to capture STDERR to a file  * Screen::Import now redirects to import-specific screens if the Import defines a screen via Plugin::Import::screen()  * require_if_exists can now take module import parameters (via use() instead of require())  * Added custom import screens for DOI and ISIWoK (interactive search-and-import)  * Bumped CPAN's SOAP::ISIWoK::Lite requirement to 1.05 (which has the retrieve method in it)  * TODO: move ISIWoK to Bazaar package  * Allow suppression of stack traces in Import by using "show_stderr=0"  * Insert useful error messages instead of aborting on workflow configuration, so workflows are less susceptable to e.g. missing fields.  * Don't set $plugin->{problems} on validate() - unused anyway. For now $plugin->{problems} will mean problems with the component initialisation, which should halt all further use of the component/field.  * Allow Longtext to be used without a dataset ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6900 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-18  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed bug in User::View always redirecting to current user (fixes user search results)  * Allow 'email' to be used in registration form as a synonym for 'newemail'  * Allow 'password' to be used in registration form to support registration without email confirmation of password
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6890 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-12  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Or if n="" or startOffset=""
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6883 9491667e-5006-0410-a446-efbe8990b998
+
+	 * abort() on attempt to IN() match a non-indexable dataset
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6881 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6860:6874] from trunk  * If object has no uri don't attempt to set id= on XML output  * Be smarter about serialising EPMs so we avoid using a local sub override  * removed unused epm_icon  * Removed redundant JSON code, use content-negotiated /id or the direct export links  * Allow .relation to be used on /id/document/XX, but probably want a better solution for locating thumbnails  * Throw an error if we can't write to the lib/epm directory  * Allow ScreenProcessor to take 'repository' argument  * Use plugin 'disable' parameter to determine whether to enable system-level plugins (so they can globally enable themselves if necessary e.g. for EPMCs)  * Allow EPMCs to show messages on the Installed screen  * Fixed EPM/EPMC in DataObj::EPM (didn't I already fix that?)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6879 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Need to map over all search results for things like graphing (don't default to 20 limit)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6877 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Fixed empty-search serialising creating a broken search string (|-|-| instead of |-||-|)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6876 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Added --force option to cleanup_cachemaps to remove all cachemaps
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6875 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-11  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Throw an error if we can't write to the lib/epm directory
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6867 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-09  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Allow .relation to be used on /id/document/XX, but probably want a better solution for locating thumbnails
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6865 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-08  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged changes from trunk [6850], [6851], [6854], [6855]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6859 9491667e-5006-0410-a446-efbe8990b998
+
+	 * $repo->client() is no longer supported
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6856 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-07  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * openid has been moved into an add-on package
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6852 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-06  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Reverted [6823]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6848 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Updated counter to use new EPM structure
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6846 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6841], [6842]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6845 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Fixed make_thumbnails not removing/updating old thumbnails  * Remove duplicate thumbnails of the same type on make_thumbnails
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6843 9491667e-5006-0410-a446-efbe8990b998
+
+2011-07-05  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Added missing logo-background images
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6840 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Fixed 82_screen unit_test for new screen_lists cache location
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6837 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Version 3.3.1
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6835 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Removed duplicated EPM code ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6834 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Replaced with trunk/
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6832 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-30  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	minor style changes on the document citation
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6790 9491667e-5006-0410-a446-efbe8990b998
+
+	removed o(l|d)d references to EPrints::User
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6784 9491667e-5006-0410-a446-efbe8990b998
+
+	added missing triggers: EP_TRIGGER_STATUS_CHANGE EP_TRIGGER_BEFORE_COMMIT
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6781 9491667e-5006-0410-a446-efbe8990b998
+
+	added search_format to EPrint objects, in order to search formats categories, fixing #4000 and #3929 (seen on ECS EPrints even so the ticket's closed)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6778 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-21  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	merged r6732
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6733 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-20  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	opens the subject file as utf8 to cope with foreign characters
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6730 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-17  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	prevents IE from opening the progress bar in another window
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6726 9491667e-5006-0410-a446-efbe8990b998
+
+	for once, there was no need for a specific hack for IE so hack removed, also fixes event listener failing on IE (scoping issues)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6722 9491667e-5006-0410-a446-efbe8990b998
+
+	a  is not a {}, fixes bug whereas new Element() takes a {} as param not a /Hash
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6720 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6718]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6719 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-17  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	fixes bug in Firefox whereas all object methods are copied as attributes
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6716 9491667e-5006-0410-a446-efbe8990b998
+
+	replaces Element.attributes.toHash() with Element.attributesHash() because IE7- returns an Array while the other browsers return a NodeMap
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6710 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-17  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Missing files from [6702]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6703 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6697], [6698]  * Fixed /cgi/export generating weird 500 internal server errors (but still outputting the data)  * Most plugins don't support output_dataobj( fh => ... )
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6702 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6684], [6689], [6691], [6692], [6699], [6700]  * Tabs now use <ul><li> and re-styled to use border-radius  * Removed deprecated usages of Session::render_tabs()  * Fixed hard-coded 'Browse' in template  * Reduced disappear-time to .1 seconds (feels more responsive)  * Merged site title and logo into one image with alt=  * Updated sitelogo to be PNG and added white-on-transparent EPrints logo  * Visual tweaks to the banner to make it more attractive (?)  * Improved button CSS so they :active when clicked  * Added colors.css to contain CSS color definitions, to separate layout CSS from color definitions  * Merged and removed menu.css into normal menu CSS controls  * Need text-left with <div class='ep_block'><ul>  * Fixed Workflow::View not AJAXing slow tabs  * Made the top menu bar a bit more defined, fixed search button roundness
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6701 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-16  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	merged r6695
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6696 9491667e-5006-0410-a446-efbe8990b998
+
+	merged r6693
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6694 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-15  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	german
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6690 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-13  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	and reverts commented-out code - oops
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6683 9491667e-5006-0410-a446-efbe8990b998
+
+	fixes menu not working on ie7
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6682 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-10  Sebastien Francois  <sf2@ecs.soton.ac.uk>
+
+	makes a <td> slightly wider, to remove empty space
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6681 9491667e-5006-0410-a446-efbe8990b998
+
+	show filename on main document citation
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6680 9491667e-5006-0410-a446-efbe8990b998
+
+	synonym overdose for removing-destroying-deleting - fixes #3843
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6679 9491667e-5006-0410-a446-efbe8990b998
+
+	introducing EPJS_Menu() to create JS menus (\!), and adding the first one to the toolbar for the links to the Browse views
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6678 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-10  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Fixed movie preview links going to is*Of instead of has*
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6677 9491667e-5006-0410-a446-efbe8990b998
+
+	 * "System-level EPMs using EPrints XML"  * Made DataObj::EPM install/uninstall/enable/disable  * Added CLI tool to manage EPMs via DataObj::EPM  * TODO: rebuild (re-build an EPM from an EPM package)
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6674 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Removed unused (?) File::Basename
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6673 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Allow a Repository object to be created without a repository by omitting the repositoryid argument from new() i.e. only using system-settings. This is useful for manipulating the system-level data without having to have an active repository for phrases, datasets etc.
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6672 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-09  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6670] - fixed search export link
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6671 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6668]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6669 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6666]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6667 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6662], [6663], [6664]  * Use internal redirects for custom 404 handlers if its local  * Added lib/plugins directory for system-level extension-based plugins - default to disabled  * Added "alias" parameter to plugins that allows a plugin to specify aliases  * Added wrapper for Public::EPrintSearch ------------------------------------------------------------------------
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6665 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Disabled OpenID login/register  * Fixed undef warning in XHTML
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6661 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-08  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * ::VERSION = 3.3.1
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6659 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6654]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6657 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6655]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6656 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6652]
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6653 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Fixed typo (and tidied up code) in 'developer mode'
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6646 9491667e-5006-0410-a446-efbe8990b998
+
+	 * Merged [6643], [6642]  * Small tool for generating an atom multipart POST  * Added support for Content-Transfer-Encoding to MIME::Multipart::Parser  * Fixed XSLT importers  * Fixed Apache::CRUD not returning a dataobj from epdata_to_dataobj
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6644 9491667e-5006-0410-a446-efbe8990b998
+
+2011-06-07  Tim Brody  <tdb2@ecs.soton.ac.uk>
+
+	 * Merged [6640], [6639], [6638]  * Adjusted some MIME types - JSON is application/json  * Fixed field-coverage unit-test errors  * Citation::XSL will now generate an error fragment if an error occurs during citation creation ------------------------------------------------------------------------
+	_M   .
+	M    perl_lib/EPrints/Repository.pm
+	M    perl_lib/EPrints/Plugin/Export/JSON.pm
+	M    perl_lib/EPrints/Plugin/Export/Atom.pm
+	M    perl_lib/EPrints/Plugin/Export/XML.pm
+	M    perl_lib/EPrints/Citation/XSL.pm
+	M    bin/epadmin
+
+
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6641 9491667e-5006-0410-a446-efbe8990b998
+
+	 * 3.3 branch
+	git-svn-id: https://svn.eprints.org/eprints/branches/3.3/system@6633 9491667e-5006-0410-a446-efbe8990b998

@@ -16,11 +16,21 @@ B<EPrints::Test::OnlineSession> - Test online features of EPrints, offline
 package EPrints::Test::OnlineSession;
 
 use EPrints::Test::RequestRec;
+<<<<<<< HEAD
 
 our @ISA = qw( EPrints::Session );
 
 my @VARS = qw( stdout uri secure );
 my %VAR;
+=======
+use EPrints::Test::Template;
+
+our @ISA = qw( EPrints::Session );
+
+my @VARS = qw( uri secure );
+my %VAR;
+our $STDOUT = "";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =item $session = EPrints::Test::OnlineSession->new( $session, $query )
 
@@ -42,6 +52,11 @@ foreach my $f (@VARS)
 	*$fn = sub { my( $self ) = @_; $VAR{$self}->{$f} };
 }
 
+<<<<<<< HEAD
+=======
+sub test_get_stdout { $STDOUT }
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub new
 {
 	my( $class, $session, $opts ) = @_;
@@ -96,6 +111,19 @@ sub new
 		$self->{current_user} = $user;
 	}
 
+<<<<<<< HEAD
+=======
+	# capture output from templates
+	foreach my $id (keys %{$self->{templates}})
+	{
+		foreach my $langid (keys %{$self->{templates}{$id}})
+		{
+			my $template = $self->{templates}{$id}{$langid};
+			bless $template, EPrints::Test::Template;
+		}
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $self;
 }
 
@@ -134,12 +162,15 @@ sub send_http_header
 
 {
 no warnings;
+<<<<<<< HEAD
 sub EPrints::Page::send
 {
 	my( $self ) = @_;
 
 	$VAR{$self->{repository}}->{"stdout"} .= $self->{page};
 }
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub Apache2::Util::ht_time
 {

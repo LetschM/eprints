@@ -176,7 +176,11 @@ sub _parse_string {
             warn("Using undefined string $1") unless defined $strings_ref->{$1};
             $value .= $strings_ref->{$1} || "";
         } elsif (/\G"(([^"\\]*(\\.)*[^\\"]*)*)"/cgs)
+<<<<<<< HEAD
         {    # quoted string with embeded escapes
+=======
+        {    # quoted string with embedded escapes
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
             $value .= $1;
         } else {
             my $part = _extract_bracketed( $_ );

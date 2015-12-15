@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::Repository
@@ -10,16 +11,36 @@
 
 =pod
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =for Pod2Wiki
 
 =head1 NAME
 
+<<<<<<< HEAD
 B<EPrints::Repository> - Single connection to a specific EPrints Repository
 
 =head1 DESCRIPTION
 
 This module is really a Repository, REALLY. The name is up to date 
 and everything :-) 
+=======
+EPrints::Repository - connection to a single repository instance
+
+=head1 SYNOPSIS
+
+	use EPrints;
+	
+	$repo = EPrints->new->current_repository;
+	
+	$repo = EPrints->new->repository( "myrepo" );
+	
+	$xml = $repo->xml;
+	$cuser = $repo->current_user;
+	$repo->log( "Got user " . $cuser->id );
+
+=head1 DESCRIPTION
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 EPrints::Repository represents a connection to the EPrints system. It
 connects to a single EPrints repository, and the database used by
@@ -34,6 +55,7 @@ if there is one, including the CGI parameters.
 
 If the connection requires a username and password then it can also 
 give access to the L<EPrints::DataObj::User> object representing the user who is
+<<<<<<< HEAD
 causing this request. See current_user().
 
 The Repository object also provides access to the L<EPrints::XHTML> class which contains
@@ -42,6 +64,18 @@ interface.
 
 =head1 METHODS
 
+=======
+causing this request. See L</current_user>.
+
+The Repository object provides access to the L<EPrints::XML> and
+L<EPrints::XHTML> class which contain methods for creating XHTML results which
+can be returned via the web interface. 
+
+=head1 METHODS
+
+=over 4
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 ######################################################################
@@ -66,10 +100,13 @@ interface.
 #  $self->{offline}
 #     True if this is a command-line script.
 #
+<<<<<<< HEAD
 #  $self->{page}
 #     Used to store the output XHTML page between "build_page" and
 #     "send_page"
 #
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 #  $self->{lang}
 #     The current language that this session should use. eg. "en" or "fr"
 #     It is used to determine which phrases and template will be used.
@@ -130,7 +167,11 @@ sub new
 	EPrints::Utils::process_parameters( \%opts, {
 		  consume_post => 1,
 		           cgi => 0,
+<<<<<<< HEAD
 		         noise => 0,
+=======
+		         noise => 1,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		    db_connect => 1,
 		      check_db => 1,
 	});
@@ -138,7 +179,11 @@ sub new
 	my $self = bless {}, $class;
 
 	$self->{noise} = $opts{noise};
+<<<<<<< HEAD
 	$self->{noise} = 0 if ( !defined $self->{noise} );
+=======
+	$self->{noise} = 1 if ( !defined $self->{noise} );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$self->{used_phrases} = {};
 
@@ -182,10 +227,20 @@ sub new
 		if( !defined $self->{database} )
 		{
 			# Database connection failure - noooo!
+<<<<<<< HEAD
 			$self->render_error( $self->html_phrase( 
 				"lib/session:fail_db_connect" ) );
 			#$self->get_repository->log( "Failed to connect to database." );
 			return undef;
+=======
+			if( $self->{offline} ) {
+				$self->log( $self->phrase( "lib/session:fail_db_connect" ) );
+				return undef;
+			}
+			else {
+				EPrints->abort( $self->phrase( "lib/session:fail_db_connect" ) );
+			}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 	}
 
@@ -255,6 +310,160 @@ sub _new
 	return $self;
 }
 
+<<<<<<< HEAD
+=======
+=item $repo = EPrints::Repository->create_from_data( $epdata )
+
+Create a new repository instance using $epdata.
+
+=cut
+
+sub create_from_data
+{
+	my( $class, $epdata ) = @_;
+
+	my $system = EPrints::System->new;
+
+	my $base_path = EPrints::Config::get( "base_path" );
+
+	my $repodir = "$base_path/archives/".$epdata->{repositoryid};
+	$system->mkdir( $repodir );
+
+	for(qw( cfg cgi var html documents documents/disk0 ))
+	{
+		$system->mkdir( "$repodir/$_" );
+	}
+
+	my $defaultcfg = "$base_path/lib/defaultcfg";
+
+	File::Find::find(sub {
+		if( -d $File::Find::name )
+		{
+			my $rel_path = substr($File::Find::name, length($defaultcfg));
+			$rel_path =~ s{^/}{};
+			$system->mkdir( "$repodir/cfg/$rel_path" )
+				or die "Error mkdir $repodir/cfg/$rel_path: $!";
+		}
+		else
+		{
+			my $rel_path = substr($File::Find::dir, length($defaultcfg));
+			$rel_path =~ s{^/}{};
+			$system->copy( $File::Find::name, "$repodir/cfg/$rel_path/$_" )
+				or die "Error copying $File::Find::name to $repodir/cfg/$rel_path/$_: $!";
+		}
+	}, $defaultcfg);
+
+	$epdata = EPrints::Utils::clone( $epdata );
+
+	my $cfgd = "$repodir/cfg/cfg.d";
+	$system->mkdir( $cfgd );
+
+	my $fh;
+
+	# 10_core.pl
+	my @core = qw( host port aliases securehost secureport http_root https_root );
+	EPrints::Config::write_config( "$cfgd/10_core.pl", [
+			map { "\$c->{$_}" } @core
+		],[
+			map { $epdata->{$_} } @core
+		]);
+
+	# adminemail.pl
+	EPrints::Config::write_config( "$cfgd/adminemail.pl", [qw/
+			$c->{adminemail}
+		/],[
+			$epdata->{adminemail}
+		]);
+
+	# database.pl
+	EPrints::Config::write_config( "$cfgd/database.pl", [
+			map { "\$c->{$_}" } grep { /^db/ } keys %$epdata
+		],[
+			map { $epdata->{$_} } grep { /^db/ } keys %$epdata
+		]);
+
+	# archive_name.xml
+	my $doc = EPrints::Language->create_phrase_doc;
+	my $phrases = $doc->documentElement;
+	my $phrase = $phrases->appendChild(
+		$doc->createElement( "epp:phrase" )
+	);
+	$phrase->setAttribute( id => "archive_name" );
+	$phrase->appendChild(
+		$doc->createTextNode( $epdata->{name} )
+	);
+	$system->mkdir("$repodir/cfg/lang/en/phrases");
+	open($fh, ">", "$repodir/cfg/lang/en/phrases/archive_name.xml");
+	print $fh $doc->toString;
+	close($fh);
+	$system->chown_for_eprints( "$repodir/cfg/lang/en/phrases/archive_name.xml" );
+
+	# reload the configuration
+	EPrints::Config::init();
+
+	return $class->new( $epdata->{repositoryid},
+			check_db => 0,
+		);
+}
+
+=item $repo->delete()
+
+Destroy the repository and all its contents.
+
+To allow this method you must first set $EPrints::Repository::ALLOW_DELETE to 1.
+
+=cut
+
+sub delete
+{
+	my( $self ) = @_;
+
+	if( !$EPrints::Repository::ALLOW_DELETE )
+	{
+		EPrints->abort( "Set \$EPrints::Repository::ALLOW_DELETE to 1 to delete a repository" );
+	}
+
+	my $base_path = $self->config( "base_path" );
+
+	my $repodir = "$base_path/archives/".$self->id;
+
+	EPrints::Utils::rmtree( $repodir );
+
+	$self->database->drop_archive_tables;
+
+	my $apache_cfg = "$base_path/cfg/apache/".$self->id.".conf";
+	unlink( $apache_cfg );
+
+	my $apache_ssl_cfg = "$base_path/cfg/apache_ssl/".$self->id.".conf";
+	unlink( $apache_ssl_cfg );
+}
+
+sub get_system_field_info
+{
+	my( $class ) = @_;
+
+	return(
+		{ name=>"repositoryid", type=>"id", required=>1, },
+
+		{ name=>"name", type=>"text", },
+
+		{ name=>"adminemail", type=>"email", },
+
+		{ name=>"host", type=>"id", },
+		{ name=>"port", type=>"int", },
+		{ name=>"http_root", type=>"id", },
+
+		{ name=>"aliases", type=>"id", multiple=>1, },
+
+		{ name=>"securehost", type=>"id", },
+		{ name=>"secureport", type=>"int", },
+		{ name=>"https_root", type=>"id", },
+
+		{ name=>"dbdriver", type=>"id", },
+	);
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =begin InternalDoc
 
 =item $repo->init_from_thread()
@@ -325,8 +534,11 @@ sub request
 ######################################################################
 =pod
 
+<<<<<<< HEAD
 =over 4
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $query = $repository->query
 
 Return the L<CGI> object describing the current HTTP query, or 
@@ -350,8 +562,41 @@ sub query
 	return $self->{query};
 }
 
+<<<<<<< HEAD
 ######################################################################
 =pod
+=======
+=item $value or @values = $repository->url_param( $name )
+
+Retrieve the UTF-8 value(s) of the query parameter $name for the current request.
+
+This will not cause the POST data to be read. 
+
+=cut
+
+sub url_param
+{
+	my( $self, $name ) = @_;
+
+	my $uri = URI::http->new;
+	$uri->query(
+			defined($self->{request}->args) ?
+			substr($self->{request}->args,1) : # strip '?'
+			""
+		);
+	my @q = $uri->query_form;
+
+	my @v;
+	for(my $i = 0; $i < @q; $i+=2)
+	{
+		push @v, $q[$i+1] if $q[$i] eq $name;
+	}
+
+	utf8::decode($_) for @v;
+
+	return wantarray ? @v : $v[0];
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =item $value or @values = $repository->param( $name )
 
@@ -360,14 +605,20 @@ Passes through to CGI.pm param method.
 $value = $repository->param( $name ): returns the value of CGI parameter
 $name.
 
+<<<<<<< HEAD
 $value = $repository->param( $name ): returns the value of CGI parameter
 $name.
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 @values = $repository->param: returns an array of the names of all the
 CGI parameters in the current request.
 
 =cut
+<<<<<<< HEAD
 ######################################################################
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub param
 {
@@ -607,6 +858,22 @@ sub eprint($$)
 	return $repository->dataset( "eprint" )->get_object( $repository, $eprint_id );
 }
 
+<<<<<<< HEAD
+=======
+=item $lang = $repository->current_language
+
+Returns the current language.
+
+=cut
+
+sub current_language
+{
+	my( $self ) = @_;
+
+	return $self->{lang};
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 
@@ -1037,10 +1304,14 @@ sub _load_templates
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	$self->{html_templates} = {};
 	$self->{text_templates} = {};
 	$self->{template_mtime} = {};
 	$self->{template_path} = {};
+=======
+	$self->{templates} = {};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	foreach my $langid ( @{$self->config( "languages" )} )
 	{
@@ -1053,16 +1324,28 @@ sub _load_templates
 				next if $fn !~ /\.xml$/;
 				my $id = $fn;
 				$id =~ s/\.xml$//;
+<<<<<<< HEAD
 				next if
 					exists $self->{template_mtime}->{$id} &&
 					exists $self->{template_mtime}->{$id}->{$langid};
 				$self->{template_path}->{$id}->{$langid} = "$dir/$fn";
 				$self->freshen_template( $langid, $id );
+=======
+				next if $self->{templates}{$id}{$langid};
+
+				$self->{templates}{$id}{$langid} = EPrints::Template::EPC->new( "$dir/$fn",
+						repository => $self,
+					);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			}
 			closedir( $dh );
 		}
 
+<<<<<<< HEAD
 		if( !defined $self->{html_templates}->{default}->{$langid} )
+=======
+		if( !defined $self->{templates}->{default}->{$langid} )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		{
 			EPrints::abort( "Failed to load default template for language $langid" );
 		}
@@ -1071,6 +1354,7 @@ sub _load_templates
 	return 1;
 }
 
+<<<<<<< HEAD
 sub freshen_template
 {
 	my( $self, $langid, $id ) = @_;
@@ -1282,6 +1566,25 @@ END
 	}
 
 	return $t;
+=======
+=item $template = $repository->template( [ $id ] )
+
+=cut
+
+sub template
+{
+	my( $self, $id ) = @_;
+
+	$id = "default" if !defined $id;
+
+	my $template = $self->{templates}{$id}{$self->get_langid};
+	if( defined $template )
+	{
+		$template->freshen;
+	}
+
+	return $template;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 ######################################################################
@@ -1650,6 +1953,7 @@ sub run_trigger
 	return $rc;
 }
 
+<<<<<<< HEAD
 ######################################################################
 =pod
 
@@ -1681,6 +1985,31 @@ sub log
 		$self->call( 'log', $self, $msg );
 	}
 	else
+=======
+=item $repository->log( $msg [, $level ] )
+
+Log a plain text message $msg. If $level is given only logs if $level is greater than or equal to L</noise>.
+
+To override where log messages are sent define the C<log> callback:
+
+	$c->{log} = sub {
+		my( $repo, $msg, $level ) = @_;
+		
+		...
+	};
+
+=cut
+
+sub log
+{
+	my( $self, $msg, $level) = @_;
+
+	if( $self->can_call( 'log' ) )
+	{
+		$self->call( 'log', $self, $msg, $level );
+	}
+	elsif( !defined $level || $level >= $self->{noise} )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		print STDERR "$msg\n";
 	}
@@ -1731,7 +2060,11 @@ sub call
 	}
 	if( $@ )
 	{
+<<<<<<< HEAD
 		print "$@\n";
+=======
+		print "Error during call to '$cmd' at ".join(':', (caller)[1,2]).": $@\n";
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		exit 1;
 	}
 	return wantarray ? @r : $r;
@@ -1935,21 +2268,37 @@ sub template_dirs
 	return @dirs;
 }
 
+<<<<<<< HEAD
 ######################################################################
 =pod
 
 =begin InternalDoc
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item @dirs = $repository->get_static_dirs( $langid )
 
 Returns a list of directories from which static files may be sourced.
 
+<<<<<<< HEAD
 Directories are returned in order of importance, most important first.
 
 =end InternalDoc
 
 =cut
 ######################################################################
+=======
+Directories are returned in order of importance, most important first:
+
+	archives/[archiveid]/cfg/lang/[langid]/static
+	archives/[archiveid]/cfg/static
+	archives/[archiveid]/themes/[themeid]/static
+	lib/themes/[themeid]/static
+	lib/lang/[langid]/static
+	lib/static
+
+=cut
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub get_static_dirs
 {
@@ -1973,14 +2322,24 @@ sub get_static_dirs
 		push @dirs, "$lib_path/themes/$theme/static";
 	}
 
+<<<<<<< HEAD
 	# site_lib
 	push @dirs, "$site_lib_path/lang/$langid/static";
 	push @dirs, "$site_lib_path/static";
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	# system path: /lib/static/
 	push @dirs, "$lib_path/lang/$langid/static";
 	push @dirs, "$lib_path/static";
 
+<<<<<<< HEAD
+=======
+	# site_lib
+	push @dirs, "$site_lib_path/lang/$langid/static";
+	push @dirs, "$site_lib_path/static";
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return @dirs;
 }
 
@@ -2397,11 +2756,14 @@ sub change_lang
 }
 
 
+<<<<<<< HEAD
 ######################################################################
 =pod
 
 =begin InternalDoc
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $xhtml_phrase = $repository->html_phrase( $phraseid, %inserts )
 
 Return an XHTML DOM object describing a phrase from the phrase files.
@@ -2415,6 +2777,7 @@ an entry in %inserts where the key is the "ref" of the pin and the
 value is an XHTML DOM object describing what the pin should be 
 replaced with.
 
+<<<<<<< HEAD
 =end InternalDoc
 
 =cut
@@ -2444,6 +2807,20 @@ sub html_phrase
 
 =begin InternalDoc
 
+=======
+=cut
+
+sub html_phrase
+{
+	my( $self, $phraseid, %inserts ) = @_;
+        
+	$self->{used_phrases}->{$phraseid} = 1;
+
+	return $self->{lang}->phrase( $phraseid, \%inserts, $self );
+}
+
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $utf8_text = $repository->phrase( $phraseid, %inserts )
 
 Performs the same function as html_phrase, but returns plain text.
@@ -2452,15 +2829,20 @@ All HTML elements will be removed, <br> and <p> will be converted
 into breaks in the text. <img> tags will be replaced with their 
 "alt" values.
 
+<<<<<<< HEAD
 =end InternalDoc
 
 =cut
 ######################################################################
+=======
+=cut
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub phrase
 {
 	my( $self, $phraseid, %inserts ) = @_;
 
+<<<<<<< HEAD
 	$self->{used_phrases}->{$phraseid} = 1;
 	foreach( keys %inserts )
 	{
@@ -2469,6 +2851,17 @@ sub phrase
         my $r = $self->{lang}->phrase( $phraseid, \%inserts , $self);
 	my $string =  EPrints::Utils::tree_to_utf8( $r, 40 );
 	EPrints::XML::dispose( $r );
+=======
+	for(values %inserts)
+	{
+		$_ = $self->make_text( $_ );
+	}
+
+	my $r = $self->html_phrase( $phraseid, %inserts );
+	my $string = EPrints::Utils::tree_to_utf8( $r, 40 );
+	$self->xml->dispose( $r );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $string;
 }
 
@@ -2764,22 +3157,33 @@ sub get_full_url
 }
 
 
+<<<<<<< HEAD
 ######################################################################
 =pod
 
 =begin InternalDoc
 
 =item $noise_level = $repository->get_noise
+=======
+=item $noise_level = $repository->noise
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Return the noise level for the current session. See the explaination
 under EPrints::Repository->new()
 
+<<<<<<< HEAD
 =end InternalDoc
 
 =cut
 ######################################################################
 
 sub get_noise
+=======
+=cut
+
+*get_noise = \&noise;
+sub noise
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self ) = @_;
 	
@@ -3136,9 +3540,13 @@ sub render_data_element
 {
 	my( $self, $indent, $elementname, $value, %opts ) = @_;
 
+<<<<<<< HEAD
 	return $self->xhtml->data_element( $elementname, $value,
 		indent => $indent,
 		%opts );
+=======
+	return $self->xhtml->data_element( $elementname, $value, %opts );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 
@@ -3943,6 +4351,7 @@ sub _render_subjects_aux
 	return $ul;
 }
 
+<<<<<<< HEAD
 
 
 ######################################################################
@@ -4012,6 +4421,8 @@ sub render_error
 	$self->send_page();
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 my %INPUT_FORM_DEFAULTS = (
 	dataset => undef,
 	type	=> undef,
@@ -4266,6 +4677,7 @@ sub render_message
 {
 	my( $self, $type, $content, $show_icon ) = @_;
 	
+<<<<<<< HEAD
 	$show_icon = 1 unless defined $show_icon;
 
 	my $id = "m".$self->get_next_id;
@@ -4288,6 +4700,19 @@ sub render_message
 #	$div->appendChild( $title_div );
 	$div->appendChild( $content_div );
 	return $div;
+=======
+	my $msg = $self->dataset( "message" )->make_dataobj( {
+			messageid => $self->get_next_id,
+			type => $type,
+			message => $content,
+		});
+
+	$show_icon = 1 unless defined $show_icon;
+
+	return !$show_icon ?
+		$msg->render_citation( "brief" ) :
+		$msg->render_citation();
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 
@@ -4359,6 +4784,7 @@ sub get_next_id
 
 
 
+<<<<<<< HEAD
 
 
 
@@ -4591,6 +5017,8 @@ sub set_page
 }
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 
@@ -5158,6 +5586,7 @@ sub expire_abstracts
 	return 1;
 }
 
+<<<<<<< HEAD
 
 
 ######################################################################
@@ -5194,16 +5623,25 @@ sub plugin_list
 =begin InternalDoc
 
 =item @plugins = $repository->get_plugins( [ $params, ] %restrictions )
+=======
+=item @plugins = $repository->plugins( [ $params, ] %restrictions )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Returns a list of plugin objects that conform to %restrictions (may be empty).
 
 If $params is given uses that hash reference to initialise the plugins. Always passes this session to the plugin constructor method.
 
+<<<<<<< HEAD
 =end InternalDoc
 
 =cut
 
 sub get_plugins
+=======
+=cut
+
+sub plugins
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 {
 	my( $self, @opts ) = @_;
 
@@ -5549,7 +5987,11 @@ sub init_from_request
 	return 1;
 }
 
+<<<<<<< HEAD
 my @CACHE_KEYS = qw/ id citations class config datasets field_defaults html_templates template_path langs plugins storage template_mtime text_templates types workflows loadtime noise /;
+=======
+my @CACHE_KEYS = qw/ id citations templates class config datasets field_defaults langs plugins storage types workflows loadtime noise /;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 my %CACHED = map { $_ => 1 } @CACHE_KEYS;
 
 sub cleanup

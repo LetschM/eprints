@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::MetaField::Bitint;
@@ -7,22 +8,39 @@
 #
 ######################################################################
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =pod
 
 =head1 NAME
 
+<<<<<<< HEAD
 B<EPrints::MetaField::Bigint> - big integer
+=======
+EPrints::MetaField::Bigint - big integer
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head1 DESCRIPTION
 
 Signed integer in the range -9223372036854775808 to 9223372036854775807.
 
+<<<<<<< HEAD
 =over 4
+=======
+Use L<EPrints::MetaField::Int> instead:
+
+	{
+		name => "twitterid",
+		type => "int",
+		maxlength => 18,
+	},
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 
 package EPrints::MetaField::Bigint;
 
+<<<<<<< HEAD
 use strict;
 use warnings;
 
@@ -41,6 +59,19 @@ sub get_sql_type
 		undef,
 		$self->get_sql_properties,
 	);
+=======
+use EPrints::MetaField::Int;
+@ISA = qw( EPrints::MetaField::Int );
+
+use strict;
+
+sub get_property_defaults
+{
+	my( $self ) = @_;
+	my %defaults = $self->SUPER::get_property_defaults;
+	$defaults{maxlength} = 18, # SQL_BIGINT
+	return %defaults;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 ######################################################################

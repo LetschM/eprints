@@ -9,7 +9,11 @@ BEGIN {
 	}
 	else
 	{
+<<<<<<< HEAD
 		plan tests => 12;
+=======
+		plan tests => 14;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 }
 

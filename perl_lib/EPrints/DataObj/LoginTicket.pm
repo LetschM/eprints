@@ -146,10 +146,14 @@ sub new_from_request
 
 	if( $repo->get_secure )
 	{
+<<<<<<< HEAD
 		my $securecode = EPrints::Apache::AnApache::cookie(
 			$r,
 			$class->secure_session_key($repo)
 		);
+=======
+		my $securecode = EPrints::Cookie::cookie( $repo, $class->secure_session_key($repo) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if (EPrints::Utils::is_set($securecode)) {
 			$ticket = $dataset->search(filters => [
 				{ meta_fields => [qw( securecode )], value => $securecode },
@@ -158,10 +162,14 @@ sub new_from_request
 	}
 	else
 	{
+<<<<<<< HEAD
 		my $code = EPrints::Apache::AnApache::cookie(
 			$r,
 			$class->session_key($repo)
 		);
+=======
+		my $code = EPrints::Cookie::cookie( $repo, $class->session_key($repo) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if (EPrints::Utils::is_set($code)) {
 			$ticket = $dataset->search(filters => [
 				{ meta_fields => [qw( code )], value => $code },
@@ -237,6 +245,7 @@ sub secure_session_key
 
 =cut
 
+<<<<<<< HEAD
 ######################################################################
 
 =begin InternalDoc
@@ -292,6 +301,8 @@ sub generate_secure_cookie
 	);			
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $ticket->set_cookies()
 
 Set the session cookies for this login ticket.
@@ -304,6 +315,7 @@ sub set_cookies
 
 	my $repo = $self->{session};
 
+<<<<<<< HEAD
 	$repo->get_request->err_headers_out->add(
 		'Set-Cookie' => $self->generate_cookie
 	);
@@ -312,6 +324,20 @@ sub set_cookies
 		$repo->get_request->err_headers_out->add(
 			'Set-Cookie' => $self->generate_secure_cookie
 		);
+=======
+	EPrints::Cookie::set_cookie(
+			$repo,
+			$self->session_key($repo),
+			$self->value( "code" )
+		);
+	if( $repo->config( "securehost" ) )
+	{
+		EPrints::Cookie::set_secure_cookie(
+				$repo,
+				$self->secure_session_key($repo),
+				$self->value( "securecode" )
+			);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 }
 

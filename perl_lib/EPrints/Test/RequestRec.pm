@@ -61,11 +61,19 @@ sub headers_in
 	return $self->{headers_in} ||= {};
 }
 
+<<<<<<< HEAD
+=======
+sub err_headers_out { shift->headers_out(@_) }
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub headers_out
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	return $self->{headers_out} ||= {};
+=======
+	return $self->{headers_out} ||= EPrints::Test::Table->new();
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub custom_response
@@ -83,6 +91,19 @@ sub set_handlers
 	my( $self, $handlers ) = @_;
 }
 
+<<<<<<< HEAD
+=======
+sub pnotes
+{
+	my( $self, $key, $value ) = @_;
+
+	$self->{pnotes} ||= {};
+	$self->{pnotes}{$key} = $value if @_ == 3;
+
+	return $self->{pnotes};
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 package EPrints::Test::Pool;
 
 sub new
@@ -101,6 +122,20 @@ sub cleanup_register
 	unshift @{$self->{cleanup}}, [$f, $ctx];
 }
 
+<<<<<<< HEAD
+=======
+package EPrints::Test::Table;
+
+sub new
+{
+	my( $class, %self ) = @_;
+
+	return bless \%self, $class;
+}
+
+sub add { shift->{$_[0]} = $_[1] }
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 1;
 
 =head1 COPYRIGHT

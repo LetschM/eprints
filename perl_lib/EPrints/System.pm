@@ -23,7 +23,11 @@ B<EPrints::System> - Wrappers for system calls
 package EPrints::System;
 
 use strict;
+<<<<<<< HEAD
 use File::Copy;
+=======
+use File::Copy qw();
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 use Digest::MD5;
 
 =item $sys = EPrints::System->new();
@@ -69,7 +73,11 @@ sub init
 
 	if(
 		!defined($EPrints::SystemSettings::conf->{user}) ||
+<<<<<<< HEAD
 		!defined($EPrints::SystemSettings::conf->{user})
+=======
+		!defined($EPrints::SystemSettings::conf->{group})
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	  )
 	{
 		EPrints->abort( "'user' and 'group' must be configured. Perhaps you need to add them to perl_lib/EPrints/SystemSettings.pm?" );
@@ -98,6 +106,53 @@ sub init
 	}
 }
 
+<<<<<<< HEAD
+=======
+=item $oct = $sys->dir_perms()
+
+Returns the default directory permissions for eprints-owned directories.
+
+=cut
+
+sub dir_perms
+{
+	# Default to "dir_perms"
+	my $perms = EPrints::Config::get( "dir_perms" );
+	if( !defined( $perms ))
+	{
+		$perms = 02770;
+	}
+	elsif( $perms =~ /^0/ )
+	{
+		$perms = oct($perms);
+	}
+
+	return $perms;
+}
+
+=item $oct = $sys->file_perms()
+
+Returns the default file permissions for eprints-owned files.
+
+=cut
+
+sub file_perms
+{
+	# Default to "dir_perms"
+	my $perms = EPrints::Config::get( "file_perms" );
+	if( !defined( $perms ))
+	{
+		$perms = 0660;
+	}
+	elsif( $perms =~ /^0/ )
+	{
+		$perms = oct($perms);
+	}
+
+	return $perms;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $sys->chmod( MODE, @filelist )
 
 Change the access control on files listed in @filelist to MODE.
@@ -108,7 +163,17 @@ sub chmod
 {
 	my( $self, $mode, @files ) = @_;
 
+<<<<<<< HEAD
 	return CORE::chmod( $mode, @files );
+=======
+	if( @files && !CORE::chmod( $mode, @files ) )
+	{
+		warn "chmod $mode @files: $!\n";
+		return 0;
+	}
+
+	return 1;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 } 
 
 =item $sys->chown( $uid, $gid, @filelist )
@@ -120,9 +185,21 @@ $gid. $uid and $gid are as returned by L<getpwnam> (usually numeric).
 
 sub chown 
 {
+<<<<<<< HEAD
 	my( $self, $mode, @files ) = @_;
 
 	return CORE::chown( $mode, @files );
+=======
+	my( $self, $uid, $gid, @files ) = @_;
+
+	if( @files && !CORE::chown( $uid, $gid, @files ) )
+	{
+		warn "chown $uid $gid @files: $!\n";
+		return 0;
+	}
+
+	return 1;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 =item $sys->chown_for_eprints( @filelist )
@@ -195,7 +272,32 @@ sub test_uid
 	}
 }
 
+<<<<<<< HEAD
 =item $sys->mkdir( $path, MODE )
+=======
+=item $sys->copy( $src, $dst [, MODE ] )
+
+Copy the file located at $src to $dst and set the correct permissions.
+
+=cut
+
+sub copy
+{
+	my( $self, $src, $dst, $perms ) = @_;
+
+	$perms = $self->file_perms if @_ < 4;
+
+	return if !File::Copy::copy( $src, $dst );
+
+	$self->chmod( $perms, $dst );
+
+	$self->chown_for_eprints( $dst );
+
+	return 1;
+}
+
+=item $sys->mkdir( $path [, MODE ] )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Create a directory $path (including parent directories as necessary)
 set to mode MODE. If MODE is undefined defaults to dir_perms in
@@ -207,12 +309,16 @@ sub mkdir
 {
 	my( $self, $full_path, $perms ) = @_;
 
+<<<<<<< HEAD
 	# Default to "dir_perms"
 	$perms = eval($EPrints::SystemSettings::conf->{"dir_perms"}) if @_ < 3;
 	if( !defined( $perms ))
 	{
 		EPrints->abort( "mkdir requires dir_perms is set in SystemSettings");
 	}
+=======
+	$perms = $self->dir_perms if @_ < 3;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $dir = "";
 	my @parts = grep { length($_) } split( "/", "$full_path" );
@@ -233,9 +339,16 @@ sub mkdir
 	}
 
 	# mkdir ignores sticky bits (01000, 02000, 04000)
+<<<<<<< HEAD
 	$self->chmod( $perms, @newdirs );
 	# fix the file ownership
 	$self->chown_for_eprints( @newdirs );
+=======
+	$self->chmod( $perms, @newdirs ) or return 0;
+
+	# fix the file ownership
+	$self->chown_for_eprints( @newdirs ) or return 0;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return 1;
 }
@@ -256,6 +369,14 @@ sub exec
 
 	my $command = $repository->invocation( $cmd_id, %map );
 
+<<<<<<< HEAD
+=======
+	if( $repository->{noise} >= 2 )
+	{
+		$repository->log( "Executing: $command" );
+	}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $rc = 0xffff & system $command;
 
 	if( $rc != 0 )
@@ -442,6 +563,13 @@ sub write_config_file
 	print $fh $content;
 	close($fh);
 
+<<<<<<< HEAD
+=======
+	$self->chmod( $self->file_perms, $path );
+
+	$self->chown_for_eprints( $path );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $rc;
 }
 

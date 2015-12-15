@@ -129,6 +129,7 @@ sub thaw
 	return Storable::thaw( $value );
 }
 
+<<<<<<< HEAD
 sub render_value
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
@@ -144,6 +145,12 @@ sub render_value
 			$object );
 	}
 
+=======
+sub render_value_actual
+{
+	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	local $Data::Dumper::Terse = 1;
 
 	return $session->make_text( Data::Dumper::Dumper( $value ) );

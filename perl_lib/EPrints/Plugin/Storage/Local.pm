@@ -214,7 +214,11 @@ sub _filename
 	if( !defined $filename )
 	{
 		$filename = $fileobj->get_value( "filename" );
+<<<<<<< HEAD
 		$filename = escape_filename( $filename );
+=======
+		$filename = $self->escape_filename( $filename );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	my $in_file;
@@ -239,7 +243,15 @@ sub _filename
 	}
 	else
 	{
+<<<<<<< HEAD
 		# Gawd knows?!
+=======
+		my $root = $self->repository->config( "documents_path" );
+		my $path = sprintf("%08d", $fileobj->id);
+		substr($path,2) =~ s{(..)}{/$1}g;
+		$local_path = join '/', $root, 'file', $path;
+		$in_file = $filename;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	return( $local_path, $in_file );
@@ -247,7 +259,11 @@ sub _filename
 
 sub escape_filename
 {
+<<<<<<< HEAD
 	my( $filename ) = @_;
+=======
+	my( $self, $filename ) = @_;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	# $filename is UTF-8
 	$filename =~ s# /\.+ #/_#xg; # don't allow hiddens

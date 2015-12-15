@@ -44,6 +44,7 @@ sub update_from_form
 	$eprint->set_value( "documents", $eprint->value( "documents" ) );
 	my @eprint_docs = $eprint->get_all_documents;
 
+<<<<<<< HEAD
 	my %update = map { $_ => 1 } $session->param( $self->{prefix} . "_update_doc" );
 
 	# update the metadata for any documents that have metadata
@@ -54,6 +55,16 @@ sub update_from_form
 
 		my $doc_prefix = $self->{prefix}."_doc".$doc->id;
 
+=======
+	# update the metadata for any documents that have metadata
+	foreach my $doc ( @eprint_docs )
+	{
+		my $doc_prefix = $self->{prefix}."_doc".$doc->id;
+
+		# check the page we're coming from included this document
+    next if !$self->{session}->param( $doc_prefix . "_update" );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my @fields = $self->doc_fields( $doc );
 
 		foreach my $field ( @fields )
@@ -102,8 +113,11 @@ sub get_state_params
 	my $to_unroll = $processor->{notes}->{upload_plugin}->{to_unroll};
 	$to_unroll = {} if !defined $to_unroll;
 
+<<<<<<< HEAD
 	my %update = map { $_ => 1 } $self->{session}->param( $self->{prefix} . "_update_doc" );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $eprint = $self->{workflow}->{item};
 	my @eprint_docs = $eprint->get_all_documents;
 	foreach my $doc ( @eprint_docs )
@@ -111,7 +125,11 @@ sub get_state_params
 		my $doc_prefix = $self->{prefix}."_doc".$doc->id;
 
 		# check the page we're coming from included this document
+<<<<<<< HEAD
 		next if !$update{$doc->id};
+=======
+    next if !$self->{session}->param( $doc_prefix . "_update" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 		my @fields = $self->doc_fields( $doc );
 		foreach my $field ( @fields )
@@ -139,8 +157,11 @@ sub get_state_fragment
 	my $to_unroll = $processor->{notes}->{upload_plugin}->{to_unroll};
 	$to_unroll = {} if !defined $to_unroll;
 
+<<<<<<< HEAD
 	my %update = map { $_ => 1 } $self->{session}->param( $self->{prefix} . "_update_doc" );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $eprint = $self->{workflow}->{item};
 	foreach my $doc ( $eprint->get_all_documents )
 	{
@@ -148,7 +169,11 @@ sub get_state_fragment
 		return $doc_prefix if $to_unroll->{$doc->id};
 
 		# check the page we're coming from included this document
+<<<<<<< HEAD
 		next if !$update{$doc->id};
+=======
+    next if !$self->{session}->param( $doc_prefix . "_update" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 		my @fields = $self->doc_fields( $doc );
 		foreach my $field ( @fields )
@@ -244,10 +269,13 @@ sub render_content
 
 	my $f = $session->make_doc_fragment;
 	
+<<<<<<< HEAD
 	$f->appendChild( $self->{session}->make_javascript(
 		"Event.observe(window, 'load', function() { new Component_Documents('".$self->{prefix}."') });"
 	) );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my @docs = $eprint->get_all_documents;
 
 	my %unroll = map { $_ => 1 } $session->param( $self->{prefix}."_view" );
@@ -261,7 +289,11 @@ sub render_content
 	}
 
 	my $panel = $session->make_element( "div",
+<<<<<<< HEAD
 		id=>$self->{prefix}."_panels",
+=======
+		id=>$self->{prefix}."_panel",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	);
 	$f->appendChild( $panel );
 
@@ -272,6 +304,13 @@ sub render_content
 		$panel->appendChild( $self->_render_doc_div( $doc, $hide ));
 	}
 
+<<<<<<< HEAD
+=======
+	$f->appendChild( $self->{session}->make_javascript(<<"EOJ") );
+new Component_Documents('$self->{prefix}');
+EOJ
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $f;
 }
 
@@ -318,7 +357,17 @@ sub export
 
 		my $hide = $self->{session}->param( "docid" );
 		$hide = !defined($hide) || $hide ne $docid;
+<<<<<<< HEAD
 		$frag = $self->_render_doc_div( $doc, $hide );
+=======
+		my $doc_div = $self->_render_doc_div( $doc, $hide );
+
+		$frag = $self->{session}->xml->create_document_fragment;
+		foreach my $node ($doc_div->childNodes)
+		{
+			$frag->appendChild( $doc_div->removeChild( $node ) );
+		}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	print $self->{session}->xhtml->to_xhtml( $frag );
@@ -330,18 +379,27 @@ sub _render_doc_div
 	my( $self, $doc, $hide ) = @_;
 
 	my $session = $self->{session};
+<<<<<<< HEAD
+=======
+	my $xml = $session->xml;
+	my $xhtml = $session->xhtml;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $docid = $doc->get_id;
 	my $doc_prefix = $self->{prefix}."_doc".$docid;
 
+<<<<<<< HEAD
 	my $imagesurl = $session->current_url( path => "static" );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $files = $doc->get_value( "files" );
 	do {
 		my %idx = map { $_ => $_->value( "filename" ) } @$files;
 		@$files = sort { $idx{$a} cmp $idx{$b} } @$files;
 	};
 
+<<<<<<< HEAD
 	my $doc_div = $self->{session}->make_element( "div", class=>"ep_upload_doc", id=>$doc_prefix."_block" );
 
 	# provide <a> link to this document
@@ -352,16 +410,28 @@ sub _render_doc_div
 
 	# note the document placement
 	$doc_div->appendChild( $session->render_hidden_field( $self->{prefix}."_doc_placement", $doc->value( "placement" ) ) );
+=======
+	my $doc_div = $self->{session}->make_element( "div", class=>"ep_upload_doc", id=>$doc_prefix );
+
+	# easier access to the docid
+	$doc_div->appendChild( $xhtml->hidden_field( $doc_prefix . "_docid", $docid ) );
+
+	# note which documents should be updated
+	$doc_div->appendChild( $xhtml->hidden_field( $doc_prefix . "_update", 1 ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $doc_title_bar = $session->make_element( "div", class=>"ep_upload_doc_title_bar" );
 	$doc_div->appendChild( $doc_title_bar );
 
+<<<<<<< HEAD
 	my $doc_expansion_bar = $session->make_element( "div", class=>"ep_upload_doc_expansion_bar ep_only_js" );
 	$doc_div->appendChild( $doc_expansion_bar );
 
 	my $content = $session->make_element( "div", id=>$doc_prefix."_opts", class=>"ep_upload_doc_content ".($hide?"ep_no_js":"") );
 	$doc_div->appendChild( $content );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $table = $session->make_element( "table", width=>"100%", border=>0 );
 	my $tr = $session->make_element( "tr" );
@@ -377,6 +447,7 @@ sub _render_doc_div
 
 	$td_right->appendChild( $self->_render_doc_actions( $doc ) );
 
+<<<<<<< HEAD
         my @fields = $self->doc_fields( $doc );
         return $doc_div if !scalar @fields;
 
@@ -406,6 +477,34 @@ sub _render_doc_div
 	$content->appendChild( $content_inner );
 
 	$content_inner->appendChild( $self->_render_doc_metadata( $doc )->{content} );
+=======
+  # drag and drop bits
+	my $container = $xml->create_element( "div",
+		class => "UploadMethod_file_container",
+		id => join('_', $doc_prefix, "dropbox"),
+	);
+	$doc_div->appendChild( $container );
+
+	$container->appendChild( $xml->create_data_element( "div",
+			$session->html_phrase( "Plugin/InputForm/Component/Upload:drag_and_drop" ),
+			class => "ep_dropbox_help",
+		) );
+
+	$container->appendChild( $xml->create_element( "table",
+			id => join('_', $doc_prefix, "progress_table"),
+			class => "UploadMethod_file_progress_table",
+		) );
+
+  $container->appendChild($xhtml->box(
+      $self->_render_doc_metadata($doc),
+      basename => join('_', $doc_prefix, 'content'),
+      show_label => $self->html_phrase('show_options'),
+      hide_label => $self->html_phrase('hide_options'),
+      collapsed => $hide,
+      class => 'ep_upload_doc_content',
+    ));
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $doc_div;
 }
 
@@ -487,6 +586,7 @@ sub _render_doc_actions
 	return $table;
 }
 
+<<<<<<< HEAD
 sub _render_related_docs
 {
 	my( $self, $doc ) = @_;
@@ -556,6 +656,8 @@ sub _render_volatile_div
 	return $doc_div;
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub doc_fields
 {
 	my( $self, $document ) = @_;
@@ -618,11 +720,15 @@ sub _render_doc_metadata
 
 	$doc_cont->appendChild( $tool_div );
 	
+<<<<<<< HEAD
 	return ({
 		id => "metadata_".$doc->get_id,
 		   title => $self->html_phrase("Metadata"),
 		   content => $doc_cont,
 	});
+=======
+  return $doc_cont;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub validate
@@ -726,6 +832,11 @@ sub parse_config
 {
 	my( $self, $config_dom ) = @_;
 
+<<<<<<< HEAD
+=======
+	$self->SUPER::parse_config( $config_dom );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$self->{config}->{doc_fields} = [];
 
 	my @fields = $config_dom->getElementsByTagName( "field" );

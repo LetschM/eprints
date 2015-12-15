@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::MetaField
@@ -9,10 +10,13 @@
 
 =pod
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =for Pod2Wiki
 
 =head1 NAME
 
+<<<<<<< HEAD
 B<EPrints::MetaField> - A single metadata field.
 
 =head1 SYNOPSIS
@@ -58,6 +62,66 @@ documentation and will not be duplicated here.
 =begin InternalDoc
 
 =head1 PROPERTIES
+=======
+EPrints::MetaField - A single metadata field.
+
+=head1 SYNOPSIS
+
+	my $field = $dataset->field( $fieldname );
+	$dataset = $field->dataset;
+	$repo = $field->repository;
+	$field->set_property( $property, $value );
+	$value = $field->property( $property );
+	$name = $field->name;
+	$type = $field->type;
+	$xhtml = $field->render_name;
+	$xhtml = $field->render_help;
+	$xhtml = $field->render_value_label( $value );
+	$values = $field->all_values( %opts );
+	$sorted_list = $field->sort_values( $unsorted_list );
+
+=head1 DESCRIPTION
+
+This object represents a single metadata field, not the value of
+that field. A field belongs (usually) to a dataset and has a large
+number of properties. Optional and required properties vary between 
+types.
+
+"type" is the most important property, it is the type of the metadata
+field. For example: "text", "name" or "date".
+
+A full description of metadata types and properties is in the eprints
+documentation and will not be duplicated here.
+
+=head1 PROPERTIES
+
+=over 4
+
+=item replace_core => 0
+
+Normally any attempt to define two fields with the same name will fail. However, you can replace a core system field by specifying the "replace_core" property. This should be used very carefully!
+
+=back
+
+=head2 Rendering
+
+=over 4
+
+=item render_value => CODEREF
+
+	sub my_render_method
+	{
+		my( $repo, $field, $value, $all_langs, $no_link, $object ) = @_;
+
+		return $repo->xml->create_text_node( $value );
+	}
+
+Override the default rendering of values with a custom method. Renders $value (which may be a multiple) and returns an XHTML fragment.
+
+=back
+
+=head2 Read-only Properties
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =over 4
 
@@ -65,6 +129,7 @@ documentation and will not be duplicated here.
 
 Indiciates where the field was initialised from. "core" fields are defined in L<DataObj> classes while "config" fields are defined in cfg.d files.
 
+<<<<<<< HEAD
 =item replace_core => 0
 
 Normally any attempt to define two fields with the same name will fail. However, you can replace a core system field by specifying the "replace_core" property. This should be used very carefully!
@@ -100,6 +165,15 @@ Normally any attempt to define two fields with the same name will fail. However,
 #     The type of this field.
 #
 ######################################################################
+=======
+=back
+
+=head1 METHODS
+
+=over 4
+
+=cut
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 package EPrints::MetaField;
 
@@ -369,8 +443,11 @@ sub clone
 	return EPrints::MetaField->new( %{$self} );
 }
 
+<<<<<<< HEAD
 =over 4
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $repository = $field->repository
 
 Return the L<EPrints::Repository> to which this field belongs.
@@ -498,6 +575,7 @@ The actual function called may be overridden from the config.
 
 sub render_input_field
 {
+<<<<<<< HEAD
 	my( $self, $session, $value, $dataset, $staff, $hidden_fields, $obj, $prefix ) = @_;
 
 	my $basename = $self->basename( $prefix );
@@ -505,6 +583,22 @@ sub render_input_field
 	if( defined $self->{toform} )
 	{
 		$value = $self->call_property( "toform", $value, $session );
+=======
+	my( $self, $session, $value, $dataset, $staff, $hidden_fields, $obj, $basename ) = @_;
+
+	if( defined $basename )
+	{
+		$basename = $basename."_".$self->{name};
+	}
+	else
+	{
+		$basename = $self->{name};
+	}
+
+	if( defined $self->{toform} )
+	{
+		$value = $self->call_property( "toform", $value, $session, $obj, $basename );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	if( defined $self->{render_input} )
@@ -550,6 +644,7 @@ sub form_value
 {
 	my( $self, $session, $object, $prefix ) = @_;
 
+<<<<<<< HEAD
 	my $basename;
 	if( defined $prefix )
 	{
@@ -559,6 +654,9 @@ sub form_value
 	{
 		$basename = $self->{name};
 	}
+=======
+	my $basename = $self->basename($prefix);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $value = $self->form_value_actual( $session, $object, $basename );
 
@@ -2438,7 +2536,11 @@ sub get_search_conditions
 	if( $match eq "SET" )
 	{
 		return EPrints::Search::Condition->new(
+<<<<<<< HEAD
 				"is_not_null",
+=======
+				"is_set",
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				$dataset,
 				$self );
 	}

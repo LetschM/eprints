@@ -20,6 +20,7 @@ use EPrints::Apache::AnApache; # exports apache constants
 use strict;
 use warnings;
 
+<<<<<<< HEAD
 #
 # This handler has been heavily modified in order to support a static
 # sitemap.xml file in addition to the semantic web crawling extensions
@@ -34,11 +35,14 @@ use warnings;
 # by _insert_semantic_web_extensions. This handler also implements the
 # sitemap-sc.xml URL.
 #
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub handler
 {
 	my( $r ) = @_;
 
 	my $repository = $EPrints::HANDLE->current_repository;
+<<<<<<< HEAD
 	my $xml = $repository->xml;
 	my $sitemap;
 
@@ -128,6 +132,36 @@ sub _insert_semantic_web_extensions
 
 	$urlset->setAttribute( "xmlns:sc" , "http://sw.deri.org/2007/07/sitemapextension/scschema.xsd" );
 
+=======
+
+        my $langid = EPrints::Session::get_session_language( $repository, $r );
+        my @static_dirs = $repository->get_static_dirs( $langid );
+        my $sitemap;
+        foreach my $static_dir ( @static_dirs )
+        {
+                my $file = "$static_dir/sitemap.xml";
+                next if( !-e $file );
+
+                open( SITEMAP, $file ) || EPrints::abort( "Can't read $file: $!" );
+                $sitemap = join( "", <SITEMAP> );
+                close SITEMAP;
+                last;
+        }
+
+	if( defined $sitemap )
+	{
+	        binmode( *STDOUT, ":utf8" );
+        	$repository->send_http_header( "content_type"=>"text/xml; charset=UTF-8" );
+	        print $sitemap;
+        	return DONE;
+	}
+
+	my $xml = $repository->xml;
+
+	my $urlset = $xml->create_element( "urlset", 
+		xmlns => "http://www.sitemaps.org/schemas/sitemap/0.9",
+		"xmlns:sc" => "http://sw.deri.org/2007/07/sitemapextension/scschema.xsd" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $sc_dataset = $xml->create_element( "sc:dataset" );
 
 	$urlset->appendChild( $sc_dataset );	
@@ -154,6 +188,21 @@ sub _insert_semantic_web_extensions
 			"sc:dataDumpLocation",
 			$top_subject->uri ) );
 	}
+<<<<<<< HEAD
+=======
+
+       	# adds local sitemap URLs
+	$repository->run_trigger( EPrints::Const::EP_TRIGGER_LOCAL_SITEMAP_URLS,
+		urlset => $urlset,
+	); 
+
+	binmode( *STDOUT, ":utf8" );
+	$repository->send_http_header( "content_type"=>"text/xml; charset=UTF-8" );
+	print "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n";
+	print $xml->to_string( $urlset );
+
+	return DONE;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub _create_data

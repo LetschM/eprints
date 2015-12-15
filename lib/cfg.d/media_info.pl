@@ -55,7 +55,11 @@ $c->add_trigger( EP_TRIGGER_MEDIA_INFO, sub {
 	return 0 if $filename =~ /.(docx|pptx|xlsx)$/i;
 	return 0 if $filename =~ /\.bib$/; # BibTeX
 
+<<<<<<< HEAD
 	if( open(my $fh, "file -b -i ".quotemeta($filepath)."|") )
+=======
+	if( open(my $fh, "file -b -i -L ".quotemeta($filepath)."|") )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my $output = <$fh>;
 		close($fh);
@@ -72,10 +76,20 @@ $c->add_trigger( EP_TRIGGER_MEDIA_INFO, sub {
 		my( $charset ) = $opts =~ s/charset=(\S+)//;
 		# unsupported in document metadata
 		# $epdata->{charset} = $charset if defined $charset;
+<<<<<<< HEAD
 	}
 	else
 	{
 		$repo->log( "Error executing command file -b -i ".quotemeta($filepath).": $!" );
+=======
+
+		# fixes for file magic
+		$epdata->{mime_type} = "video/ogg" if $epdata->{mime_type} eq "application/ogg";
+	}
+	else
+	{
+		$repo->log( "Error executing command file -b -i -L ".quotemeta($filepath).": $!" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		return undef;
 	}
 

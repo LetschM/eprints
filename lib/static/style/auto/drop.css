@@ -2,6 +2,10 @@
 /* style for ajax suggestion drops */
 
 .ep_drop_target {
+<<<<<<< HEAD
+=======
+	position: absolute;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 .ep_drop_target ul {

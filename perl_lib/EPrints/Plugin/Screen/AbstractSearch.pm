@@ -21,6 +21,21 @@ sub new
 	return $self;
 }
 
+<<<<<<< HEAD
+=======
+# public searches require no csrf
+sub verify_csrf { 1 }
+
+# default search forms to 'get' (allows refreshing)
+sub render_form
+{
+	my( $self, $method, $action ) = @_;
+
+	$method = "get" if !defined $method;
+
+	return $self->SUPER::render_form( $method, $action );
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 sub can_be_viewed
 {
@@ -299,7 +314,11 @@ sub _get_export_plugins
 			is_visible=>$self->_vis_level,
 	);
 	unless( $include_not_advertised ) { $opts{is_advertised} = 1; }
+<<<<<<< HEAD
 	return $self->{session}->plugin_list( %opts );
+=======
+	return $self->{session}->plugins( %opts );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub _vis_level
@@ -342,16 +361,25 @@ sub render_links
 	my $links = $self->{session}->make_doc_fragment();
 
 	my $escexp = $self->{processor}->{search}->serialise;
+<<<<<<< HEAD
 	foreach my $plugin_id ( @plugins ) 
 	{
 		$plugin_id =~ m/^[^:]+::(.*)$/;
 		my $id = $1;
 		my $plugin = $self->{session}->plugin( $plugin_id );
+=======
+	foreach my $plugin ( @plugins ) 
+	{
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my $url = URI::http->new;
 		$url->query_form(
 			cache => $self->{cache_id},
 			exp => $escexp,
+<<<<<<< HEAD
 			output => $id,
+=======
+			output => $plugin->subtype,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			_action_export_redir => 1
 			);
 		my $link = $self->{session}->make_element( 
@@ -465,18 +493,27 @@ sub render_export_bar
 	my $feeds = $session->make_doc_fragment;
 	my $tools = $session->make_doc_fragment;
 	my $options = {};
+<<<<<<< HEAD
 	foreach my $plugin_id ( @plugins ) 
 	{
 		$plugin_id =~ m/^[^:]+::(.*)$/;
 		my $id = $1;
 		my $plugin = $session->plugin( $plugin_id );
+=======
+	foreach my $plugin ( @plugins ) 
+	{
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my $dom_name = $plugin->render_name;
 		if( $plugin->is_feed || $plugin->is_tool )
 		{
 			my $type = "feed";
 			$type = "tool" if( $plugin->is_tool );
 			my $span = $session->make_element( "span", class=>"ep_search_$type" );
+<<<<<<< HEAD
 			my $url = $self->export_url( $id );
+=======
+			my $url = $self->export_url( $plugin->subtype );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			my $a1 = $session->render_link( $url );
 			my $icon = $session->make_element( "img", src=>$plugin->icon_url(), alt=>"[$type]", border=>0 );
 			$a1->appendChild( $icon );
@@ -499,7 +536,11 @@ sub render_export_bar
 		}
 		else
 		{
+<<<<<<< HEAD
 			my $option = $session->make_element( "option", value=>$id );
+=======
+			my $option = $session->make_element( "option", value=>$plugin->subtype );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			$option->appendChild( $dom_name );
 			$options->{EPrints::XML::to_string($dom_name)} = $option;
 		}
@@ -514,6 +555,7 @@ sub render_export_bar
 	$button->appendChild( $session->render_button(
 			name=>"_action_export_redir",
 			value=>$session->phrase( "lib/searchexpression:export_button" ) ) );
+<<<<<<< HEAD
 	$button->appendChild( $self->render_hidden_bits );
 	$button->appendChild( 
 		$session->render_hidden_field( "order", $order ) ); 
@@ -523,6 +565,13 @@ sub render_export_bar
 		$session->render_hidden_field( "exp", $escexp, ) );
 
 	my $form = $self->{session}->render_form( "GET" );
+=======
+
+	my $form = $self->render_form;
+	$form->appendChild( $session->render_hidden_field( "order", $order ) ); 
+	$form->appendChild( $session->render_hidden_field( "cache", $cacheid ) ); 
+	$form->appendChild( $session->render_hidden_field( "exp", $escexp, ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$form->appendChild( $session->html_phrase( "lib/searchexpression:export_section",
 					feeds => $feeds,
 					tools => $tools,
@@ -537,6 +586,7 @@ sub render_export_bar
 sub get_basic_controls_before
 {
 	my( $self ) = @_;
+<<<<<<< HEAD
 	my $cacheid = $self->{processor}->{results}->{cache_id};
 	my $escexp = $self->{processor}->{search}->serialise;
 
@@ -558,6 +608,38 @@ sub get_basic_controls_before
 			label => $self->{session}->html_phrase( "lib/searchexpression:new" ),
 		}
 	);
+=======
+
+	my $repo = $self->repository;
+
+	my @controls_before;
+
+	my $cacheid = $self->{processor}->{results}->{cache_id};
+	my $escexp = $self->{processor}->{search}->serialise;
+
+	my $baseurl = $self->{session}->get_url;
+	$baseurl->query_form( $self->hidden_bits );
+
+	{
+		my $url = $baseurl->clone;
+		$url->query_form(
+			$url->query_form,
+			cache => $cacheid,
+			exp => $escexp,
+			order => $self->{processor}->{search}->{custom_order},
+			_action_update => 1,
+		);
+		push @controls_before, {
+				url => "$url",
+				label => $repo->html_phrase( "lib/searchexpression:refine" ),
+			};
+	}
+
+	push @controls_before, {
+			url => $baseurl->clone,
+			label => $repo->html_phrase( "lib/searchexpression:new" ),
+		};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return @controls_before;
 }
@@ -602,7 +684,11 @@ sub paginate_opts
 	}
 
 	my $order_div = $self->{session}->make_element( "div", class=>"ep_search_reorder" );
+<<<<<<< HEAD
 	my $form = $self->{session}->render_form( "GET" );
+=======
+	my $form = $self->render_form;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$order_div->appendChild( $form );
 	$form->appendChild( $self->{session}->html_phrase( "lib/searchexpression:order_results" ) );
 	$form->appendChild( $self->{session}->make_text( ": " ) );
@@ -611,7 +697,10 @@ sub paginate_opts
 	$form->appendChild( $self->{session}->render_button(
 			name=>"_action_search",
 			value=>$self->{session}->phrase( "lib/searchexpression:reorder_button" ) ) );
+<<<<<<< HEAD
 	$form->appendChild( $self->render_hidden_bits );
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$form->appendChild( 
 		$self->{session}->render_hidden_field( "exp", $escexp, ) );
 
@@ -621,7 +710,11 @@ sub paginate_opts
 		above_results => $export_div,
 		controls_after => $order_div,
 		params => { 
+<<<<<<< HEAD
 			screen => $self->{processor}->{screenid},
+=======
+			$self->hidden_bits,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			_action_search => 1,
 			cache => $cacheid,
 			exp => $escexp,
@@ -694,9 +787,13 @@ sub render_search_form
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	my $form = $self->{session}->render_form( "get" );
 
 	$form->appendChild( $self->render_hidden_bits );
+=======
+	my $form = $self->render_form;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	$form->appendChild( $self->render_preamble );
 
@@ -857,7 +954,11 @@ sub wishes_to_export
 	my @plugins = $self->_get_export_plugins( 1 );
 		
 	my $ok = 0;
+<<<<<<< HEAD
 	foreach( @plugins ) { if( $_ eq "Export::$format" ) { $ok = 1; last; } }
+=======
+	foreach( @plugins ) { if( $_->subtype eq $format ) { $ok = 1; last; } }
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	unless( $ok ) 
 	{
 		$self->{processor}->{search_subscreen} = "results";

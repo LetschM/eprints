@@ -21,9 +21,20 @@ sub xml_tests
 	my $node;
 	my $frag;
 
+<<<<<<< HEAD
 	$node = $repo->make_element( "x" );
 	ok(EPrints::XML::is_dom( $node, "Element" ), "is_dom (Element)");
 
+=======
+	$node = $repo->make_element( "x", i => "j", x => "y" );
+	ok(EPrints::XML::is_dom( $node, "Element" ), "is_dom (Element)");
+
+	my @attr = $node->attributes;
+	ok(@attr == 2, "attributes in array context");
+	my $attr = $node->attributes;
+	is(eval { $attr->length }, 2, "attributes in scalar context");
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$frag = $repo->make_doc_fragment;
 	ok(EPrints::XML::is_dom( $frag, "DocumentFragment" ), "is_dom (DocumentFragment)");
 
@@ -46,10 +57,25 @@ sub xml_tests
 	ok(utf8::is_utf8($xml_str), "to_string utf8 document");
 
 	my $eprint = EPrints::Test::get_test_dataobj( $repo->dataset( "eprint" ) );
+<<<<<<< HEAD
 
 	my $xml_dump = $eprint->to_xml;
 	my $epdata = $eprint->xml_to_epdata( $repo, $xml_dump );
 	delete $epdata->{documents}; # to_xml() won't work with non-objects
+=======
+	my $dataset = $eprint->get_dataset;
+
+	my $xml_dump = $eprint->to_xml;
+	my $epdata = $eprint->xml_to_epdata( $repo, $xml_dump );
+	# MetaField::Subobject can't to_xml non-objects, which is what
+	# xml_to_epdata gives us, but Subobject will retrieve the records for us in
+	# the final object
+	foreach my $field ($dataset->fields)
+	{
+		next if !$field->isa( "EPrints::MetaField::Subobject" );
+		delete $epdata->{$field->name};
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $eprint2 = $repo->dataset( "eprint" )->make_dataobj( $epdata );
 
 	is( $xml_dump->toString(), $eprint2->to_xml->toString(), "to_xml==xml_to_epdata" );

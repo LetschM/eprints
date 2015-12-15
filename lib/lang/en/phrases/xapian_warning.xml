@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
+=======
+<?xml version="1.0" encoding="iso-8859-1" standalone="no" ?>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 <!DOCTYPE phrases SYSTEM "entities.dtd">
 
 <epp:phrases xmlns="http://www.w3.org/1999/xhtml" xmlns:epp="http://eprints.org/ep3/phrase" xmlns:epc="http://eprints.org/ep3/control">

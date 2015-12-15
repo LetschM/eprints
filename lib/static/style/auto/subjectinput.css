@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 /* 
    Styles for the subject component.
 
@@ -96,6 +99,10 @@ ul.ep_subjectinput_subjects img {
 	background-color: transparent;
 	font-size: 70%;
 	color: blue;
+<<<<<<< HEAD
+=======
+	cursor:pointer;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 

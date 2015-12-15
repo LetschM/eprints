@@ -97,12 +97,20 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 				$value = $v;
 			}
 			next if !EPrints::Utils::is_set( $value );
+<<<<<<< HEAD
 			$tg->index_text( $value );
+=======
+			$tg->index_text( lc( $value ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			$tg->increase_termpos();
 			next if length($value) > 200; # Xapian term length limit-ish
 			if( $field->isa( "EPrints::MetaField::Text" ) || $field->isa( "EPrints::MetaField::Name" ) )
 			{
+<<<<<<< HEAD
 				$tg->index_text( $value, 2, $prefix );
+=======
+				$tg->index_text( lc( $value ), 2, $prefix );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				$tg->increase_termpos();
 			}
 			else
@@ -139,7 +147,11 @@ $c->add_trigger( EP_TRIGGER_INDEX_FIELDS, sub {
 				open(my $fh, "<", "$tempdir/$fn") or next FILE;
 				sysread($fh, my $buffer, 2 * 1024 * 1024);
 				close($fh);
+<<<<<<< HEAD
 				$tg->index_text( Encode::decode_utf8( $buffer ) );
+=======
+				$tg->index_text( lc( Encode::decode_utf8( $buffer ) ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				$tg->increase_termpos();
 			}
 		}

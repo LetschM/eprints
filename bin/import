@@ -44,7 +44,15 @@ Please note that for the "subject" dataset, you are probably better off using th
 
 The id of the input plugin to use. This should not include the leading "Import::". Examples: BibTeX, XML.
 
+<<<<<<< HEAD
 If this is ommited or an invalid plugin is requested, then 'import' will list all plugins compatible with the dataset and exit.
+=======
+If this is omitted or an invalid plugin is requested, then 'import' will list all plugins compatible with the dataset and exit.
+
+=item I<filename>
+
+Filename to read from. To read from STDIN specify '-'.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =back
 
@@ -64,7 +72,11 @@ If this is an integer then it is assumed to be the userid of the user, otherwise
 
 You may wish to create one or more "bulk import" users and make imported eprint records belong to them.
 
+<<<<<<< HEAD
 =item B<--arg key=value>
+=======
+=item B<--argument key=value>
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Add an argument to the import plugin. May be repeated. Effects depend on the import plugin.
 
@@ -94,6 +106,13 @@ This sets the "enable_file_imports" configuration option for this session only.
 Allow the imported data to import files from the Web. This can obviously be seen as a security hole if you don't trust the data you are importing.
 This sets the "enable_web_imports" configuration option for this session only.
 
+<<<<<<< HEAD
+=======
+=item B<--xml>
+
+Output to STDOUT the parsed objects in EPrints XML (does not import anything).
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item B<--update>
 
 Normally you can not import a new item with the same id as an existing item. With this option enabled existing items will be updated with the new item. Combine with --enable-import-fields to update all field values.
@@ -112,7 +131,11 @@ Print the full manual page and then exit.
 
 =item B<--quiet>
 
+<<<<<<< HEAD
 Be vewwy vewwy quiet. This option will supress all output unless an error occurs.
+=======
+Be vewwy vewwy quiet. This option will suppress all output unless an error occurs.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =item B<--verbose>
 
@@ -155,6 +178,10 @@ my $migration = 0;
 my $update = 0;
 my %opt_args;
 my @actions;
+<<<<<<< HEAD
+=======
+my $output_xml = 0;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 my $dump = 0;
 
 Getopt::Long::Configure("permute");
@@ -176,8 +203,14 @@ GetOptions(
 	'enable-web-imports' => \$enable_web_imports,
 	'migration' => \$migration,
 	'update' => \$update,
+<<<<<<< HEAD
 	'arg=s' => \%opt_args,
 	'action=s' => \@actions,
+=======
+	'argument|arg=s' => \%opt_args,
+	'action=s' => \@actions,
+	'xml' => \$output_xml,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	'dump' => \$dump,
 ) || pod2usage( 2 );
 EPrints::Utils::cmd_version() if $version;
@@ -297,7 +330,11 @@ if( !defined $user && $ds->confid eq "eprint" && !$force )
 	print <<END;
 Warning! You haven't specified a user id to own these eprints, 
 That's OK, assuming the input file specifies the userid for each eprint. 
+<<<<<<< HEAD
 (you can supress this check with --force).
+=======
+(you can suppress this check with --force).
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 END
 	unless( EPrints::Utils::get_input_confirm( "Continue?", 1 ) )
 	{
@@ -328,6 +365,19 @@ my $handler = EPrints::CLIProcessor->new(
 
 		$count++, return if $parse_only;
 
+<<<<<<< HEAD
+=======
+		if( $output_xml )
+		{
+			my $dataobj = $opts{dataset}->make_dataobj( $epdata );
+			my $frag = $dataobj->to_xml;
+			print $session->xml->to_string( $frag, indent => 1 );
+			print "\n";
+			$session->xml->dispose( $frag );
+			return;
+		}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my $item;
 
 		if(
@@ -410,10 +460,34 @@ if( $scripted )
 # improve ordervalues insertion performance
 $session->cache_subjects;
 
+<<<<<<< HEAD
 my $list = eval { $plugin->input_file(
 		%arguments,
 		dataset=>$ds,
 		filename=>$filename,
+=======
+if( $output_xml )
+{
+	binmode(STDOUT, ":utf8");
+	print "<?xml version='1.0'?>\n<eprints xmlns='".EPrints::Const::EP_NS_DATA()."'>\n";
+}
+
+my $fh;
+
+if( $filename eq "-" )
+{
+	$fh = \*STDIN;
+}
+else
+{
+	open($fh, "<", $filename) or die "Error reading from $filename: $!";
+}
+
+my $list = eval { $plugin->input_fh(
+		%arguments,
+		dataset=>$ds,
+		fh=>$fh,
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		user=>$userobj,
 		actions=>\@actions,
 ) };
@@ -422,6 +496,16 @@ if( $@ )
 	$handler->message( "error", $session->make_text( "Unhandled exception in ".$plugin->{id}.": $@" ) );
 }
 
+<<<<<<< HEAD
+=======
+close $fh;
+
+if( $output_xml )
+{
+	print "\n</eprints>\n";
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 if( $scripted )
 {
 	print "EPRINTS_IMPORT: DONE $count\n";

@@ -2,6 +2,25 @@
 
 EPrints::Plugin::Issues
 
+<<<<<<< HEAD
+=======
+=head1 SYNOPSIS
+
+	my $plugin = $repo->plugin( "Issues::..." );
+
+	$plugin->process_dataobj( $eprint );
+	$plugin->finish;
+
+	$list = $repo->dataset( "eprint" )->search;
+
+	$plugin->process_list( list => $list );
+	$plugin->finish;
+
+=head1 METHODS
+
+=over 4
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 
 package EPrints::Plugin::Issues;
@@ -12,19 +31,54 @@ our @ISA = qw/ EPrints::Plugin /;
 
 $EPrints::Plugin::Issues::DISABLE = 1;
 
+<<<<<<< HEAD
+=======
+sub new
+{
+	my( $self, %params ) = @_;
+
+	$params{accept} = [] if !exists $params{accept};
+	$params{Handler} = EPrints::CLIProcessor->new( session => $params{session} )
+		if !exists $params{Handler};
+
+	return $self->SUPER::new( %params );
+}
+
+sub handler
+{
+	my( $self ) = @_;
+
+	return $self->{Handler};
+}
+
+sub set_handler
+{
+	my( $self, $handler ) = @_;
+
+	return $self->{Handler} = $handler;
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub matches 
 {
 	my( $self, $test, $param ) = @_;
 
+<<<<<<< HEAD
 	if( $test eq "is_available" )
 	{
 		return( $self->is_available() );
+=======
+	if( $test eq "can_accept" )
+	{
+		return( $self->can_accept( $param ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	# didn't understand this match 
 	return $self->SUPER::matches( $test, $param );
 }
 
+<<<<<<< HEAD
 sub is_available
 {
 	my( $self ) = @_;
@@ -81,10 +135,78 @@ sub item_issues
 	my( $plugin, $dataobj ) = @_;
 	
 	return ();
+=======
+sub can_accept { shift->EPrints::Plugin::Export::can_accept( @_ ) }
+
+=item $issue = $plugin->create_issue( $parent, $epdata [, %opts ] )
+
+Utility method to create a new issue for $parent from $epdata.
+
+=cut
+
+sub create_issue
+{
+	my( $self, $parent, $epdata, %opts ) = @_;
+
+	# set the parent, without side-effecting
+	local $epdata->{datasetid} = $parent->{dataset}->base_id;
+	local $epdata->{objectid} = $parent->id;
+
+	return $self->handler->epdata_to_dataobj( $epdata,
+			%opts,
+			dataset => $self->repository->dataset( "issue" ),
+		);
+}
+
+=item $plugin->process_list( list => $list [, %opts ] )
+
+Process a L<EPrints::List> of items. Call L</finish> to perform any summary-data actions.
+
+=cut
+
+sub process_list
+{
+	my( $self, %opts ) = @_;
+
+	$opts{list}->map(sub {
+		(undef, undef, my $item) = @_;
+
+		$self->process_dataobj( $item, %opts );
+	});
+}
+
+=item $plugin->process_dataobj( $dataobj [, %opts ] )
+
+Process a single L<EPrints::DataObj>. Call L</finish> to perform any summary-data actions.
+
+=cut
+
+sub process_dataobj
+{
+	my( $self, $item, %opts ) = @_;
+
+	# nothing to do
+}
+
+=item $plugin->finish
+
+Finish processing for issues and clean-up any state information stored in the plugin.
+
+=cut
+
+sub finish
+{
+	my( $self, %opts ) = @_;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 1;
 
+<<<<<<< HEAD
+=======
+=back
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =head1 COPYRIGHT
 
 =for COPYRIGHT BEGIN

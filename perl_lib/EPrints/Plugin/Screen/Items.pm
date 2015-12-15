@@ -50,6 +50,7 @@ sub can_be_viewed
 	return $self->allow( "items" );
 }
 
+<<<<<<< HEAD
 sub allow_col_left { return $_[0]->can_be_viewed; }
 sub allow_col_right { return $_[0]->can_be_viewed; }
 sub allow_remove_col { return $_[0]->can_be_viewed; }
@@ -115,6 +116,8 @@ sub action_remove_col
 	$self->{session}->current_user->commit();
 }
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub get_filters
 {
 	my( $self ) = @_;
@@ -164,12 +167,17 @@ sub perform_search
 
 	# dirty hack to pass the internal search through to owned_eprints_list
 	my $list = $self->{session}->current_user->owned_eprints_list( %$search,
+<<<<<<< HEAD
 		custom_order => $search->{order}
+=======
+		custom_order => $search->{custom_order}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	);
 
 	return $list;
 }
 
+<<<<<<< HEAD
 sub render
 {
 	my( $self ) = @_;
@@ -249,17 +257,53 @@ sub render_items
 		if( $filters{$f} )
 		{
 			$link->appendChild( $session->make_element(
+=======
+sub render_filters
+{
+	my( $self ) = @_;
+
+	my $repo = $self->repository;
+	my $xml = $repo->xml;
+	my $dataset = $self->{processor}->{dataset};
+	my $imagesurl = $repo->config( "rel_path" )."/style/images";
+
+	my $frag = $xml->create_document_fragment;
+
+	my $filter_div = $xml->create_element( "div", class=>"ep_items_filters" );
+	$frag->appendChild( $filter_div );
+
+	my $pref = $self->{id}."/eprint_status";
+	my %filters = @{$repo->current_user->preference( $pref ) || [
+		inbox=>1, buffer=>1, archive=>1, deletion=>1
+	]};
+
+	foreach my $f ( qw/ inbox buffer archive deletion / )
+	{
+		my $url = URI->new( $repo->current_url() );
+		my %q = $self->hidden_bits;
+		$q{"set_show_$f"} = !$filters{$f};
+		$url->query_form( %q );
+		my $link = $repo->render_link( $url );
+		if( $filters{$f} )
+		{
+			$link->appendChild( $xml->create_element(
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				"img",
 				src=> "$imagesurl/checkbox_tick.png",
 				alt=>"Showing" ) );
 		}
 		else
 		{
+<<<<<<< HEAD
 			$link->appendChild( $session->make_element(
+=======
+			$link->appendChild( $xml->create_element(
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				"img",
 				src=> "$imagesurl/checkbox_empty.png",
 				alt=>"Not showing" ) );
 		}
+<<<<<<< HEAD
 		$link->appendChild( $session->make_text( " " ) );
 		$link->appendChild( $session->html_phrase( "eprint_fieldopt_eprint_status_$f" ) );
 		$filter_div->appendChild( $link );
@@ -460,10 +504,96 @@ sub render_items
 	$div->appendChild( $form_add );
 	$chunk->appendChild( $div );
 	# End of Add form
+=======
+		$link->appendChild( $xml->create_text_node( " " ) );
+		$link->appendChild( $repo->html_phrase( "eprint_fieldopt_eprint_status_$f" ) );
+		$filter_div->appendChild( $link );
+		$filter_div->appendChild( $xml->create_text_node( ". " ) );
+	}
+
+	return $frag;
+}
+
+sub render_result_row
+{
+	my( $self, $e ) = @_;
+
+	my $session = $self->{session};
+	my $columns = $self->{processor}->{columns};
+
+	my $class = "";
+# "row_".($info->{row}%2?"b":"a");
+	if( $e->is_locked )
+	{
+		$class .= " ep_columns_row_locked";
+		my $my_lock = ( $e->get_value( "edit_lock_user" ) == $session->current_user->get_id );
+		if( $my_lock )
+		{
+			$class .= " ep_columns_row_locked_mine";
+		}
+		else
+		{
+			$class .= " ep_columns_row_locked_other";
+		}
+	}
+
+	my $tr = $session->make_element( "tr", class=>$class );
+
+	my $status = $e->get_value( "eprint_status" );
+
+	my $first = 1;
+	for( map { $_->name } @$columns )
+	{
+		my $td = $session->make_element( "td", class=>"ep_columns_cell ep_columns_cell_$status".($first?" ep_columns_cell_first":"")." ep_columns_cell_$_"  );
+		$first = 0;
+		$tr->appendChild( $td );
+		$td->appendChild( $e->render_value( $_ ) );
+	}
+
+	local $self->{processor}->{eprint} = $e;
+	local $self->{processor}->{eprintid} = $e->get_id;
+	my $td = $session->make_element( "td", class=>"ep_columns_cell ep_columns_cell_last", align=>"left" );
+	$tr->appendChild( $td );
+	$td->appendChild( 
+		$self->render_action_list_icons( "eprint_item_actions", { 'eprintid' => $self->{processor}->{eprintid} } ) );
+
+	return $tr;
+}
+
+sub render_top_bar
+{
+	my( $self ) = @_;
+
+	my $session = $self->{session};
+	my $chunk = $session->make_doc_fragment;
+
+	$chunk->appendChild( $self->SUPER::render_top_bar );
+
+	$chunk->appendChild( $self->render_action_list_bar( "item_tools" ) );
+
+	$chunk->appendChild( $self->{processor}->render_item_list(
+			[ $self->{processor}->list_items( "user_tasks" ) ],
+			class => "ep_user_tasks",
+		) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $chunk;
 }
 
+<<<<<<< HEAD
+=======
+sub render_items
+{
+	my( $self, $list ) = @_;
+
+	if( $list->count == 0 )
+	{
+		return $self->{session}->make_doc_fragment;
+	}
+
+	return $self->SUPER::render_items( $list );
+}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 1;
 

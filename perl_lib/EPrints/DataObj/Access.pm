@@ -70,7 +70,11 @@ Id of the object requested.
 
 =item referent_docid
 
+<<<<<<< HEAD
 Id of the document requested (if relevent).
+=======
+Id of the document requested (if relevant).
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =back
 

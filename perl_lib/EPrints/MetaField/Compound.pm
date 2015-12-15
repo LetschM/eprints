@@ -89,6 +89,7 @@ sub extra_subfields
 	return ();
 }
 
+<<<<<<< HEAD
 sub render_value
 {
 	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
@@ -104,6 +105,12 @@ sub render_value
 			$object );
 	}
 
+=======
+sub render_value_actual
+{
+	my( $self, $session, $value, $alllangs, $nolink, $object ) = @_;
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $table = $session->make_element( "table", border=>1, cellspacing=>0, cellpadding=>2 );
 	my $tr = $session->make_element( "tr" );
 	$table->appendChild( $tr );

@@ -84,7 +84,11 @@ sub action_upload
 	}
 
 	# install system-level and repository files
+<<<<<<< HEAD
 	if( !$self->_install( $epm ) )
+=======
+	if( !$self->_install( $epm, 1 ) )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		if( defined $iepm )
 		{
@@ -126,7 +130,11 @@ sub action_install
 
 sub _install
 {
+<<<<<<< HEAD
 	my( $self, $epm ) = @_;
+=======
+	my( $self, $epm, $skip_reload ) = @_;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $repo = $self->{repository};
 
@@ -158,8 +166,16 @@ sub _install
 		$epm->uninstall( $self->{processor} );
 		return;
 	}
+<<<<<<< HEAD
 
 	$repo->load_config;
+=======
+	
+	if (!$skip_reload) 
+	{
+		$repo->load_config;
+	}
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $controller = $epm->control_screen( processor => $self->{processor} );
 	# enable if not already enabled
@@ -206,7 +222,11 @@ sub action_upgrade
 	return if !$iepm->uninstall( $self->{processor} );
 
 	# install system-level and repository files
+<<<<<<< HEAD
 	if( !$self->_install( $epm ) )
+=======
+	if( !$self->_install( $epm, 1 ) )
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		$iepm->install( $self->{processor} );
 		$iepm->enable( $self->{processor} );
@@ -240,10 +260,13 @@ sub action_search
 
 	$self->{processor}->{notes}->{$self->get_subtype."_q"} =
 		$self->{repository}->param($self->get_subtype."_q");
+<<<<<<< HEAD
 
 	$self->{processor}->{notes}->{$self->get_subtype."_v"} =
 		$self->{repository}->param($self->get_subtype."_v");
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$self->{processor}->{notes}->{ep_tabs_current} = $self->get_subtype;
 
 	$self->{processor}->{screenid} = "Admin::EPM";
@@ -280,6 +303,7 @@ sub render
 		"${prefix}_q" => scalar($repo->param( "${prefix}_q" )),
 		id => "${prefix}_q",
 	) );
+<<<<<<< HEAD
 
 
 	my $base_url = $repo->param( "base_url" );
@@ -295,6 +319,8 @@ sub render
 		labels => \%acc,
 	) );
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	$form->appendChild( $xhtml->input_field(
 		"_action_search" => $repo->phrase( "lib/searchexpression:action_search" ),
 		type => "submit",
@@ -347,11 +373,15 @@ sub render_results
 	EPrints::EPM::Source->map( $repo, sub {
 		my( undef, $source ) = @_;
 
+<<<<<<< HEAD
 		# my $epms = $source->query( scalar($repo->param( $self->get_subtype."_q" )) );
 		my $epms = $source->query2(
 			scalar($repo->param( $self->get_subtype."_q" )),
 			scalar($repo->param( $self->get_subtype."_v" ))
 		);
+=======
+		my $epms = $source->query( scalar($repo->param( $self->get_subtype."_q" )) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		if( !defined $epms )
 		{
 			$self->{processor}->add_message( "warning", $self->html_phrase( "source_error",

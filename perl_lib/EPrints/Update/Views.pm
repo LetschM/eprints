@@ -318,6 +318,7 @@ sub update_browse_view_list
 
 	$title = $repo->html_phrase( "bin/generate_views:browsetitle" );
 
+<<<<<<< HEAD
 	$repo->write_static_page( 
 			$target, 
 			{
@@ -328,6 +329,15 @@ sub update_browse_view_list
 
 	$xml->dispose( $title );
 	$xml->dispose( $page );
+=======
+	EPrints::Page->new(
+			repository => $repo,
+			pins => {
+				title => $title,
+				page => $page,
+			}
+		)->write_to_path( $target );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return OK;
 }
@@ -536,14 +546,21 @@ sub update_view_list
 	);
 
 	# hit the limit
+<<<<<<< HEAD
 	if( $max_items && $count > $max_items )
+=======
+	if ($count == $max_items+1)
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	{
 		my $PAGE = $xml->create_element( "div",
 			class => "ep_view_page ep_view_page_view_$view->{id}"
 		);
 		$PAGE->appendChild( $navigation_aids );
 		$PAGE->appendChild( $repo->html_phrase( "bin/generate_views:max_items",
+<<<<<<< HEAD
 			n => $xml->create_text_node( $count ),
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			max => $xml->create_text_node( $max_items ),
 		) );
 		output_files( $repo,
@@ -754,7 +771,11 @@ sub update_view_list
 					$view,
 					$path_values,
 					$opts->{filename} );
+<<<<<<< HEAD
 			$block = $xml->parse_string( $block )
+=======
+			$block = $xml->parse_string( $block )->documentElement
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 				if !ref( $block );
 
 			$PAGE->appendChild( $xml->clone( $intro ) );
@@ -1058,6 +1079,7 @@ sub create_single_page_menu
 		);
 	}
 
+<<<<<<< HEAD
 
 	# Write page to disk
 	$repo->write_static_page( 
@@ -1074,6 +1096,28 @@ sub create_single_page_menu
 	close INCLUDE;
 
 	EPrints::XML::dispose( $page );
+=======
+	my %pins = (
+		title => $title,
+		page => $page,
+	);
+
+	if( $view->{template} )
+	{
+		$pins{template} = $view->{template};
+	}
+
+	my $_page = EPrints::Page->new(
+			repository => $repo,
+			pins => \%pins,
+		);
+
+	$_page->write_to_path( $target );
+
+	open(my $fh, ">:utf8", "$target.include") or die "Error writing to $target.include: $!";
+	print $fh $_page->utf8_pin( "page" );
+	close($fh);
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $target;
 }
@@ -1188,6 +1232,7 @@ sub group_by_n_chars
 	return $sections;
 }
 
+<<<<<<< HEAD
 # [2015-01-26/drn] A-Z group treating accented characters as the same letter as unaccented ones.
 sub group_by_a_to_z_unidecode
 {
@@ -1248,6 +1293,8 @@ sub group_by_n_chars_unidecode
 # END: A-Z group treating accented characters as the same letter as unaccented ones.
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub default_sort
 {
 	my( $repo, $menu, $values ) = @_;

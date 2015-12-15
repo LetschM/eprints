@@ -231,7 +231,11 @@ sub render_item_list
 
 	my $xml = $self->{session}->xml;
 
+<<<<<<< HEAD
 	my $ul = $xml->create_element( "ul", class => $class, id => "ep_tm_menu_tools" );
+=======
+	my $ul = $xml->create_element( "ul", class => $class );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	foreach my $opt (@$list)
 	{
@@ -316,10 +320,14 @@ sub process
 		{
 			foreach my $message ( @{$self->{messages}} )
 			{
+<<<<<<< HEAD
 				$self->{session}->get_database->save_user_message( 
 					$current_user->get_id,
 					$message->{type},
 					$message->{content} );
+=======
+				$current_user->create_subdataobj( "messages", $message );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			}
 		}
 		$self->{session}->redirect( $self->{redirect} );
@@ -336,10 +344,14 @@ sub process
 		{
 			foreach my $message ( @{$self->{messages}} )
 			{
+<<<<<<< HEAD
 				$self->{session}->get_database->save_user_message( 
 					$current_user->get_id,
 					$message->{type},
 					$message->{content} );
+=======
+				$current_user->create_subdataobj( "messages", $message );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			}
 			$self->{session}->redirect( $url );
 			return;
@@ -392,6 +404,7 @@ sub process
 
 	$page->appendChild( $content );
 
+<<<<<<< HEAD
 	$self->{session}->prepare_page(  
 		{
 			title => $title, 
@@ -403,6 +416,20 @@ sub process
 		template => $self->{template},
  	);
 	$self->{session}->send_page();
+=======
+	my $template = $self->{session}->template( $self->{template} );
+
+	$template->send_page( EPrints::Page->new(
+			repository => $self->{session},
+			pins => {
+				title => $title, 
+				page => $page,
+				head => $links,
+				login_status => $self->render_toolbar,
+#			toolbar => $toolbar,
+			},
+ 	) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self; # useful for unit-tests
 }
@@ -430,7 +457,11 @@ sub add_message
 	# we'll sanity check now, otherwise it becomes hard to trace later on
 	EPrints->abort( "Requires message argument" ) if !defined $message;
 
+<<<<<<< HEAD
 	push @{$self->{messages}},{type=>$type,content=>$message};
+=======
+	push @{$self->{messages}},{type=>$type,message=>$message};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 
@@ -438,6 +469,11 @@ sub screen
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
+=======
+	return $self->{screen} if( defined $self->{screen} && $self->{screen}->get_subtype eq "$self->{screenid}" );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $screen = $self->{screenid};
 	my $plugin_id = "Screen::".$screen;
 	$self->{screen} = $self->{session}->plugin( $plugin_id, processor=>$self );
@@ -465,6 +501,7 @@ sub render_messages
 
 	my $chunk = $self->{session}->make_element( "div", id => "ep_messages" );
 
+<<<<<<< HEAD
 	my @old_messages;
 	my $cuser = $self->{session}->current_user;
 	if( defined $cuser )
@@ -485,6 +522,30 @@ sub render_messages
 		$chunk->appendChild( $dom_message );
 	}
 
+=======
+	my $user = $self->{session}->current_user;
+	if( defined $user )
+	{
+		foreach my $message ( @{$user->value( "messages" )} )
+		{
+			$chunk->appendChild( $message->render_citation );
+			$message->remove;
+		}
+	}
+
+	my $dataset = $self->{session}->dataset( "message" );
+	foreach my $message ( @{$self->{messages}} )
+	{
+		# EPrints::DataObj::Message will dispose $message->{message}
+		$chunk->appendChild(
+				$dataset->make_dataobj( $message )->render_citation
+			);
+	}
+
+	# XML has been disposed, so don't let anything else try to use the messages
+	$self->{messages} = [];
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return $chunk;
 }
 

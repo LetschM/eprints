@@ -67,6 +67,10 @@ sub get_property_defaults
 	$defaults{dataobj_fieldname} = "objectid";
 	$defaults{show_in_fieldlist} = 0;
 	$defaults{match} = "IN";
+<<<<<<< HEAD
+=======
+	$defaults{citation} = $EPrints::MetaField::UNDEF;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return %defaults;
 }
@@ -166,7 +170,11 @@ sub get_value
 		{
 			if( !$ds->has_field( $fieldname ) )
 			{
+<<<<<<< HEAD
 				EPrints->abort( "dataset_fieldname property on ".$self->{dataset}->id.".".$self->{name}." is not a valid field on ".$ds->id );
+=======
+				EPrints->abort( "dataset_fieldname property on ".$self->{dataset}->id.".".$self->{name}." (".$fieldname.") is not a valid field on ".$ds->id );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 			}
 			$searchexp->add_field(
 				$ds->field( $fieldname ),
@@ -176,7 +184,11 @@ sub get_value
 		$fieldname = $self->get_property( "dataobj_fieldname" );
 		if( !$ds->has_field( $fieldname ) )
 		{
+<<<<<<< HEAD
 			EPrints->abort( "dataobj_fieldname property on ".$self->{dataset}->id.".".$self->{name}." is not a valid field on ".$ds->id );
+=======
+			EPrints->abort( "dataobj_fieldname property on ".$self->{dataset}->id.".".$self->{name}." (".$fieldname.") is not a valid field on ".$ds->id );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 		$searchexp->add_field(
 			$ds->field( $fieldname ),
@@ -209,7 +221,11 @@ sub render_single_value
 {
 	my( $self, $session, $value ) = @_;
 
+<<<<<<< HEAD
 	return $value->render_citation_link( "default" );
+=======
+	return $value->render_citation_link( $self->property( "citation" ) );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 sub get_search_conditions
@@ -266,7 +282,11 @@ sub get_index_codes_basic
 	}
 
 	# (re)generate indexcodes if it doesn't exist or is out of date
+<<<<<<< HEAD
 	if( !defined( $indexcodes_doc ) || !defined( $indexcodes_file ) ||
+=======
+	if( !defined( $indexcodes_doc ) ||
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$main_file->get_datestamp() gt $indexcodes_file->get_datestamp() )
 	{
 		$indexcodes_doc = $doc->make_indexcodes();
@@ -308,12 +328,28 @@ sub to_sax
 
 	for($self->property( "multiple" ) ? @$value : $value)
 	{
+<<<<<<< HEAD
 		next if(
 			$opts{hide_volatile} &&
 			$_->isa( "EPrints::DataObj::Document" ) &&
 			$_->has_relation( undef, "isVolatileVersionOf" )
 		);
 		$_->to_sax( %opts );
+=======
+		my $dataobj = $_;
+		# raw epdata
+		if(ref($dataobj) eq "HASH")
+		{
+			my $dataset = $self->{repository}->dataset( $self->property( "datasetid" ) );
+			$dataobj = $dataset->make_dataobj( $dataobj );
+		}
+		next if(
+			$opts{hide_volatile} &&
+			$dataobj->isa( "EPrints::DataObj::Document" ) &&
+			$dataobj->has_relation( undef, "isVolatileVersionOf" )
+		);
+		$dataobj->to_sax( %opts );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	}
 
 	$handler->end_element( {

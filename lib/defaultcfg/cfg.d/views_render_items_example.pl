@@ -1,9 +1,12 @@
 
 # This is an example of a custom browse items renderer.
 
+<<<<<<< HEAD
 # Note: This function needs to return a UTF-8 encoded string NOT XHTML DOM.
 # (this is to speed things up).
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 # To use this add render_fn=render_view_items_3col_boxes" to the options of a variation of a view.
 # eg:
 #		variations => [
@@ -45,6 +48,10 @@ $c->{render_view_items_3col_boxes} = sub
 		$cells += 1;
 	}
 
+<<<<<<< HEAD
 	return $xml->to_string( $table );
+=======
+	return $table;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 };
 

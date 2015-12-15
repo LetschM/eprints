@@ -36,11 +36,16 @@ sub new
 	}
 
 	# Creating a new stage
+<<<<<<< HEAD
 	$self->_read_components( $stage->getChildNodes );
+=======
+	$self->_parse_stage( $stage );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	return $self;
 }
 
+<<<<<<< HEAD
 	
 
 sub _read_components
@@ -128,10 +133,89 @@ sub _read_components
 		elsif( $name eq "short-title" )
 		{
 			$self->{short_title} = $stage_node->getFirstChild->nodeValue;
+=======
+sub _parse_stage
+{
+	my( $self, $stage ) = @_;
+
+	$self->{components} = [];
+	foreach my $node ($stage->childNodes)
+	{
+		my $name = $node->localName;
+		next if !defined $name;
+		if( $name eq "component" )
+		{
+			$self->_parse_component( $node );
+		}
+		elsif( $name eq "title" )
+		{
+			$self->{title} = $self->{session}->xml->text_contents_of( $node );
+		}
+		elsif( $name eq "short-title" )
+		{
+			$self->{short_title} = $self->{session}->xml->text_contents_of( $node );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		}
 	}
 }
 
+<<<<<<< HEAD
+=======
+sub _parse_component
+{
+	my( $self, $xml_config ) = @_;
+
+	# Nb. Cyclic refs on stage & workflow. May mess up g.c.
+	my %params = (
+			xml_config=>$xml_config, 
+			dataobj=>$self->{item}, 
+			dataset=>$self->{item}->get_dataset,
+			stage=>$self, 	
+			workflow=>$self->{workflow},
+			processor=>$self->{workflow}->{processor} ); 
+
+	# Pull out the type
+
+	my $type = $xml_config->getAttribute( "type" );
+	$type = "Field" if( !EPrints::Utils::is_set( $type ) );
+
+	my $plugin = $self->{session}->plugin( "InputForm::Component::$type", %params );
+	if( !defined $plugin )
+	{
+		$plugin = $self->{session}->plugin( "InputForm::Component::Error",
+			%params,
+			problems => [$self->{session}->html_phrase( "Plugin/InputForm/Component:error_invalid_component",
+				placeholding => $self->{session}->xml->create_text_node( $type ),
+				xml => $self->{session}->xml->create_text_node( $self->{session}->xml->to_string( $xml_config ) ),
+			)],
+		);
+	}
+	elsif( $plugin->problems )
+	{
+		$plugin = $self->{session}->plugin( "InputForm::Component::Error",
+			%params,
+			problems => [$plugin->problems],
+		);
+	}
+	elsif( !defined $plugin->{prefix} )
+	{
+		EPrints::abort( "Prefix did not get set in component $type (id=?): did you call SUPER::parse_config() in Component?" );
+	}
+
+	if ($self->{workflow}->{processor}->{required_fields_only})
+	{
+		if ($plugin->is_required())
+		{
+			push @{$self->{components}}, $plugin;
+		}
+	}
+	else
+	{
+		push @{$self->{components}}, $plugin;
+	}
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =item $flag = $stage->action_buttons()
 
 Returns the action buttons setting: both, top, bottom or none.
@@ -252,7 +336,11 @@ sub render
 		$div = $session->make_element(
 			"div",
 			class => "ep_form_field_input" );
+<<<<<<< HEAD
 		$div->appendChild( $component->get_surround()->render( $component, $session ) );
+=======
+		$div->appendChild( $component->render );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$dom->appendChild( $div );
 	}
 

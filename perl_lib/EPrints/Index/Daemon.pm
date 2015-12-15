@@ -67,7 +67,11 @@ sub new
 	$opts{respawn} ||= 86400; # 1 day
 	$opts{timeout} ||= 600; # 10 minutes
 	$opts{nextrespawn} = time() + $opts{respawn};
+<<<<<<< HEAD
 	$opts{interupt} = 0; # break out of any loops
+=======
+	$opts{interrupt} = 0; # break out of any loops
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 	my $self = bless \%opts, $class;
 
@@ -249,7 +253,11 @@ sub interupted
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	return $self->{interupt} ||= -e $_[0]->{suicidefile};
+=======
+	return $self->{interrupt} ||= -e $_[0]->{suicidefile};
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 # roll the log files then reopen the main log file
@@ -613,7 +621,11 @@ sub run_index
 	};
 	$SIG{INT} = sub {
 		$self->log( 3, "** Worker process interupted" );
+<<<<<<< HEAD
 		$self->{interupt} = 1;
+=======
+		$self->{interrupt} = 1;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	};
 
 	MAINLOOP: while( 1 )
@@ -654,7 +666,11 @@ sub run_index
 
 		next MAINLOOP if $seen_action;
 
+<<<<<<< HEAD
 		# wait interval seconds. Check interupt requests every 5 seconds.
+=======
+		# wait interval seconds. Check interrupt requests every 5 seconds.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		my $stime = time();
 		while( ($stime + $self->{interval}) > time() )
 		{

@@ -223,10 +223,32 @@ my $INFO = {
 		class => "EPrints::DataObj::File",
 		datestamp => "mtime",
 	},
+<<<<<<< HEAD
 	import => {
 		sqlname => "import",
 		class => "EPrints::DataObj::Import",
 		datestamp => "datestamp",
+=======
+#	import => {
+#		sqlname => "import",
+#		class => "EPrints::DataObj::Import",
+#		datestamp => "datestamp",
+#	},
+	cache_dataobj_map => {
+		sqlname => "cache_dataobj_map",
+		class => "EPrints::DataObj::CacheDataobjMap",
+	},
+	cache_dataobj => {
+		sqlname => "cache_dataobj",
+		class => "EPrints::DataObj::CacheDataobj",
+		order => 0,
+	},
+	issue => {
+		sqlname => "issue",
+		class => "EPrints::DataObj::Issue",
+		datestamp => "timestamp",
+		columns => [qw( parent description status )],
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	},
 	metafield => {
 		sqlname => "mf", # identifiers get too long
@@ -313,6 +335,10 @@ my $INFO = {
 		index => 1,
 		order => 1,
 		datestamp => "lastmod",
+<<<<<<< HEAD
+=======
+		columns => [qw( eprintid type eprint_status lastmod )], # default columns for Items screen
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	},
 	document => {
 		sqlname => "document",
@@ -339,7 +365,11 @@ my $INFO = {
 		class => "EPrints::DataObj::SavedSearch",
 		import => 1,
 		index => 1,
+<<<<<<< HEAD
 		columns => [qw( id name )],
+=======
+		columns => [qw( id name spec )],
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	},
 	public_saved_search => {
 		sqlname => "saved_search",
@@ -692,9 +722,13 @@ sub field
 	my $value = $self->{field_index}->{$fieldname};
 	if (!defined $value) 
 	{
+<<<<<<< HEAD
 		$self->{repository}->log( 
 			"dataset ".$self->{id}." has no field: ".
 			$fieldname );
+=======
+		Carp::carp( "dataset ".$self->{id}." has no field: ".$fieldname );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		return undef;
 	}
 	return $self->{field_index}->{$fieldname};
@@ -814,8 +848,11 @@ sub get_sql_table_name
 	EPrints::abort( "Can't get a SQL table name for dataset: ".$self->{id} );
 }
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 =pod
 
@@ -1412,6 +1449,7 @@ Short-cut to L</prepare_search>( %options )->execute.
 
 =over 4
 
+<<<<<<< HEAD
 =item "satisfy_all"=>1 
 
 Satify all conditions specified. 0 means satisfy any of the conditions specified. Default is 1
@@ -1429,6 +1467,46 @@ Order the search results by field order. prefixing the field name with a "-" res
 Return values where field1 field2 or field3 is "bees" and field2  is "honey" (assuming satisfy all is set)
 
 =item "limit" => 10
+=======
+=item satisfy_all
+
+   satisfy_all"=>1 
+
+Satify all conditions specified. 0 means satisfy any of the conditions specified. Default is 1
+
+=item staff
+
+  "staff"=>1
+
+Do search as an adminstrator means you get everything back
+
+=item custom_order
+
+  "custom_order" => "field1/-field2/field3"
+
+Order the search results by field order. prefixing the field name with a "-" results in reverse ordering
+
+=item filters
+
+  "filters" => \@(
+                         { meta_fields=>[ "field1", "field2" "document.field3" ],
+                           merge=>"ANY", match=>"EX",
+                           value=>"bees"
+                         },
+                         { meta_fields=>[ "field4" ],
+                           value=> qw( honey ),
+                           match=>"IN"
+                         }
+                       );
+
+This searchs for 'bees' in C<field1> or C<field2> or C<document.field3>, and 'honey' in C<field4>
+
+For details on the C<merge> and C<match> parameters, refer to L<EPrints::Search::Field>
+
+=back
+
+  "limit" => 10
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Only return 10 results
 
@@ -1670,6 +1748,47 @@ sub citation
 	return $citation;
 }
 
+<<<<<<< HEAD
+=======
+=item $searchexp = $dataset->owned_by($user [, %opts])
+
+Returns a prepared search for items in this dataset owned by $user.
+
+=cut
+
+sub owned_by
+{
+	my ($self, $user, %opts) = @_;
+
+	my @filters = @{$opts{filters} || []};
+
+	my $f = $self->{repository}->config( "datasets", $self->id, "owned" );
+	if (defined $f) {
+		&$f($self, $user, \@filters, %opts);
+	}
+	elsif ($self->has_field("userid")) {
+		push @filters, {
+			meta_fields => [qw( userid )],
+			value => $user->id,
+			match => "EX",
+		};
+	}
+	else {
+		# return a NO-OP?
+		push @filters, {
+			meta_fields => [$self->key_field->name],
+			value => undef,
+			match => "EX",
+		};
+	}
+
+	return $self->prepare_search(
+		%opts,
+		filters => \@filters,
+	);
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 ######################################################################
 1;
 ######################################################################

@@ -117,6 +117,11 @@ sub render
 
 	$chunk->appendChild( $self->render_status );
 
+<<<<<<< HEAD
+=======
+	$chunk->appendChild( $self->render_common_action_links );
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	my $buttons = $self->render_common_action_buttons;
 	$chunk->appendChild( $buttons );
 
@@ -202,6 +207,24 @@ sub render_status
 	return $div;
 }
 
+<<<<<<< HEAD
+=======
+sub render_common_action_links
+{
+	my( $self ) = @_;
+
+	my $datasetid = $self->{processor}->{dataset}->id;
+
+	return $self->{processor}->render_item_list(
+			[
+				$self->{processor}->list_items( "${datasetid}_view_action_links" ),
+				$self->{processor}->list_items( "dataobj_view_action_links" ),
+			],
+			class => "ep_user_tasks",
+		);
+}
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 sub render_common_action_buttons
 {
 	my( $self ) = @_;

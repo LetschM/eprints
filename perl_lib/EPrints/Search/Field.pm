@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ######################################################################
 #
 # EPrints::Search::Field
@@ -24,6 +25,22 @@ It should not be confused with MetaField.
 It can search over several metadata fields, and the value of the
 value of the search field is usually a string containing a list of
 whitespace seperated words, or other search criteria.
+=======
+=for Pod2Wiki
+
+=head1 NAME
+
+EPrints::Search::Field - one criteria in a search expression.
+
+=head1 DESCRIPTION
+
+This class represents a single criteria in a L<EPrints::Search> and by
+extension a search form.
+
+It can search over several L<EPrints::MetaField>s, and the value of the
+search field is usually a string containing a list of
+whitespace separated words.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 A search field has four key parameters:
 
@@ -35,7 +52,11 @@ A search field has four key parameters:
 
 =over 4
 
+<<<<<<< HEAD
 =item match=IN
+=======
+=item match=IN (index)
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 Treat the value as a list of whitespace-seperated words. Search for
 each one in the full-text index.
@@ -73,6 +94,7 @@ just fail to match anything without doing any actual searching.
 
 =item merge=ANY 
 
+<<<<<<< HEAD
 Match an item if any of the words in the value match.
 
 =item merge=ALL 
@@ -82,6 +104,17 @@ Match an item only if all of the words in the value match.
 =back
 
 
+=======
+Match an item if any of the space-separated words in the value match.
+
+=item merge=ALL 
+
+Match an item only if all of the space-separated words in the value match.
+
+=back
+
+Merge has no affect on C<EX> matches, which always match the entire value.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =head2 METHODS
 
@@ -154,11 +187,19 @@ use strict;
 
 =item $thing = EPrints::Search::Field->new( $session, $dataset, $fields, $value, [$match], [$merge], [$prefix], [$show_help] )
 
+<<<<<<< HEAD
 Create a new search field object. 
 
 $prefix is used when generating HTML forms and reading values from forms. 
 
 $fields is a reference to an array of field names.
+=======
+Create a new search field object (%opts form is preferred).
+
+$prefix is used when generating HTML forms and reading values from forms. 
+
+$fields is a reference to an array of L<EPrints::MetaField> objects.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 $match is one of EQ, IN, EX. default is EQ.
 
@@ -169,6 +210,11 @@ be a name hash.
 
 $show_help is used to control if the help shows up on the search form. A value of "always" shows the help without the show/hide toggle. "never" shows no help and no toggle. "toggle" shows no help, but shows the [?] icon which will reveal the help. The default is "toggle". If javascript is off, toggle will show the help and show no toggle.
 
+<<<<<<< HEAD
+=======
+If C<match> and C<merge> are not explicitly provided the properties of the B<first> field in the fields will be used. If you are performing a multi-field search you probably want to explicitly set the search type to "IN" (index).
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 ######################################################################
 
@@ -510,6 +556,7 @@ sub split_value
 {
 	my( $self, $value ) = @_;
 
+<<<<<<< HEAD
 	my @values = EPrints::Index::Tokenizer::split_search_value( 
 		$self->{"repository"},
 		$value );
@@ -530,6 +577,18 @@ sub split_value
 		} @values;
 
 	return @values;
+=======
+	my $index_start = $value =~ s/\*$//;
+
+	my ($codes, $badwords) = $self->{repository}->call("extract_words", $self->{repository}, $value);
+
+	if (@$codes == 1)
+	{
+		$codes->[0] .= '*' if $index_start;
+	}
+
+	return @$codes;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 }
 
 ######################################################################
@@ -539,6 +598,11 @@ sub split_value
 
 Return the current value parameter of this search field.
 
+<<<<<<< HEAD
+=======
+Do not do C<EPrints::Utils::is_set($sf->get_value)> to test whether the search field is set, see L</is_set> for details.
+
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 =cut
 ######################################################################
 
@@ -802,9 +866,13 @@ sub get_id
 
 Returns true if this search field has a value to search.
 
+<<<<<<< HEAD
 If the "match" parameter is set to "EX" then it always returns true,
 even if the value is "" because "" is a valid search value in
 "EX" searches.
+=======
+For "EX" matches this will always return true unless the %opts form of the constructor was used B<without a value option>. This is because "" is a valid search value in "EX" searches (but by EPrints definitions is "not set").
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =cut
 ######################################################################
@@ -813,8 +881,11 @@ sub is_set
 {
 	my( $self ) = @_;
 
+<<<<<<< HEAD
 	return 1 if $self->{"match"} eq "SET";
 
+=======
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	return 0 if !exists( $self->{value} );
 
 	return
@@ -975,7 +1046,11 @@ sub set_dataset
 
 =for COPYRIGHT BEGIN
 
+<<<<<<< HEAD
 Copyright 2000-2011 University of Southampton.
+=======
+Copyright 2000-2013 University of Southampton.
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 
 =for COPYRIGHT END
 

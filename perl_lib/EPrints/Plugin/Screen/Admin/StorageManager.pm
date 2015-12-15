@@ -142,8 +142,12 @@ sub ajax_stats
 		my $ddata = $data->{parent}->{$datasetid};
 		my $total_width = $max_width * $ddata->{total} / $max;
 		my $bytes_width = $max_width * $ddata->{bytes} / $max_bytes;
+<<<<<<< HEAD
 		my $form = $session->render_form( "GET", "#" );
 		$form->appendChild( $session->render_hidden_field( screen => $self->{processor}->{screenid} ) );
+=======
+		my $form = $self->render_form( "get" );
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 		$form->appendChild( $session->render_hidden_field( store => $pluginid ) );
 		$form->appendChild( $session->render_hidden_field( datasetid => $datasetid ) );
 		$form->appendChild( $session->render_button(
@@ -209,6 +213,10 @@ sub ajax_migrate
 		my( undef, undef, $file ) = @_;
 
 		$total ++ if $session->get_storage->copy( $target_store, $file );
+<<<<<<< HEAD
+=======
+		$file->commit;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	});
 
 	print "$total";
@@ -242,6 +250,10 @@ sub ajax_delete
 		return if scalar(@copies) <= 1;
 
 		$total ++ if $session->get_storage->delete_copy( $store, $file );
+<<<<<<< HEAD
+=======
+		$file->commit;
+>>>>>>> 2b6259f2290a0e66c6dd1d800751684d72f6aaf6
 	});
 
 	print "$total";
